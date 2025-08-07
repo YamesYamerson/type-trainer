@@ -1,0 +1,26 @@
+[
+  {
+    "id": "lowercase",
+    "name": "Basic Words",
+    "options": ["Lowercase only", "Simple words", "Beginner friendly"],
+    "contentPath": "lowercase"
+  },
+  {
+    "id": "punctuation",
+    "name": "Punctuation & Capitalization",
+    "options": ["Full sentences", "Punctuation marks", "Capital letters"],
+    "contentPath": "punctuation"
+  },
+  {
+    "id": "code",
+    "name": "Programming Code",
+    "options": ["JavaScript", "Python", "Syntax symbols"],
+    "contentPath": "code"
+  },
+  {
+    "id": "data_entry",
+    "name": "Data Entry",
+    "options": ["Form fields", "Tab navigation", "Mixed content"],
+    "contentPath": "data_entry"
+  }
+]
