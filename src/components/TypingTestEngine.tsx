@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import type { TypingTest, TypingState, TypingResult } from '../types';
+import { VirtualKeyboard } from './VirtualKeyboard';
 
 interface TypingTestEngineProps {
   test: TypingTest;
   onComplete: (result: TypingResult) => void;
   onKeyPress?: (key: string) => void;
+  showKeyboard?: boolean;
 }
 
 export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
   test,
   onComplete,
-  onKeyPress
+  onKeyPress,
+  showKeyboard = true
 }) => {
   const [typingState, setTypingState] = useState<TypingState>({
     currentIndex: 0,
@@ -20,6 +23,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     startTime: null,
     endTime: null
   });
+  const [currentKey, setCurrentKey] = useState<string>('');
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -43,6 +47,9 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     if (typingState.isComplete) return;
 
     const { key } = event;
+    
+    // Set current key for keyboard display
+    setCurrentKey(key);
     
     // Prevent default for most keys to avoid unwanted behavior
     if (key.length === 1 || key === 'Backspace' || key === 'Enter') {
@@ -146,6 +153,16 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     };
   }, [handleKeyDown]);
 
+  // Clear current key after a short delay
+  useEffect(() => {
+    if (currentKey) {
+      const timer = setTimeout(() => {
+        setCurrentKey('');
+      }, 200); // Clear after 200ms
+      return () => clearTimeout(timer);
+    }
+  }, [currentKey]);
+
   // Render the text with proper styling
   const renderText = () => {
     const characters = test.content.split('');
@@ -175,30 +192,37 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
   };
 
   return (
-    <div 
-      ref={containerRef}
-      className="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg"
-      tabIndex={0}
-    >
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">
-          {test.category.charAt(0).toUpperCase() + test.category.slice(1)} Test
-        </h2>
-        <p className="text-sm text-gray-600">
-          Difficulty: {test.difficulty}
-        </p>
-      </div>
-      
-      <div className="mb-6">
-        <div className="text-lg leading-relaxed font-mono bg-gray-50 p-4 rounded border-2 border-gray-200 min-h-[120px] whitespace-pre-wrap">
-          {renderText()}
+    <div className="w-full max-w-6xl mx-auto space-y-6">
+      {/* Typing Area */}
+      <div 
+        ref={containerRef}
+        className="p-6 bg-white rounded-lg shadow-lg"
+        tabIndex={0}
+      >
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">
+            {test.category.charAt(0).toUpperCase() + test.category.slice(1)} Test
+          </h2>
+          <p className="text-sm text-gray-600">
+            Difficulty: {test.difficulty}
+          </p>
+        </div>
+        
+        <div className="mb-4">
+          <div className="text-lg leading-relaxed font-mono bg-gray-50 p-4 rounded border-2 border-gray-200 min-h-[120px] whitespace-pre-wrap">
+            {renderText()}
+          </div>
         </div>
       </div>
-      
-      <div className="text-sm text-gray-600">
-        <p>Click in the text area above and start typing to begin the test.</p>
-        <p>Use Backspace to correct mistakes. The test will complete when you finish typing all characters.</p>
-      </div>
+
+      {/* Virtual Keyboard - positioned right below input field */}
+      {showKeyboard && (
+        <VirtualKeyboard 
+          currentKey={currentKey} 
+          isActive={!typingState.isComplete}
+          nextKey={typingState.currentIndex < test.content.length ? test.content[typingState.currentIndex] : undefined}
+        />
+      )}
     </div>
   );
 };

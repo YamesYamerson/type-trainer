@@ -3,6 +3,7 @@ import { TypingTestEngine } from '../components/TypingTestEngine';
 import { ModeSelector } from '../components/ModeSelector';
 import { Layout } from '../components/Layout';
 import { StatsDisplay } from '../components/StatsDisplay';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import type { TypingTest, TypingResult, TypingMode } from '../types';
 import { loadTestById, loadModes, getRandomTestByCategory } from '../utils/testLoader';
 import { useTypingResults } from '../hooks/useTypingResults';
@@ -12,6 +13,7 @@ export const TestPage: React.FC = () => {
   const [testResult, setTestResult] = useState<TypingResult | null>(null);
   const [isTestActive, setIsTestActive] = useState(false);
   const [selectedMode, setSelectedMode] = useState<string>('lowercase');
+  const [showKeyboard, setShowKeyboard] = useState<boolean>(true);
   const [modes] = useState<TypingMode[]>(loadModes());
   const { results, addResult } = useTypingResults();
 
@@ -64,7 +66,19 @@ export const TestPage: React.FC = () => {
           modes={modes}
         />
         
-        <div className="text-center">
+        <div className="text-center space-y-4">
+          <div className="flex items-center justify-center space-x-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={showKeyboard}
+                onChange={(e) => setShowKeyboard(e.target.checked)}
+                className="rounded text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">Show Virtual Keyboard</span>
+            </label>
+          </div>
+          
           <button
             onClick={startTest}
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
@@ -128,12 +142,15 @@ export const TestPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {currentTest && (
-        <TypingTestEngine
-          test={currentTest}
-          onComplete={handleTestComplete}
-        />
+        <ErrorBoundary>
+          <TypingTestEngine
+            test={currentTest}
+            onComplete={handleTestComplete}
+            showKeyboard={showKeyboard}
+          />
+        </ErrorBoundary>
       )}
     </div>
   );
