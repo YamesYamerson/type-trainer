@@ -1,8 +1,27 @@
-# Typing Trainer
+# Type Trainer
 
 A modern, keyboard-first typing practice application built with React, TypeScript, and Tailwind CSS. Modeled after popular typing tutors like Monkeytype and Mavis Beacon, this app provides multiple practice modes with real-time feedback and performance tracking.
 
-## Features
+## 🎯 Current Status
+
+**Phase:** 6 Complete (Backend API & SQLite Database)  
+**Overall Progress:** 95% Complete  
+**Next Phase:** 7 (Deployment)  
+**Ready for:** Production Deployment
+
+### ✅ Completed Features
+
+- **Typing Engine**: Real-time WPM and accuracy calculation with character-by-character tracking
+- **Multiple Practice Modes**: Basic Words, Punctuation, Code, Data Entry
+- **User Management**: Dummy authentication with localStorage persistence
+- **Backend API**: Node.js + Express server with SQLite database
+- **Hybrid Storage**: localStorage + SQLite with automatic synchronization
+- **Hash-based System**: Duplicate prevention and data integrity
+- **Environment Variables**: Secure configuration management
+- **Testing Framework**: Comprehensive test suite for all components
+- **Performance Optimized**: O(1) operations for high-speed typing
+
+## 🚀 Features
 
 ### 🎯 Multiple Practice Modes
 - **Basic Words**: Lowercase word practice for beginners
@@ -20,24 +39,27 @@ A modern, keyboard-first typing practice application built with React, TypeScrip
 - **Dummy Authentication**: Simple login system (any email/password works)
 - **Profile Dashboard**: Comprehensive statistics and test history
 - **Mode-specific Stats**: Performance breakdown by practice type
-- **Persistent Storage**: Results saved locally using localStorage
+- **Persistent Storage**: Results saved locally and in SQLite database
 
 ### 🎨 Modern UI/UX
 - **Keyboard-first Design**: Complete functionality without mouse dependency
 - **Responsive Layout**: Works on desktop and mobile devices
 - **Clean Interface**: Minimalist design focused on typing practice
 - **Real-time Feedback**: Color-coded character highlighting
+- **Virtual Keyboard**: Real-time key highlighting
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend**: React 18 + TypeScript
+- **Frontend**: React 18 + TypeScript + Vite
 - **Styling**: Tailwind CSS
-- **Build Tool**: Vite
 - **State Management**: React Hooks + Custom Hooks
-- **Storage**: localStorage (client-side persistence)
-- **Development**: ESLint + Prettier
+- **Backend**: Node.js + Express
+- **Database**: SQLite (local) → PostgreSQL (production ready)
+- **Storage**: Hybrid localStorage + SQLite
+- **Testing**: Comprehensive test suite
+- **Environment**: Secure environment variable management
 
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
@@ -45,25 +67,141 @@ A modern, keyboard-first typing practice application built with React, TypeScrip
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
 ```bash
 git clone <repository-url>
 cd type-trainer
 ```
 
-2. Install dependencies:
+2. **Install dependencies:**
 ```bash
 npm install
+cd server && npm install && cd ..
 ```
 
-3. Start the development server:
+3. **Set up environment variables:**
+```bash
+# Create .env file in root directory
+cp .env.example .env  # if available
+# Or create manually with:
+VITE_API_BASE_URL=http://localhost:3001/api
+VITE_APP_NAME=Type Trainer
+VITE_APP_VERSION=1.0.0
+```
+
+4. **Start the backend server:**
+```bash
+cd server && npm start
+```
+
+5. **Start the frontend development server:**
 ```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+6. **Open your browser and navigate to `http://localhost:5173`**
 
-### Usage
+## 🧪 Testing
+
+### Backend Tests
+```bash
+# Test category filtering
+npm run test:category
+
+# Test hash-based system
+npm run test:hash
+```
+
+### Frontend Tests
+```javascript
+// In browser console
+// Load test utilities
+// Copy content from test-frontend-hash.js
+
+// Run tests
+window.hashSystemTests.runAllTests()
+testNewSystem()
+testFrontendSave()
+```
+
+### Database Management
+```bash
+# Clear database stats
+npm run clear-stats
+
+# Clear all data
+node clear-all-data.js
+
+# Check database contents
+node server/check-db.js
+```
+
+## 📁 Project Structure
+
+```
+type-trainer/
+├── AI_DOCS/                    # Historical documentation
+│   ├── DEVELOPMENT_LOG.md      # Complete development history
+│   └── base-material/          # Original project requirements
+├── src/                        # Frontend source code
+│   ├── components/             # Reusable UI components
+│   ├── hooks/                  # Custom React hooks
+│   ├── pages/                  # Page components
+│   ├── types/                  # TypeScript definitions
+│   ├── utils/                  # Utility functions
+│   └── config/                 # Environment configuration
+├── server/                     # Backend source code
+│   ├── index.js               # Express server
+│   ├── config.js              # Server configuration
+│   └── init-db.js             # Database initialization
+├── test-*.js                   # Testing utilities
+├── clear-*.js                  # Data management utilities
+├── README.md                   # This file
+├── QUICK_COMMANDS.md           # Development utilities
+└── [other project files]
+```
+
+## 🔧 Development
+
+### Environment Variables
+
+#### Frontend (Vite)
+```bash
+VITE_API_BASE_URL=http://localhost:3001/api
+VITE_APP_NAME=Type Trainer
+VITE_APP_VERSION=1.0.0
+```
+
+#### Backend (Node.js)
+```bash
+PORT=3001
+NODE_ENV=development
+DB_PATH=./typing_trainer.db
+CORS_ORIGIN=http://localhost:5173
+LOG_LEVEL=info
+```
+
+### Key Commands
+
+```bash
+# Development
+npm run dev                    # Start frontend
+cd server && npm start        # Start backend
+
+# Testing
+npm run test:category         # Test category filtering
+npm run test:hash            # Test hash system
+
+# Database
+npm run clear-stats          # Clear database stats
+node clear-all-data.js       # Clear all data
+
+# Building
+npm run build                # Build for production
+npm run preview              # Preview production build
+```
+
+## 🎯 Usage
 
 1. **Login**: Enter any email and password to access the app
 2. **Choose Mode**: Select from Basic Words, Punctuation, Code, or Data Entry
@@ -72,60 +210,35 @@ npm run dev
 5. **Review Results**: See your WPM, accuracy, and error count
 6. **View Profile**: Check your overall statistics and test history
 
-## Project Structure
+## 🔒 Security
 
-```
-src/
-├── components/          # Reusable UI components
-│   ├── Layout.tsx      # Main layout wrapper
-│   ├── LoginForm.tsx   # Authentication form
-│   ├── ModeSelector.tsx # Practice mode selection
-│   ├── StatsDisplay.tsx # Performance statistics
-│   └── TypingTestEngine.tsx # Core typing logic
-├── hooks/              # Custom React hooks
-│   ├── useTypingResults.ts # Results management
-│   └── useUser.ts      # User state management
-├── pages/              # Page components
-│   ├── ProfilePage.tsx # User profile and stats
-│   └── TestPage.tsx    # Main practice interface
-├── types/              # TypeScript type definitions
-│   └── index.ts        # Core interfaces
-├── utils/              # Utility functions
-│   └── testLoader.ts   # Test data management
-└── data/               # Static data files
-    ├── typing-modes.json # Mode configurations
-    └── typing-tests.json # Practice content
-```
+- **Environment Variables**: Sensitive data not committed to repository
+- **Database Security**: Database files excluded from version control
+- **Hash-based System**: Duplicate prevention and data integrity
+- **CORS Configuration**: Secure cross-origin requests
 
-## Development Phases
+## 📊 Performance
 
-This project was built following a structured development protocol:
+- **O(1) Operations**: Character-by-character tracking for high-speed typing
+- **Memoized Rendering**: Efficient UI updates
+- **Hybrid Storage**: Best of localStorage and database
+- **Optimized State Management**: React Hooks with proper optimization
 
-1. **Phase 1**: Environment setup and project scaffolding
-2. **Phase 2**: Core typing engine implementation
-3. **Phase 3**: Multiple practice modes
-4. **Phase 4**: UI/UX improvements and layout system
-5. **Phase 5**: User management and local persistence
+## 🤝 Contributing
 
-## Future Enhancements
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-- **Backend Integration**: Real user accounts and cloud storage
-- **Advanced Analytics**: Detailed performance insights
-- **Custom Content**: User-uploaded practice texts
-- **Multiplayer**: Real-time typing competitions
-- **Accessibility**: Screen reader support and keyboard shortcuts
-- **Theming**: Dark mode and custom color schemes
+## 📝 License
 
-## Contributing
+This project is licensed under the MIT License.
 
-This is a solo developer project following the master protocol for efficient development. The codebase is designed to be maintainable and extensible for future enhancements.
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Acknowledgments
+## 🎉 Acknowledgments
 
 - Inspired by Monkeytype and Mavis Beacon
-- Built following modern React best practices
-- Designed for keyboard-first user experience
+- Built with modern web technologies
+- Designed for keyboard-first interaction
+- Optimized for performance and user experience
