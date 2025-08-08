@@ -120,7 +120,13 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
           };
           
           // Call onComplete after state update
-          setTimeout(() => onComplete(result), 0);
+          setTimeout(async () => {
+            try {
+              await onComplete(result);
+            } catch (error) {
+              console.error('Error completing test:', error);
+            }
+          }, 0);
         }
         
         return {
@@ -192,8 +198,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6">
-      {/* Typing Area */}
+    <div className="w-full max-w-6xl mx-auto">
       <div 
         ref={containerRef}
         className="p-6 bg-white rounded-lg shadow-lg"
@@ -208,21 +213,23 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
           </p>
         </div>
         
-        <div className="mb-4">
+        <div className="mb-6">
           <div className="text-lg leading-relaxed font-mono bg-gray-50 p-4 rounded border-2 border-gray-200 min-h-[120px] whitespace-pre-wrap">
             {renderText()}
           </div>
         </div>
-      </div>
 
-      {/* Virtual Keyboard - positioned right below input field */}
-      {showKeyboard && (
-        <VirtualKeyboard 
-          currentKey={currentKey} 
-          isActive={!typingState.isComplete}
-          nextKey={typingState.currentIndex < test.content.length ? test.content[typingState.currentIndex] : undefined}
-        />
-      )}
+        {/* Virtual Keyboard - integrated into the same card */}
+        {showKeyboard && (
+          <div className="border-t border-gray-200 pt-6">
+            <VirtualKeyboard 
+              currentKey={currentKey} 
+              isActive={!typingState.isComplete}
+              nextKey={typingState.currentIndex < test.content.length ? test.content[typingState.currentIndex] : undefined}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

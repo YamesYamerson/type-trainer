@@ -37,7 +37,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showHeader = true }) =
                   <div className="flex items-center space-x-2">
                     <span>•</span>
                     <span className="text-blue-600 font-medium">
-                      Welcome, {user.name}!
+                      Ready to practice typing!
                     </span>
                   </div>
                 )}

@@ -24,6 +24,15 @@ export const useUser = () => {
         console.error('Failed to parse stored user:', error);
         setUser(null);
       }
+    } else {
+      // Auto-login with default user if no stored user
+      const defaultUser: User = {
+        id: 'default_user',
+        name: 'Typing Trainer User',
+        email: 'user@typingtrainer.com',
+        joinDate: Date.now()
+      };
+      setUser(defaultUser);
     }
     setIsLoading(false);
   }, []);

@@ -103,7 +103,7 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">
         Virtual Keyboard
       </h3>

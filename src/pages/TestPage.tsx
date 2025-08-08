@@ -15,7 +15,7 @@ export const TestPage: React.FC = () => {
   const [selectedMode, setSelectedMode] = useState<string>('lowercase');
   const [showKeyboard, setShowKeyboard] = useState<boolean>(true);
   const [modes] = useState<TypingMode[]>(loadModes());
-  const { results, addResult } = useTypingResults();
+  const { results, addResult, syncStatus, syncPendingData } = useTypingResults();
 
   const startTest = () => {
     // Load a random test from the selected category
@@ -31,10 +31,10 @@ export const TestPage: React.FC = () => {
     setSelectedMode(modeId);
   };
 
-  const handleTestComplete = (result: TypingResult) => {
+  const handleTestComplete = async (result: TypingResult) => {
     setTestResult(result);
     setIsTestActive(false);
-    addResult(result);
+    await addResult(result);
   };
 
   const resetTest = () => {
@@ -84,6 +84,21 @@ export const TestPage: React.FC = () => {
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
           >
             Start Typing Test
+          </button>
+          
+          {/* Sync Status */}
+          {syncStatus && (
+            <div className="mt-4 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-700">{syncStatus}</p>
+            </div>
+          )}
+          
+          {/* Manual Sync Button */}
+          <button
+            onClick={syncPendingData}
+            className="text-sm text-gray-500 hover:text-gray-700 underline"
+          >
+            Sync Data
           </button>
         </div>
       </div>
