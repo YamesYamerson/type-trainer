@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import type { TypingTest, TypingState, TypingResult } from '../types';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import type { TypingTest, TypingState, TypingResult, TypedCharacter } from '../types';
 import { VirtualKeyboard } from './VirtualKeyboard';
 
 interface TypingTestEngineProps {
@@ -17,11 +17,12 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
 }) => {
   const [typingState, setTypingState] = useState<TypingState>({
     currentIndex: 0,
-    typedText: '',
-    errors: [],
+    typedCharacters: [],
     isComplete: false,
     startTime: null,
-    endTime: null
+    endTime: null,
+    totalErrors: 0,
+    totalCorrect: 0
   });
   const [currentKey, setCurrentKey] = useState<string>('');
 
@@ -42,7 +43,54 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     return Math.round((correctCharacters / totalCharacters) * 100);
   }, []);
 
-  // Handle key press events
+  // Robust character comparison function
+  const compareCharacters = useCallback((inputChar: string, expectedChar: string): boolean => {
+    // Handle special cases first
+    if (expectedChar === '\t' && inputChar === 'Tab') return true;
+    if (expectedChar === '\n' && (inputChar === 'Enter' || inputChar === '\r')) return true;
+    if (expectedChar === ' ' && inputChar === ' ') return true;
+    
+    // Direct comparison first (most common case)
+    if (inputChar === expectedChar) return true;
+    
+    // Normalize characters for comparison
+    const normalizedInput = inputChar.normalize();
+    const normalizedExpected = expectedChar.normalize();
+    
+    // Normalized comparison
+    if (normalizedInput === normalizedExpected) return true;
+    
+    // Case-insensitive comparison for alphabetic characters
+    if (/[a-zA-Z]/.test(normalizedInput) && /[a-zA-Z]/.test(normalizedExpected)) {
+      return normalizedInput.toLowerCase() === normalizedExpected.toLowerCase();
+    }
+    
+    return false;
+  }, []);
+
+  // Memoized character status for performance
+  const characterStatus = useMemo(() => {
+    const status = new Map<number, 'correct' | 'incorrect' | 'pending' | 'current'>();
+    
+    // Mark all characters as pending initially
+    for (let i = 0; i < test.content.length; i++) {
+      status.set(i, 'pending');
+    }
+    
+    // Mark typed characters
+    typingState.typedCharacters.forEach(typedChar => {
+      status.set(typedChar.index, typedChar.isCorrect ? 'correct' : 'incorrect');
+    });
+    
+    // Mark current position
+    if (typingState.currentIndex < test.content.length) {
+      status.set(typingState.currentIndex, 'current');
+    }
+    
+    return status;
+  }, [typingState.typedCharacters, typingState.currentIndex, test.content.length]);
+
+  // Handle key press events with robust state management
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (typingState.isComplete) return;
 
@@ -64,39 +112,53 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
       }));
     }
 
-    // Handle backspace
+    // Handle backspace with proper character removal
     if (key === 'Backspace') {
       setTypingState(prev => {
         if (prev.currentIndex === 0) return prev;
         
-        const newTypedText = prev.typedText.slice(0, -1);
         const newCurrentIndex = prev.currentIndex - 1;
-        const newErrors = [...prev.errors];
+        const newTypedCharacters = prev.typedCharacters.slice(0, -1); // Remove last character
         
-        // Remove error if we're backing up over an error
-        if (newErrors.includes(newCurrentIndex)) {
-          newErrors.splice(newErrors.indexOf(newCurrentIndex), 1);
-        }
+        // Recalculate totals
+        const newTotalErrors = newTypedCharacters.filter(char => !char.isCorrect).length;
+        const newTotalCorrect = newTypedCharacters.filter(char => char.isCorrect).length;
         
         return {
           ...prev,
-          typedText: newTypedText,
           currentIndex: newCurrentIndex,
-          errors: newErrors
+          typedCharacters: newTypedCharacters,
+          totalErrors: newTotalErrors,
+          totalCorrect: newTotalCorrect
         };
       });
       return;
     }
 
-    // Handle tab key
-    if (key === 'Tab') {
+    // Handle character input (including Tab)
+    if (key.length === 1 || key === 'Tab') {
       setTypingState(prev => {
-        const expectedChar = test.content[prev.currentIndex];
-        const isCorrect = expectedChar === '\t';
-        const newErrors = isCorrect ? prev.errors : [...prev.errors, prev.currentIndex];
+        if (prev.currentIndex >= test.content.length) return prev;
         
-        const newTypedText = prev.typedText + '\t';
+        const expectedChar = test.content[prev.currentIndex];
+        const isCorrect = compareCharacters(key, expectedChar);
+        
+        // Create new typed character
+        const newTypedCharacter: TypedCharacter = {
+          index: prev.currentIndex,
+          inputChar: key === 'Tab' ? '\t' : key,
+          expectedChar,
+          isCorrect,
+          timestamp: Date.now()
+        };
+        
+        // Add to typed characters
+        const newTypedCharacters = [...prev.typedCharacters, newTypedCharacter];
         const newCurrentIndex = prev.currentIndex + 1;
+        
+        // Update totals
+        const newTotalErrors = newTypedCharacters.filter(char => !char.isCorrect).length;
+        const newTotalCorrect = newTypedCharacters.filter(char => char.isCorrect).length;
         
         // Check if test is complete
         const isComplete = newCurrentIndex >= test.content.length;
@@ -104,16 +166,15 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
         
         if (isComplete && endTime) {
           const timeElapsed = endTime - (prev.startTime || endTime);
-          const correctCharacters = newTypedText.length - newErrors.length;
-          const wpm = calculateWPM(correctCharacters, timeElapsed);
-          const accuracy = calculateAccuracy(correctCharacters, test.content.length);
+          const wpm = calculateWPM(newTotalCorrect, timeElapsed);
+          const accuracy = calculateAccuracy(newTotalCorrect, test.content.length);
           
           const result: TypingResult = {
             wpm,
             accuracy,
-            errors: newErrors.length,
+            errors: newTotalErrors,
             totalCharacters: test.content.length,
-            correctCharacters,
+            correctCharacters: newTotalCorrect,
             timeElapsed,
             testId: test.id,
             timestamp: Date.now()
@@ -131,62 +192,10 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
         
         return {
           ...prev,
-          typedText: newTypedText,
           currentIndex: newCurrentIndex,
-          errors: newErrors,
-          isComplete,
-          endTime
-        };
-      });
-      return;
-    }
-
-    // Handle regular character input
-    if (key.length === 1) {
-      setTypingState(prev => {
-        const expectedChar = test.content[prev.currentIndex];
-        const isCorrect = key === expectedChar;
-        const newErrors = isCorrect ? prev.errors : [...prev.errors, prev.currentIndex];
-        
-        const newTypedText = prev.typedText + key;
-        const newCurrentIndex = prev.currentIndex + 1;
-        
-        // Check if test is complete
-        const isComplete = newCurrentIndex >= test.content.length;
-        const endTime = isComplete ? Date.now() : null;
-        
-        if (isComplete && endTime) {
-          const timeElapsed = endTime - (prev.startTime || endTime);
-          const correctCharacters = newTypedText.length - newErrors.length;
-          const wpm = calculateWPM(correctCharacters, timeElapsed);
-          const accuracy = calculateAccuracy(correctCharacters, test.content.length);
-          
-          const result: TypingResult = {
-            wpm,
-            accuracy,
-            errors: newErrors.length,
-            totalCharacters: test.content.length,
-            correctCharacters,
-            timeElapsed,
-            testId: test.id,
-            timestamp: Date.now()
-          };
-          
-          // Call onComplete after state update
-          setTimeout(async () => {
-            try {
-              await onComplete(result);
-            } catch (error) {
-              console.error('Error completing test:', error);
-            }
-          }, 0);
-        }
-        
-        return {
-          ...prev,
-          typedText: newTypedText,
-          currentIndex: newCurrentIndex,
-          errors: newErrors,
+          typedCharacters: newTypedCharacters,
+          totalErrors: newTotalErrors,
+          totalCorrect: newTotalCorrect,
           isComplete,
           endTime
         };
@@ -197,7 +206,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     if (onKeyPress) {
       onKeyPress(key);
     }
-  }, [typingState, test, onComplete, onKeyPress, calculateWPM, calculateAccuracy]);
+  }, [typingState, test, onComplete, onKeyPress, calculateWPM, calculateAccuracy, compareCharacters]);
 
   // Set up keyboard event listener
   useEffect(() => {
@@ -217,34 +226,49 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     if (currentKey) {
       const timer = setTimeout(() => {
         setCurrentKey('');
-      }, 200); // Clear after 200ms
+      }, 200);
       return () => clearTimeout(timer);
     }
   }, [currentKey]);
 
-  // Render the text with proper styling
+  // Render the text with proper styling using the new character status
   const renderText = () => {
     const characters = test.content.split('');
-    const typedChars = typingState.typedText.split('');
     
     return characters.map((char, index) => {
+      const status = characterStatus.get(index) || 'pending';
       let className = 'typing-pending';
+      let displayChar = char;
       
-      if (index < typingState.currentIndex) {
-        // Already typed
-        if (typingState.errors.includes(index)) {
-          className = 'typing-incorrect';
-        } else {
+      // Check if there's a typed character for this index
+      const typedChar = typingState.typedCharacters.find(tc => tc.index === index);
+      
+      switch (status) {
+        case 'correct':
           className = 'typing-correct';
-        }
-      } else if (index === typingState.currentIndex) {
-        // Current position
-        className = 'typing-cursor';
+          // Use the actual typed character (should be the same as expected)
+          displayChar = typedChar ? typedChar.inputChar : char;
+          break;
+        case 'incorrect':
+          className = 'typing-incorrect';
+          // Use the actual incorrect character that was typed
+          displayChar = typedChar ? typedChar.inputChar : char;
+          break;
+        case 'current':
+          className = 'typing-cursor';
+          break;
+        default:
+          className = 'typing-pending';
       }
+      
+      // Handle special characters for display
+      const displayText = displayChar === '\n' ? '\u00A0' : 
+                         displayChar === '\t' ? '\u00A0\u00A0\u00A0\u00A0' : 
+                         displayChar;
       
       return (
         <span key={index} className={className}>
-          {char === '\n' ? '\u00A0' : char === '\t' ? '\u00A0\u00A0\u00A0\u00A0' : char}
+          {displayText}
         </span>
       );
     });

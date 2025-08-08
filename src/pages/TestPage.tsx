@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TypingTestEngine } from '../components/TypingTestEngine';
 import { ModeSelector } from '../components/ModeSelector';
-import { Layout } from '../components/Layout';
 import { StatsDisplay } from '../components/StatsDisplay';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import type { TypingTest, TypingResult, TypingMode } from '../types';

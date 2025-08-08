@@ -36,37 +36,12 @@ function App() {
   }
 
   return (
-    <Layout>
+    <Layout 
+      currentPage={currentPage}
+      onPageChange={setCurrentPage}
+    >
       <div className="p-4">
         <div className="max-w-6xl mx-auto">
-          {/* Navigation */}
-          <div className="flex justify-center mb-6">
-            <div className="bg-white rounded-lg shadow-sm p-2">
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => setCurrentPage('test')}
-                  className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                    currentPage === 'test'
-                      ? 'bg-blue-500 text-white'
-                      : 'text-gray-600 hover:text-gray-800'
-                  }`}
-                >
-                  Practice
-                </button>
-                <button
-                  onClick={() => setCurrentPage('profile')}
-                  className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                    currentPage === 'profile'
-                      ? 'bg-blue-500 text-white'
-                      : 'text-gray-600 hover:text-gray-800'
-                  }`}
-                >
-                  Profile
-                </button>
-              </div>
-            </div>
-          </div>
-
           {/* Page Content */}
           {currentPage === 'test' ? <TestPage /> : <ProfilePage />}
         </div>

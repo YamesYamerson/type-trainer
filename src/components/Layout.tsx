@@ -4,9 +4,16 @@ import { useUser } from '../hooks/useUser';
 interface LayoutProps {
   children: React.ReactNode;
   showHeader?: boolean;
+  currentPage?: 'test' | 'profile';
+  onPageChange?: (page: 'test' | 'profile') => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, showHeader = true }) => {
+export const Layout: React.FC<LayoutProps> = ({ 
+  children, 
+  showHeader = true, 
+  currentPage,
+  onPageChange 
+}) => {
   const { user } = useUser();
 
   return (
@@ -33,12 +40,34 @@ export const Layout: React.FC<LayoutProps> = ({ children, showHeader = true }) =
                   <span>Real-time feedback</span>
                 </div>
                 
-                {user && (
-                  <div className="flex items-center space-x-2">
-                    <span>•</span>
-                    <span className="text-blue-600 font-medium">
-                      Ready to practice typing!
-                    </span>
+                
+                {/* Navigation Toggle */}
+                {currentPage && onPageChange && (
+                  <div className="flex items-center space-x-2 ml-4">
+                    <div className="bg-gray-100 rounded-lg p-1">
+                      <div className="flex space-x-1">
+                        <button
+                          onClick={() => onPageChange('test')}
+                          className={`px-3 py-1 rounded-md font-medium text-sm transition-colors ${
+                            currentPage === 'test'
+                              ? 'bg-white text-blue-600 shadow-sm'
+                              : 'text-gray-600 hover:text-gray-800'
+                          }`}
+                        >
+                          Practice
+                        </button>
+                        <button
+                          onClick={() => onPageChange('profile')}
+                          className={`px-3 py-1 rounded-md font-medium text-sm transition-colors ${
+                            currentPage === 'profile'
+                              ? 'bg-white text-blue-600 shadow-sm'
+                              : 'text-gray-600 hover:text-gray-800'
+                          }`}
+                        >
+                          Profile
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

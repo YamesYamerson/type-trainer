@@ -33,11 +33,21 @@ export interface UserStats {
   lastTestDate: number;
 }
 
+// New character tracking interface
+export interface TypedCharacter {
+  index: number;
+  inputChar: string;
+  expectedChar: string;
+  isCorrect: boolean;
+  timestamp: number;
+}
+
 export interface TypingState {
   currentIndex: number;
-  typedText: string;
-  errors: number[];
+  typedCharacters: TypedCharacter[]; // Stack-like structure for character tracking
   isComplete: boolean;
   startTime: number | null;
   endTime: number | null;
+  totalErrors: number; // Cached for performance
+  totalCorrect: number; // Cached for performance
 }
