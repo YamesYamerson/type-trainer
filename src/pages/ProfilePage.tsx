@@ -8,6 +8,15 @@ export const ProfilePage: React.FC = () => {
   const { user, logout } = useUser();
   const { results, clearResults } = useTypingResults();
 
+  // Debug logging
+  console.log('🔍 ProfilePage loaded results:', results.length, 'results');
+  console.log('🔍 All results:', results.map(r => ({ 
+    testId: r.testId, 
+    category: r.category, 
+    wpm: r.wpm,
+    hasCategory: !!r.category 
+  })));
+
   if (!user) {
     return (
       <div className="p-4">
@@ -27,7 +36,14 @@ export const ProfilePage: React.FC = () => {
   };
 
   const getResultsByMode = (modeId: string): TypingResult[] => {
-    return results.filter(result => result.category === modeId);
+    const filtered = results.filter(result => result.category === modeId);
+    console.log(`🔍 getResultsByMode('${modeId}') returned:`, filtered.length, 'results');
+    console.log(`🔍 ${modeId} results:`, filtered.map(r => ({ 
+      testId: r.testId, 
+      category: r.category, 
+      wpm: r.wpm 
+    })));
+    return filtered;
   };
 
   const recentResults = results.slice(0, 10);

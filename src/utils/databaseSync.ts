@@ -91,21 +91,42 @@ export class DatabaseSync {
     try {
       // Get local results first
       const localResults = this.getLocalResults();
+      console.log('🔍 DatabaseSync.getUserResults - local results:', localResults.length, 'results');
+      console.log('🔍 Local results:', localResults.map(r => ({ 
+        testId: r.testId, 
+        category: r.category, 
+        wpm: r.wpm,
+        hasCategory: !!r.category 
+      })));
       
-      // Try to get database results if online
-      if (this.isOnline) {
-        try {
-          const response = await fetch(`${API_BASE_URL}/users/${userId}/results?limit=${limit}`);
-          if (response.ok) {
-            const dbResults = await response.json();
-            // Merge and deduplicate results
-            return this.mergeResults(localResults, dbResults);
-          }
-        } catch (error) {
-          console.warn('Could not fetch database results, using local only:', error);
+      // Always try to get database results
+      try {
+        const response = await fetch(`${API_BASE_URL}/users/${userId}/results?limit=${limit}`);
+        if (response.ok) {
+          const dbResults = await response.json();
+          console.log('🔍 DatabaseSync.getUserResults - database results:', dbResults.length, 'results');
+          console.log('🔍 Database results:', dbResults.map((r: any) => ({ 
+            test_id: r.test_id, 
+            category: r.category, 
+            wpm: r.wpm,
+            hasCategory: !!r.category 
+          })));
+          // Merge and deduplicate results
+          const merged = this.mergeResults(localResults, dbResults);
+          console.log('🔍 DatabaseSync.getUserResults - merged results:', merged.length, 'results');
+          console.log('🔍 Merged results:', merged.map(r => ({ 
+            testId: r.testId, 
+            category: r.category, 
+            wpm: r.wpm,
+            hasCategory: !!r.category 
+          })));
+          return merged;
         }
+      } catch (error) {
+        console.warn('Could not fetch database results, using local only:', error);
       }
       
+      console.log('🔍 DatabaseSync.getUserResults - returning local results only');
       return localResults.slice(0, limit);
     } catch (error) {
       console.error('Error getting user results:', error);
@@ -162,6 +183,19 @@ export class DatabaseSync {
 
   private static saveToLocalStorage(result: TypingResult) {
     const existingResults = this.getLocalResults();
+    
+    // Check if this result already exists (using multiple criteria)
+    const exists = existingResults.some(existing => 
+      existing.testId === result.testId && 
+      Math.abs(existing.timestamp - result.timestamp) < 1000 && // Within 1 second
+      existing.wpm === result.wpm &&
+      existing.accuracy === result.accuracy
+    );
+    
+    if (exists) {
+      return;
+    }
+    
     existingResults.unshift(result);
     
     // Keep only last 100 results in localStorage
@@ -252,42 +286,60 @@ export class DatabaseSync {
   }
 
   private static mergeResults(localResults: TypingResult[], dbResults: any[]): TypingResult[] {
-    // Combine and deduplicate results based on timestamp and testId
-    const combined = [...localResults];
+    // Start with database results as the primary source
+    const combined: TypingResult[] = [];
+    const seen = new Set<string>(); // Track seen results to avoid duplicates
     
+    // Process database results first (they have priority)
     for (const dbResult of dbResults) {
-      const exists = combined.some(local => 
-        local.timestamp === dbResult.timestamp && local.testId === dbResult.test_id
-      );
-      if (!exists) {
-        // Handle missing category field for existing records
-        let category = dbResult.category;
-        if (!category) {
-          // Try to infer category from test_id for backward compatibility
-          if (dbResult.test_id.startsWith('lowercase')) {
-            category = 'lowercase';
-          } else if (dbResult.test_id.startsWith('punctuation')) {
-            category = 'punctuation';
-          } else if (dbResult.test_id.startsWith('code')) {
-            category = 'code';
-          } else if (dbResult.test_id.startsWith('data_entry')) {
-            category = 'data_entry';
-          } else {
-            category = 'unknown';
-          }
+      // Handle missing category field for existing records
+      let category = dbResult.category;
+      if (!category) {
+        // Try to infer category from test_id for backward compatibility
+        if (dbResult.test_id.startsWith('lowercase')) {
+          category = 'lowercase';
+        } else if (dbResult.test_id.startsWith('punctuation')) {
+          category = 'punctuation';
+        } else if (dbResult.test_id.startsWith('code')) {
+          category = 'code';
+        } else if (dbResult.test_id.startsWith('data_entry')) {
+          category = 'data_entry';
+        } else {
+          category = 'unknown';
         }
-        
-        combined.push({
-          wpm: dbResult.wpm,
-          accuracy: dbResult.accuracy,
-          errors: dbResult.errors,
-          totalCharacters: dbResult.total_characters,
-          correctCharacters: dbResult.correct_characters,
-          timeElapsed: dbResult.time_elapsed,
-          testId: dbResult.test_id,
-          category: category,
-          timestamp: dbResult.timestamp
-        });
+      }
+      
+      const key = `${dbResult.test_id}-${dbResult.timestamp}`;
+      seen.add(key);
+      
+      combined.push({
+        wpm: dbResult.wpm,
+        accuracy: dbResult.accuracy,
+        errors: dbResult.errors,
+        totalCharacters: dbResult.total_characters,
+        correctCharacters: dbResult.correct_characters,
+        timeElapsed: dbResult.time_elapsed,
+        testId: dbResult.test_id,
+        category: category,
+        timestamp: dbResult.timestamp
+      });
+    }
+    
+    // Now add local results only if they don't exist in database
+    for (const localResult of localResults) {
+      const key = `${localResult.testId}-${localResult.timestamp}`;
+      
+      // Check if this result already exists in database results
+      const exists = seen.has(key) || combined.some(db => 
+        db.testId === localResult.testId && 
+        Math.abs(db.timestamp - localResult.timestamp) < 1000 && // Within 1 second
+        db.wpm === localResult.wpm &&
+        db.accuracy === localResult.accuracy
+      );
+      
+      if (!exists) {
+        seen.add(key);
+        combined.push(localResult);
       }
     }
 

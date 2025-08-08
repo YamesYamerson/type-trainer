@@ -25,6 +25,8 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     totalCorrect: 0
   });
   const [currentKey, setCurrentKey] = useState<string>('');
+  const [isCompleting, setIsCompleting] = useState<boolean>(false);
+  const isCompletingRef = useRef<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -164,7 +166,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
         const isComplete = newCurrentIndex >= test.content.length;
         const endTime = isComplete ? Date.now() : null;
         
-        if (isComplete && endTime) {
+        if (isComplete && endTime && !isCompletingRef.current) {
           const timeElapsed = endTime - (prev.startTime || endTime);
           const wpm = calculateWPM(newTotalCorrect, timeElapsed);
           const accuracy = calculateAccuracy(newTotalCorrect, test.content.length);
@@ -181,12 +183,17 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
             timestamp: Date.now()
           };
           
+          // Set completing flag to prevent multiple calls
+          isCompletingRef.current = true;
+          
           // Call onComplete after state update
           setTimeout(async () => {
             try {
               await onComplete(result);
             } catch (error) {
               console.error('Error completing test:', error);
+            } finally {
+              isCompletingRef.current = false;
             }
           }, 0);
         }

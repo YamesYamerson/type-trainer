@@ -19,6 +19,13 @@ export const useTypingResults = () => {
       try {
         // Get results from hybrid storage (localStorage + SQLite)
         const hybridResults = await DatabaseSync.getUserResults('default_user', 100);
+        console.log('🔍 useTypingResults loaded results:', hybridResults.length, 'results');
+        console.log('🔍 Results details:', hybridResults.map(r => ({ 
+          testId: r.testId, 
+          category: r.category, 
+          wpm: r.wpm,
+          hasCategory: !!r.category 
+        })));
         setResults(hybridResults);
       } catch (error) {
         console.error('Failed to load results:', error);
@@ -27,6 +34,13 @@ export const useTypingResults = () => {
         if (stored) {
           try {
             const parsed = JSON.parse(stored);
+            console.log('🔍 useTypingResults fallback to localStorage:', parsed.length, 'results');
+            console.log('🔍 localStorage results:', parsed.map(r => ({ 
+              testId: r.testId, 
+              category: r.category, 
+              wpm: r.wpm,
+              hasCategory: !!r.category 
+            })));
             setResults(parsed);
           } catch (error) {
             console.error('Failed to parse stored results:', error);
@@ -43,19 +57,60 @@ export const useTypingResults = () => {
 
   const addResult = async (result: TypingResult) => {
     try {
+      // Check for duplicates before saving
+      const existingResults = results;
+      const exists = existingResults.some(existing => 
+        existing.testId === result.testId && 
+        Math.abs(existing.timestamp - result.timestamp) < 1000 && // Within 1 second
+        existing.wpm === result.wpm &&
+        existing.accuracy === result.accuracy
+      );
+      
+      if (exists) {
+        return;
+      }
+      
       // Save to hybrid storage (localStorage + SQLite)
       const syncResult = await DatabaseSync.saveTypingResult(result);
       setSyncStatus(syncResult.message);
       
-      // Update local state
-      setResults(prev => [result, ...prev]);
+      // Update local state - check for duplicates first
+      setResults(prev => {
+        // Check if this result already exists (using multiple criteria)
+        const exists = prev.some(existing => 
+          existing.testId === result.testId && 
+          Math.abs(existing.timestamp - result.timestamp) < 1000 && // Within 1 second
+          existing.wpm === result.wpm &&
+          existing.accuracy === result.accuracy
+        );
+        
+        if (exists) {
+          return prev; // Don't add if it already exists
+        }
+        
+        return [result, ...prev];
+      });
       
       // Clear sync status after 3 seconds
       setTimeout(() => setSyncStatus(''), 3000);
     } catch (error) {
       console.error('Failed to save result:', error);
       // Fallback to localStorage only
-      setResults(prev => [result, ...prev]);
+      setResults(prev => {
+        // Check for duplicates in fallback case too
+        const exists = prev.some(existing => 
+          existing.testId === result.testId && 
+          Math.abs(existing.timestamp - result.timestamp) < 1000 &&
+          existing.wpm === result.wpm &&
+          existing.accuracy === result.accuracy
+        );
+        
+        if (exists) {
+          return prev;
+        }
+        
+        return [result, ...prev];
+      });
       setSyncStatus('Saved locally only');
     }
   };
@@ -68,7 +123,7 @@ export const useTypingResults = () => {
   };
 
   const getResultsByMode = (modeId: string) => {
-    return results.filter(result => result.testId.startsWith(modeId));
+    return results.filter(result => result.category === modeId);
   };
 
   const getRecentResults = (count: number = 10) => {
