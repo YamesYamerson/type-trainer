@@ -90,44 +90,20 @@ export class DatabaseSync {
   // Get user results (combine localStorage and SQLite)
   static async getUserResults(userId: string, limit: number = 50): Promise<TypingResult[]> {
     try {
-      // Get local results first
       const localResults = this.getLocalResults();
-      console.log('🔍 DatabaseSync.getUserResults - local results:', localResults.length, 'results');
-      console.log('🔍 Local results:', localResults.map(r => ({ 
-        testId: r.testId, 
-        category: r.category, 
-        wpm: r.wpm,
-        hasCategory: !!r.category 
-      })));
       
       // Always try to get database results
       try {
         const response = await fetch(`${API_BASE_URL}/users/${userId}/results?limit=${limit}`);
         if (response.ok) {
           const dbResults = await response.json();
-          console.log('🔍 DatabaseSync.getUserResults - database results:', dbResults.length, 'results');
-          console.log('🔍 Database results:', dbResults.map((r: any) => ({ 
-            test_id: r.test_id, 
-            category: r.category, 
-            wpm: r.wpm,
-            hasCategory: !!r.category 
-          })));
-          // Merge and deduplicate results
           const merged = this.mergeResults(localResults, dbResults);
-          console.log('🔍 DatabaseSync.getUserResults - merged results:', merged.length, 'results');
-          console.log('🔍 Merged results:', merged.map(r => ({ 
-            testId: r.testId, 
-            category: r.category, 
-            wpm: r.wpm,
-            hasCategory: !!r.category 
-          })));
           return merged;
         }
       } catch (error) {
         console.warn('Could not fetch database results, using local only:', error);
       }
       
-      console.log('🔍 DatabaseSync.getUserResults - returning local results only');
       return localResults.slice(0, limit);
     } catch (error) {
       console.error('Error getting user results:', error);

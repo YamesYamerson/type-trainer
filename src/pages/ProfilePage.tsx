@@ -1,167 +1,110 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import type { TypingResult, UserStats } from '../types';
 import { StatsDisplay } from '../components/StatsDisplay';
-import { useTypingResults } from '../hooks/useTypingResults';
-import { useUser } from '../hooks/useUser';
-import type { TypingResult } from '../types';
+import { DataManager } from '../utils/dataManager';
 
 export const ProfilePage: React.FC = () => {
-  const { user, logout } = useUser();
-  const { results, clearResults } = useTypingResults();
+  const [results, setResults] = useState<TypingResult[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [overallStats, setOverallStats] = useState<UserStats>({
+    totalTests: 0,
+    averageWpm: 0,
+    bestWpm: 0,
+    averageAccuracy: 0,
+    lastTestDate: null
+  });
 
-  // Debug logging
-  console.log('🔍 ProfilePage loaded results:', results.length, 'results');
-  console.log('🔍 All results:', results.map(r => ({ 
-    testId: r.testId, 
-    category: r.category, 
-    wpm: r.wpm,
-    hasCategory: !!r.category 
-  })));
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const [loadedResults, stats] = await Promise.all([
+          DataManager.getResults(100),
+          DataManager.getUserStats()
+        ]);
+        setResults(loadedResults);
+        setOverallStats(stats);
+      } catch (error) {
+        console.error('Failed to load profile data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  if (!user) {
+    loadData();
+  }, []);
+
+  const getResultsByMode = (modeId: string): TypingResult[] => {
+    return results.filter(result => result.category === modeId);
+  };
+
+  if (isLoading) {
     return (
-      <div className="p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">
-              Please log in to view your profile
-            </h1>
-          </div>
-        </div>
+      <div className="flex justify-center items-center h-64">
+        <div className="text-lg text-gray-600">Loading profile...</div>
       </div>
     );
   }
 
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString();
-  };
-
-  const getResultsByMode = (modeId: string): TypingResult[] => {
-    const filtered = results.filter(result => result.category === modeId);
-    console.log(`🔍 getResultsByMode('${modeId}') returned:`, filtered.length, 'results');
-    console.log(`🔍 ${modeId} results:`, filtered.map(r => ({ 
-      testId: r.testId, 
-      category: r.category, 
-      wpm: r.wpm 
-    })));
-    return filtered;
-  };
-
-  const recentResults = results.slice(0, 10);
-
   return (
-    <div className="p-4">
-      <div className="max-w-6xl mx-auto">
-        {/* User Info */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                {user.name}
-              </h1>
-              <p className="text-gray-600">{user.email}</p>
-              <p className="text-sm text-gray-500">
-                Member since {formatDate(user.joinDate)}
-              </p>
-            </div>
-            <button
-              onClick={logout}
-              className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition-colors"
-            >
-              Logout
-            </button>
-          </div>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Your Profile</h1>
+      
+      {/* Overall Statistics */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Overall Statistics</h2>
+        <StatsDisplay results={results} />
+      </div>
+
+      {/* Category-Specific Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Basic Words Stats</h3>
+          <StatsDisplay results={getResultsByMode('lowercase')} />
         </div>
 
-        {/* Overall Stats */}
-        <div className="mb-6">
-          <StatsDisplay results={results} />
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Punctuation Stats</h3>
+          <StatsDisplay results={getResultsByMode('punctuation')} />
         </div>
 
-        {/* Mode-specific Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Basic Words Stats
-            </h3>
-            <StatsDisplay 
-              results={getResultsByMode('lowercase')} 
-              showTitle={false}
-            />
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Punctuation Stats
-            </h3>
-            <StatsDisplay 
-              results={getResultsByMode('punctuation')} 
-              showTitle={false}
-            />
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Code Stats
-            </h3>
-            <StatsDisplay 
-              results={getResultsByMode('code')} 
-              showTitle={false}
-            />
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Data Entry Stats
-            </h3>
-            <StatsDisplay 
-              results={getResultsByMode('data_entry')} 
-              showTitle={false}
-            />
-          </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Code Stats</h3>
+          <StatsDisplay results={getResultsByMode('code')} />
         </div>
 
-        {/* Recent Results */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">
-              Recent Tests
-            </h3>
-            {results.length > 0 && (
-              <button
-                onClick={clearResults}
-                className="text-red-500 hover:text-red-600 text-sm"
-              >
-                Clear All Results
-              </button>
-            )}
-          </div>
-          
-          {recentResults.length === 0 ? (
-            <p className="text-gray-500 text-center">No tests completed yet</p>
-          ) : (
-            <div className="space-y-3">
-              {recentResults.map((result, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                  <div>
-                    <span className="font-medium text-gray-800">
-                      {result.testId.replace(/_/g, ' ')}
-                    </span>
-                    <span className="text-sm text-gray-500 ml-2">
-                      {formatDate(result.timestamp)}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-4 text-sm">
-                    <span className="text-blue-600 font-medium">{result.wpm} WPM</span>
-                    <span className="text-green-600 font-medium">{result.accuracy}%</span>
-                    <span className="text-gray-600">
-                      {(result.timeElapsed / 1000).toFixed(1)}s
-                    </span>
-                  </div>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Data Entry Stats</h3>
+          <StatsDisplay results={getResultsByMode('data_entry')} />
+        </div>
+      </div>
+
+      {/* Recent Tests */}
+      <div className="bg-white rounded-lg shadow-md p-6 mt-8">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Recent Tests</h2>
+        {results.length === 0 ? (
+          <p className="text-gray-600">No tests completed yet. Start practicing to see your results here!</p>
+        ) : (
+          <div className="space-y-3">
+            {results.slice(0, 10).map((result, index) => (
+              <div key={`${result.testId}-${result.timestamp}`} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div>
+                  <span className="font-medium text-gray-800">
+                    {result.category === 'lowercase' ? 'Basic Words' :
+                     result.category === 'punctuation' ? 'Punctuation' :
+                     result.category === 'code' ? 'Code' :
+                     result.category === 'data_entry' ? 'Data Entry' : result.category}
+                  </span>
+                  <span className="text-gray-600 ml-2">• {result.testId}</span>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <div className="text-right">
+                  <div className="font-semibold text-gray-800">{result.wpm} WPM</div>
+                  <div className="text-sm text-gray-600">{result.accuracy}% accuracy</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

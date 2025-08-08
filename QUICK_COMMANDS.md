@@ -56,6 +56,19 @@ window.hashSystemTests.testHybridData()
 window.hashSystemTests.testDuplicatePrevention()
 ```
 
+### Test New Simplified System (Browser Console)
+```javascript
+// Load the test utility
+// Copy and paste the content of test-new-system.js into browser console
+
+// Test the new data management system
+testNewSystem()
+
+// Test frontend result saving
+// Copy and paste the content of test-frontend-save.js into browser console
+testFrontendSave()
+```
+
 ### Clear localStorage (Browser Console)
 ```javascript
 // Copy and paste the content of clear-localStorage.js into browser console
