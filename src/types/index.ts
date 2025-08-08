@@ -21,6 +21,7 @@ export interface TypingResult {
   correctCharacters: number;
   timeElapsed: number;
   testId: string;
+  category: string; // Add category field to track test type
   timestamp: number;
 }
 

@@ -27,7 +27,7 @@ export const ProfilePage: React.FC = () => {
   };
 
   const getResultsByMode = (modeId: string): TypingResult[] => {
-    return results.filter(result => result.testId.startsWith(modeId));
+    return results.filter(result => result.category === modeId);
   };
 
   const recentResults = results.slice(0, 10);

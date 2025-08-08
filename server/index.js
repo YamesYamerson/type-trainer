@@ -86,6 +86,7 @@ app.post('/api/results', (req, res) => {
   const {
     userId,
     testId,
+    category,
     wpm,
     accuracy,
     errors,
@@ -97,9 +98,9 @@ app.post('/api/results', (req, res) => {
 
   db.run(`
     INSERT INTO typing_results 
-    (user_id, test_id, wpm, accuracy, errors, total_characters, correct_characters, time_elapsed, timestamp)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `, [userId, testId, wpm, accuracy, errors, totalCharacters, correctCharacters, timeElapsed, timestamp], function(err) {
+    (user_id, test_id, category, wpm, accuracy, errors, total_characters, correct_characters, time_elapsed, timestamp)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `, [userId, testId, category, wpm, accuracy, errors, totalCharacters, correctCharacters, timeElapsed, timestamp], function(err) {
     if (err) {
       res.status(500).json({ error: err.message });
       return;

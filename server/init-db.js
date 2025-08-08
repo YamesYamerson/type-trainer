@@ -32,6 +32,7 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id TEXT NOT NULL,
       test_id TEXT NOT NULL,
+      category TEXT NOT NULL,
       wpm INTEGER NOT NULL,
       accuracy INTEGER NOT NULL,
       errors INTEGER NOT NULL,
@@ -47,6 +48,36 @@ db.serialize(() => {
       console.error('Error creating typing_results table:', err);
     } else {
       console.log('✅ Typing results table created successfully');
+    }
+  });
+
+  // Migration: Add category column if it doesn't exist
+  db.run(`
+    ALTER TABLE typing_results ADD COLUMN category TEXT
+  `, (err) => {
+    if (err && !err.message.includes('duplicate column name')) {
+      console.error('Error adding category column:', err);
+    } else {
+      console.log('✅ Category column migration completed');
+    }
+  });
+
+  // Migration: Update existing records with category based on test_id
+  db.run(`
+    UPDATE typing_results 
+    SET category = CASE 
+      WHEN test_id LIKE 'lowercase%' THEN 'lowercase'
+      WHEN test_id LIKE 'punctuation%' THEN 'punctuation'
+      WHEN test_id LIKE 'code%' THEN 'code'
+      WHEN test_id LIKE 'data_entry%' THEN 'data_entry'
+      ELSE 'unknown'
+    END
+    WHERE category IS NULL OR category = ''
+  `, (err) => {
+    if (err) {
+      console.error('Error updating existing records with category:', err);
+    } else {
+      console.log('✅ Existing records updated with category');
     }
   });
 

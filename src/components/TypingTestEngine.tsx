@@ -177,6 +177,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
             correctCharacters: newTotalCorrect,
             timeElapsed,
             testId: test.id,
+            category: test.category, // Add the test category
             timestamp: Date.now()
           };
           

@@ -260,6 +260,23 @@ export class DatabaseSync {
         local.timestamp === dbResult.timestamp && local.testId === dbResult.test_id
       );
       if (!exists) {
+        // Handle missing category field for existing records
+        let category = dbResult.category;
+        if (!category) {
+          // Try to infer category from test_id for backward compatibility
+          if (dbResult.test_id.startsWith('lowercase')) {
+            category = 'lowercase';
+          } else if (dbResult.test_id.startsWith('punctuation')) {
+            category = 'punctuation';
+          } else if (dbResult.test_id.startsWith('code')) {
+            category = 'code';
+          } else if (dbResult.test_id.startsWith('data_entry')) {
+            category = 'data_entry';
+          } else {
+            category = 'unknown';
+          }
+        }
+        
         combined.push({
           wpm: dbResult.wpm,
           accuracy: dbResult.accuracy,
@@ -268,6 +285,7 @@ export class DatabaseSync {
           correctCharacters: dbResult.correct_characters,
           timeElapsed: dbResult.time_elapsed,
           testId: dbResult.test_id,
+          category: category,
           timestamp: dbResult.timestamp
         });
       }
@@ -285,6 +303,7 @@ export class DatabaseSync {
         body: JSON.stringify({
           userId: 'default_user',
           testId: result.testId,
+          category: result.category,
           wpm: result.wpm,
           accuracy: result.accuracy,
           errors: result.errors,

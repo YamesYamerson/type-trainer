@@ -18,9 +18,24 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({
     const loadStats = async () => {
       setIsLoading(true);
       try {
-        // Get hybrid stats (localStorage + SQLite)
-        const hybridStats = await DatabaseSync.getUserStats('default_user');
-        setStats(hybridStats);
+        // If results are provided, calculate stats from them
+        if (results.length > 0) {
+          const averageWpm = Math.round(results.reduce((sum, r) => sum + r.wpm, 0) / results.length);
+          const averageAccuracy = Math.round(results.reduce((sum, r) => sum + r.accuracy, 0) / results.length);
+          const bestWpm = Math.max(...results.map(r => r.wpm));
+          setStats({
+            userId: 'default_user',
+            totalTests: results.length,
+            averageWpm,
+            bestWpm,
+            totalAccuracy: averageAccuracy,
+            lastTestDate: Math.max(...results.map(r => r.timestamp))
+          });
+        } else {
+          // If no results provided, get hybrid stats (localStorage + SQLite)
+          const hybridStats = await DatabaseSync.getUserStats('default_user');
+          setStats(hybridStats);
+        }
       } catch (error) {
         console.error('Failed to load stats:', error);
         // Fallback to local calculation
