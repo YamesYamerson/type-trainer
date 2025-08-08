@@ -27,12 +27,20 @@ export interface TypingResult {
 }
 
 export interface UserStats {
-  userId: string;
   totalTests: number;
   averageWpm: number;
   bestWpm: number;
-  totalAccuracy: number;
-  lastTestDate: number;
+  averageAccuracy: number;
+  lastTestDate: number | null;
+  totalCharacters?: number;
+  totalErrors?: number;
+  categoryStats?: {
+    [key: string]: {
+      tests: number;
+      averageWpm: number;
+      averageAccuracy: number;
+    };
+  };
 }
 
 // New character tracking interface
