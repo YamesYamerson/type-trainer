@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { TypingResult } from '../types';
 import { DatabaseSync } from '../utils/databaseSync';
+import { resultExists } from '../utils/hashUtils';
 
 export const useTypingResults = () => {
   const [results, setResults] = useState<TypingResult[]>([]);
@@ -59,12 +60,7 @@ export const useTypingResults = () => {
     try {
       // Check for duplicates before saving
       const existingResults = results;
-      const exists = existingResults.some(existing => 
-        existing.testId === result.testId && 
-        Math.abs(existing.timestamp - result.timestamp) < 1000 && // Within 1 second
-        existing.wpm === result.wpm &&
-        existing.accuracy === result.accuracy
-      );
+      const exists = resultExists(existingResults, result);
       
       if (exists) {
         return;
@@ -77,12 +73,7 @@ export const useTypingResults = () => {
       // Update local state - check for duplicates first
       setResults(prev => {
         // Check if this result already exists (using multiple criteria)
-        const exists = prev.some(existing => 
-          existing.testId === result.testId && 
-          Math.abs(existing.timestamp - result.timestamp) < 1000 && // Within 1 second
-          existing.wpm === result.wpm &&
-          existing.accuracy === result.accuracy
-        );
+        const exists = resultExists(prev, result);
         
         if (exists) {
           return prev; // Don't add if it already exists
@@ -98,12 +89,7 @@ export const useTypingResults = () => {
       // Fallback to localStorage only
       setResults(prev => {
         // Check for duplicates in fallback case too
-        const exists = prev.some(existing => 
-          existing.testId === result.testId && 
-          Math.abs(existing.timestamp - result.timestamp) < 1000 &&
-          existing.wpm === result.wpm &&
-          existing.accuracy === result.accuracy
-        );
+        const exists = resultExists(prev, result);
         
         if (exists) {
           return prev;

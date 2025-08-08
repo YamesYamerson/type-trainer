@@ -23,6 +23,7 @@ export interface TypingResult {
   testId: string;
   category: string; // Add category field to track test type
   timestamp: number;
+  hash: string; // Unique hash to prevent duplicates
 }
 
 export interface UserStats {

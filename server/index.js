@@ -93,21 +93,42 @@ app.post('/api/results', (req, res) => {
     totalCharacters,
     correctCharacters,
     timeElapsed,
-    timestamp
+    timestamp,
+    hash
   } = req.body;
 
-  db.run(`
-    INSERT INTO typing_results 
-    (user_id, test_id, category, wpm, accuracy, errors, total_characters, correct_characters, time_elapsed, timestamp)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `, [userId, testId, category, wpm, accuracy, errors, totalCharacters, correctCharacters, timeElapsed, timestamp], function(err) {
+  // First check if a result with this hash already exists
+  db.get('SELECT id FROM typing_results WHERE hash = ?', [hash], (err, existingResult) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
-    res.json({ 
-      id: this.lastID,
-      message: 'Result saved successfully' 
+    
+    if (existingResult) {
+      // Result with this hash already exists, return success (idempotent)
+      res.json({ 
+        id: existingResult.id,
+        message: 'Result already exists',
+        duplicate: true
+      });
+      return;
+    }
+    
+    // No existing result, insert new one
+    db.run(`
+      INSERT INTO typing_results 
+      (user_id, test_id, category, wpm, accuracy, errors, total_characters, correct_characters, time_elapsed, timestamp, hash)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [userId, testId, category, wpm, accuracy, errors, totalCharacters, correctCharacters, timeElapsed, timestamp, hash], function(err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json({ 
+        id: this.lastID,
+        message: 'Result saved successfully',
+        duplicate: false
+      });
     });
   });
 });

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import type { TypingTest, TypingState, TypingResult, TypedCharacter } from '../types';
 import { VirtualKeyboard } from './VirtualKeyboard';
+import { generateHashForResult } from '../utils/hashUtils';
 
 interface TypingTestEngineProps {
   test: TypingTest;
@@ -25,7 +26,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     totalCorrect: 0
   });
   const [currentKey, setCurrentKey] = useState<string>('');
-  const [isCompleting, setIsCompleting] = useState<boolean>(false);
+  // const [isCompleting, setIsCompleting] = useState<boolean>(false);
   const isCompletingRef = useRef<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -180,7 +181,16 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
             timeElapsed,
             testId: test.id,
             category: test.category, // Add the test category
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            hash: generateHashForResult(
+              test.id,
+              Date.now(),
+              wpm,
+              accuracy,
+              newTotalErrors,
+              test.content.length,
+              newTotalCorrect
+            )
           };
           
           // Set completing flag to prevent multiple calls

@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test:category": "node test-category-filtering.js"
+    "test:category": "node test-category-filtering.js",
+    "test:hash": "node test-hash-system.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",

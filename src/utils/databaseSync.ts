@@ -1,4 +1,5 @@
 import type { TypingResult, UserStats } from '../types';
+import { resultExists, removeDuplicates, generateHashForResult } from './hashUtils';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
@@ -184,13 +185,8 @@ export class DatabaseSync {
   private static saveToLocalStorage(result: TypingResult) {
     const existingResults = this.getLocalResults();
     
-    // Check if this result already exists (using multiple criteria)
-    const exists = existingResults.some(existing => 
-      existing.testId === result.testId && 
-      Math.abs(existing.timestamp - result.timestamp) < 1000 && // Within 1 second
-      existing.wpm === result.wpm &&
-      existing.accuracy === result.accuracy
-    );
+    // Check if this result already exists using hash
+    const exists = resultExists(existingResults, result);
     
     if (exists) {
       return;
@@ -288,7 +284,6 @@ export class DatabaseSync {
   private static mergeResults(localResults: TypingResult[], dbResults: any[]): TypingResult[] {
     // Start with database results as the primary source
     const combined: TypingResult[] = [];
-    const seen = new Set<string>(); // Track seen results to avoid duplicates
     
     // Process database results first (they have priority)
     for (const dbResult of dbResults) {
@@ -309,9 +304,6 @@ export class DatabaseSync {
         }
       }
       
-      const key = `${dbResult.test_id}-${dbResult.timestamp}`;
-      seen.add(key);
-      
       combined.push({
         wpm: dbResult.wpm,
         accuracy: dbResult.accuracy,
@@ -321,30 +313,30 @@ export class DatabaseSync {
         timeElapsed: dbResult.time_elapsed,
         testId: dbResult.test_id,
         category: category,
-        timestamp: dbResult.timestamp
+        timestamp: dbResult.timestamp,
+        hash: dbResult.hash || generateHashForResult(
+          dbResult.test_id,
+          dbResult.timestamp,
+          dbResult.wpm,
+          dbResult.accuracy,
+          dbResult.errors,
+          dbResult.total_characters,
+          dbResult.correct_characters
+        )
       });
     }
     
     // Now add local results only if they don't exist in database
     for (const localResult of localResults) {
-      const key = `${localResult.testId}-${localResult.timestamp}`;
-      
-      // Check if this result already exists in database results
-      const exists = seen.has(key) || combined.some(db => 
-        db.testId === localResult.testId && 
-        Math.abs(db.timestamp - localResult.timestamp) < 1000 && // Within 1 second
-        db.wpm === localResult.wpm &&
-        db.accuracy === localResult.accuracy
-      );
+      const exists = resultExists(combined, localResult);
       
       if (!exists) {
-        seen.add(key);
         combined.push(localResult);
       }
     }
 
-    // Sort by timestamp (newest first) and return
-    return combined.sort((a, b) => b.timestamp - a.timestamp);
+    // Remove any remaining duplicates and sort by timestamp (newest first)
+    return removeDuplicates(combined).sort((a, b) => b.timestamp - a.timestamp);
   }
 
   private static async syncToDatabase(result: TypingResult): Promise<SyncResult> {
@@ -362,7 +354,8 @@ export class DatabaseSync {
           totalCharacters: result.totalCharacters,
           correctCharacters: result.correctCharacters,
           timeElapsed: result.timeElapsed,
-          timestamp: result.timestamp
+          timestamp: result.timestamp,
+          hash: result.hash
         })
       });
 

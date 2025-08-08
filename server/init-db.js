@@ -40,6 +40,7 @@ db.serialize(() => {
       correct_characters INTEGER NOT NULL,
       time_elapsed INTEGER NOT NULL,
       timestamp INTEGER NOT NULL,
+      hash TEXT UNIQUE,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id)
     )
@@ -59,6 +60,17 @@ db.serialize(() => {
       console.error('Error adding category column:', err);
     } else {
       console.log('✅ Category column migration completed');
+    }
+  });
+
+  // Migration: Add hash column if it doesn't exist
+  db.run(`
+    ALTER TABLE typing_results ADD COLUMN hash TEXT
+  `, (err) => {
+    if (err && !err.message.includes('duplicate column name')) {
+      console.error('Error adding hash column:', err);
+    } else {
+      console.log('✅ Hash column migration completed');
     }
   });
 
