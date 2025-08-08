@@ -3,19 +3,21 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const config = require('./config');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
+app.use(cors({
+  origin: config.corsOrigin,
+  credentials: true
+}));
+app.use(express.json());
 
 // Database setup
-const dbPath = path.join(__dirname, 'typing_trainer.db');
-const db = new sqlite3.Database(dbPath);
+const db = new sqlite3.Database(config.dbPath);
 
-console.log('Connected to SQLite database:', dbPath);
+console.log('Connected to SQLite database:', config.dbPath);
 
 // Routes
 
@@ -164,7 +166,7 @@ app.get('/api/db-info', (req, res) => {
       }
       
       res.json({
-        database: 'typing_trainer.db',
+        database: config.dbPath,
         users: userCount.user_count,
         results: resultCount.result_count,
         timestamp: new Date().toISOString()
@@ -174,14 +176,12 @@ app.get('/api/db-info', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+app.listen(config.port, () => {
+  console.log(`🚀 Server running on http://localhost:${config.port}`);
   console.log('📊 Database endpoints:');
   console.log('  GET  /api/users - List all users');
-  console.log('  GET  /api/users/:id - Get user details');
   console.log('  GET  /api/users/:id/results - Get user results');
-  console.log('  GET  /api/users/:id/stats - Get user statistics');
   console.log('  POST /api/results - Submit typing result');
-  console.log('  GET  /api/results - Get all results');
   console.log('  GET  /api/db-info - Database information');
+  console.log('  POST /api/clear-stats - Clear all results');
 });

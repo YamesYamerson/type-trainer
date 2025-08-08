@@ -5,8 +5,7 @@
 
 import type { TypingResult, UserStats } from '../types';
 import { generateHashForResult } from './hashUtils';
-
-const API_BASE_URL = 'http://localhost:3001/api';
+import { config } from '../config/environment';
 
 interface SaveResult {
   success: boolean;
@@ -59,7 +58,7 @@ export class DataManager {
       // Try to save to database first (if online)
       if (this.isOnline) {
         try {
-          const response = await fetch(`${API_BASE_URL}/results`, {
+          const response = await fetch(`${config.apiBaseUrl}/results`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -120,7 +119,7 @@ export class DataManager {
       // Try to get from database first
       if (this.isOnline) {
         try {
-          const response = await fetch(`${API_BASE_URL}/users/default_user/results?limit=${limit}`);
+          const response = await fetch(`${config.apiBaseUrl}/users/default_user/results?limit=${limit}`);
           if (response.ok) {
             const dbResults = await response.json();
             results = dbResults.map((r: any) => ({
@@ -216,7 +215,7 @@ export class DataManager {
       // Clear database if online
       if (this.isOnline) {
         try {
-          await fetch(`${API_BASE_URL}/clear-stats`, { method: 'POST' });
+          await fetch(`${config.apiBaseUrl}/clear-stats`, { method: 'POST' });
           console.log('✅ Database cleared');
         } catch (error) {
           console.warn('⚠️ Could not clear database:', error);

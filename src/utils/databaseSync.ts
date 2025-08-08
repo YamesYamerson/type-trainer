@@ -1,7 +1,6 @@
 import type { TypingResult, UserStats } from '../types';
 import { resultExists, removeDuplicates, generateHashForResult } from './hashUtils';
-
-const API_BASE_URL = 'http://localhost:3001/api';
+import { config } from '../config/environment';
 
 interface SyncResult {
   success: boolean;
@@ -69,7 +68,7 @@ export class DatabaseSync {
       // Try to get database stats if online
       if (this.isOnline) {
         try {
-          const response = await fetch(`${API_BASE_URL}/users/${userId}/stats`);
+          const response = await fetch(`${config.apiBaseUrl}/users/${userId}/stats`);
           if (response.ok) {
             const dbStats = await response.json();
             // Merge local and database stats
@@ -94,7 +93,7 @@ export class DatabaseSync {
       
       // Always try to get database results
       try {
-        const response = await fetch(`${API_BASE_URL}/users/${userId}/results?limit=${limit}`);
+        const response = await fetch(`${config.apiBaseUrl}/users/${userId}/results?limit=${limit}`);
         if (response.ok) {
           const dbResults = await response.json();
           const merged = this.mergeResults(localResults, dbResults);
@@ -124,7 +123,7 @@ export class DatabaseSync {
 
       for (const result of pendingData) {
         try {
-          const response = await fetch(`${API_BASE_URL}/results`, {
+          const response = await fetch(`${config.apiBaseUrl}/results`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(result)
@@ -317,7 +316,7 @@ export class DatabaseSync {
 
   private static async syncToDatabase(result: TypingResult): Promise<SyncResult> {
     try {
-      const response = await fetch(`${API_BASE_URL}/results`, {
+      const response = await fetch(`${config.apiBaseUrl}/results`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

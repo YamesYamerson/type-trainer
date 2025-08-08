@@ -3,13 +3,18 @@
  * Run this in the browser console to test if results are being saved
  */
 
+// Get API URL from environment or use default
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3001/api' 
+  : `${window.location.protocol}//${window.location.host}/api`;
+
 async function testFrontendSave() {
   console.log('🧪 Testing Frontend Result Saving...\n');
   
   try {
     // 1. Check if server is running
     console.log('1. Checking server connection...');
-    const healthResponse = await fetch('http://localhost:3001/api/db-info');
+    const healthResponse = await fetch(`${API_BASE_URL}/db-info`);
     if (healthResponse.ok) {
       const dbInfo = await healthResponse.json();
       console.log('   ✅ Server is running');
@@ -21,7 +26,7 @@ async function testFrontendSave() {
 
     // 2. Check current database state
     console.log('\n2. Checking current database state...');
-    const resultsResponse = await fetch('http://localhost:3001/api/users/default_user/results');
+    const resultsResponse = await fetch(`${API_BASE_URL}/users/default_user/results`);
     const currentResults = await resultsResponse.json();
     console.log(`   Current results in database: ${currentResults.length}`);
     
@@ -50,7 +55,7 @@ async function testFrontendSave() {
       hash: 'frontend_test_hash_123'
     };
 
-    const saveResponse = await fetch('http://localhost:3001/api/results', {
+    const saveResponse = await fetch(`${API_BASE_URL}/results`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(testResult)
@@ -67,7 +72,7 @@ async function testFrontendSave() {
 
     // 4. Verify the result was saved
     console.log('\n4. Verifying saved result...');
-    const verifyResponse = await fetch('http://localhost:3001/api/users/default_user/results');
+    const verifyResponse = await fetch(`${API_BASE_URL}/users/default_user/results`);
     const updatedResults = await verifyResponse.json();
     console.log(`   Updated results in database: ${updatedResults.length}`);
     
@@ -100,7 +105,7 @@ async function testFrontendSave() {
 
     // 6. Test duplicate prevention
     console.log('\n6. Testing duplicate prevention...');
-    const duplicateResponse = await fetch('http://localhost:3001/api/results', {
+    const duplicateResponse = await fetch(`${API_BASE_URL}/results`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(testResult)

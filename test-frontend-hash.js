@@ -3,6 +3,11 @@
  * Run this in the browser console to test the hash-based duplicate prevention system
  */
 
+// Get API URL from environment or use default
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:3001/api' 
+  : `${window.location.protocol}//${window.location.host}/api`;
+
 // Test the hash generation function
 function testHashGeneration() {
   console.log('🧪 Testing Hash Generation...');
@@ -63,7 +68,7 @@ async function testAPIData() {
   console.log('\n🧪 Testing API Data...');
   
   try {
-    const response = await fetch('http://localhost:3001/api/users/default_user/results');
+    const response = await fetch(`${API_BASE_URL}/users/default_user/results`);
     const results = await response.json();
     
     console.log('Total results from API:', results.length);
@@ -115,7 +120,7 @@ async function testHybridData() {
     const localResults = JSON.parse(localStorage.getItem('typing-trainer-results') || '[]');
     console.log('localStorage results:', localResults.length);
     
-    const apiResponse = await fetch('http://localhost:3001/api/users/default_user/results');
+    const apiResponse = await fetch(`${API_BASE_URL}/users/default_user/results`);
     const apiResults = apiResponse.ok ? await apiResponse.json() : [];
     console.log('API results:', apiResults.length);
     

@@ -5,7 +5,10 @@
  * Run with: node test-category-filtering.js
  */
 
-const API_BASE_URL = 'http://localhost:3001/api';
+// Load environment variables
+require('dotenv').config();
+
+const API_BASE_URL = process.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
 async function testCategoryFiltering() {
   console.log('🧪 Testing Category Filtering...\n');
