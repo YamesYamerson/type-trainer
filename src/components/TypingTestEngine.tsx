@@ -52,7 +52,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     setCurrentKey(key);
     
     // Prevent default for most keys to avoid unwanted behavior
-    if (key.length === 1 || key === 'Backspace' || key === 'Enter') {
+    if (key.length === 1 || key === 'Backspace' || key === 'Enter' || key === 'Tab') {
       event.preventDefault();
     }
 
@@ -83,6 +83,59 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
           typedText: newTypedText,
           currentIndex: newCurrentIndex,
           errors: newErrors
+        };
+      });
+      return;
+    }
+
+    // Handle tab key
+    if (key === 'Tab') {
+      setTypingState(prev => {
+        const expectedChar = test.content[prev.currentIndex];
+        const isCorrect = expectedChar === '\t';
+        const newErrors = isCorrect ? prev.errors : [...prev.errors, prev.currentIndex];
+        
+        const newTypedText = prev.typedText + '\t';
+        const newCurrentIndex = prev.currentIndex + 1;
+        
+        // Check if test is complete
+        const isComplete = newCurrentIndex >= test.content.length;
+        const endTime = isComplete ? Date.now() : null;
+        
+        if (isComplete && endTime) {
+          const timeElapsed = endTime - (prev.startTime || endTime);
+          const correctCharacters = newTypedText.length - newErrors.length;
+          const wpm = calculateWPM(correctCharacters, timeElapsed);
+          const accuracy = calculateAccuracy(correctCharacters, test.content.length);
+          
+          const result: TypingResult = {
+            wpm,
+            accuracy,
+            errors: newErrors.length,
+            totalCharacters: test.content.length,
+            correctCharacters,
+            timeElapsed,
+            testId: test.id,
+            timestamp: Date.now()
+          };
+          
+          // Call onComplete after state update
+          setTimeout(async () => {
+            try {
+              await onComplete(result);
+            } catch (error) {
+              console.error('Error completing test:', error);
+            }
+          }, 0);
+        }
+        
+        return {
+          ...prev,
+          typedText: newTypedText,
+          currentIndex: newCurrentIndex,
+          errors: newErrors,
+          isComplete,
+          endTime
         };
       });
       return;
@@ -191,7 +244,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
       
       return (
         <span key={index} className={className}>
-          {char === '\n' ? '\u00A0' : char}
+          {char === '\n' ? '\u00A0' : char === '\t' ? '\u00A0\u00A0\u00A0\u00A0' : char}
         </span>
       );
     });
