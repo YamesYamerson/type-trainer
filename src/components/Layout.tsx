@@ -17,9 +17,9 @@ export const Layout: React.FC<LayoutProps> = ({
   const { user } = useUser();
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
       {showHeader && (
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-white shadow-sm border-b border-gray-200 flex-shrink-0">
           <div className="max-w-6xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -80,7 +80,7 @@ export const Layout: React.FC<LayoutProps> = ({
         {children}
       </main>
       
-      <footer className="bg-white border-t border-gray-200 mt-auto">
+      <footer className="bg-white border-t border-gray-200 flex-shrink-0">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="text-center text-sm text-gray-500">
             <p>Built with React, TypeScript, and Tailwind CSS</p>
