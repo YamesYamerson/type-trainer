@@ -3,14 +3,14 @@
     "id": "lowercase_random_words_1",
     "category": "lowercase",
     "subcategory": "random_words",
-    "content": "this is a simple typing test for lowercase practice with basic words that are commonly used in everyday writing",
+    "content": "the quick brown fox jumps over lazy dog",
     "difficulty": "beginner"
   },
   {
     "id": "lowercase_random_words_2", 
     "category": "lowercase",
     "subcategory": "random_words",
-    "content": "the quick brown fox jumps over the lazy dog this pangram contains every letter of the alphabet at least once",
+    "content": "sunlight streams through window casting warm golden rays",
     "difficulty": "beginner"
   },
   {
@@ -230,5 +230,822 @@
     "subcategory": "api_data",
     "content": "{\"status\": \"success\", \"data\": {\"users\": [{\"id\": 1, \"name\": \"John\"}, {\"id\": 2, \"name\": \"Jane\"}], \"total\": 2}}",
     "difficulty": "advanced"
+  },
+  {
+    "id": "code_bash_2",
+    "category": "code",
+    "subcategory": "bash",
+    "language": "bash",
+    "content": "#!/bin/bash\n\n# Function to check if a file exists\ncheck_file() {\n    if [ -f \"$1\" ]; then\n        echo \"File $1 exists\"\n    else\n        echo \"File $1 not found\"\n    fi\n}\n\n# Usage\ncheck_file \"example.txt\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_random_words_3",
+    "category": "lowercase",
+    "subcategory": "random_words",
+    "content": "mountain peaks rise majestically above valley covered snow",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_random_words_4",
+    "category": "lowercase",
+    "subcategory": "random_words",
+    "content": "forest trees sway gently wind leaves rustling softly",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_random_words_5",
+    "category": "lowercase",
+    "subcategory": "random_words",
+    "content": "raindrops fall gently roof creating soothing rhythm",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_random_words_6",
+    "category": "lowercase",
+    "subcategory": "random_words",
+    "content": "butterflies flutter wildflowers meadow colorful wings",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_random_sentences_3",
+    "category": "lowercase",
+    "subcategory": "random_sentences",
+    "content": "butterflies flutter among the wildflowers in the meadow their colorful wings catching the sunlight as they search for nectar and pollen",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_random_sentences_4",
+    "category": "lowercase",
+    "subcategory": "random_sentences",
+    "content": "crickets chirp in the evening air creating a symphony of nature sounds that fills the garden with peaceful evening ambiance",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_random_sentences_5",
+    "category": "lowercase",
+    "subcategory": "random_sentences",
+    "content": "snowflakes drift down from the gray sky covering the ground in a soft white blanket that muffles all sounds except the crunch of footsteps",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_random_sentences_6",
+    "category": "lowercase",
+    "subcategory": "random_sentences",
+    "content": "fireflies twinkle in the dark night like tiny stars that have fallen to earth creating a magical display of natural light",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_word_definitions_3",
+    "category": "lowercase",
+    "subcategory": "word_definitions",
+    "content": "mellifluous describes a sound that is sweet and smooth like honey flowing or a voice that is pleasant and musical to hear",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_word_definitions_4",
+    "category": "lowercase",
+    "subcategory": "word_definitions",
+    "content": "ubiquitous means present everywhere or existing in many places at the same time like smartphones in modern society",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_word_definitions_5",
+    "category": "lowercase",
+    "subcategory": "word_definitions",
+    "content": "perspicacious describes someone who has keen insight and understanding able to see through complexity to the heart of matters",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_word_definitions_6",
+    "category": "lowercase",
+    "subcategory": "word_definitions",
+    "content": "quintessential represents the most perfect example of something embodying all the essential characteristics of a particular quality",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_fables_3",
+    "category": "lowercase",
+    "subcategory": "fables",
+    "content": "a little mouse was being chased by a cat when it ran into a hole in the wall the cat could not follow and the mouse was safe",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_fables_4",
+    "category": "lowercase",
+    "subcategory": "fables",
+    "content": "a crow found a piece of cheese and flew to a tree branch to eat it a fox saw this and wanted the cheese for himself",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_fables_5",
+    "category": "lowercase",
+    "subcategory": "fables",
+    "content": "a lion was sleeping in the forest when a mouse ran over his face the lion woke up and was about to eat the mouse",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_fables_6",
+    "category": "lowercase",
+    "subcategory": "fables",
+    "content": "a shepherd boy was watching his sheep when he got bored and cried wolf to amuse himself the villagers came running but there was no wolf",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "uppercase_random_words_1",
+    "category": "uppercase",
+    "subcategory": "random_words",
+    "content": "THE QUICK BROWN FOX JUMPS OVER LAZY DOG",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_words_2",
+    "category": "uppercase",
+    "subcategory": "random_words",
+    "content": "SUNLIGHT STREAMS THROUGH WINDOW CASTING WARM",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_words_3",
+    "category": "uppercase",
+    "subcategory": "random_words",
+    "content": "MOUNTAIN PEAKS RISE MAJESTICALLY ABOVE VALLEY",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_words_4",
+    "category": "uppercase",
+    "subcategory": "random_words",
+    "content": "FOREST TREES SWAY GENTLY WIND LEAVES RUSTLING",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_words_5",
+    "category": "uppercase",
+    "subcategory": "random_words",
+    "content": "RAINDROPS FALL GENTLY ROOF CREATING SOOTHING",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_words_6",
+    "category": "uppercase",
+    "subcategory": "random_words",
+    "content": "BUTTERFLIES FLUTTER WILDFLOWERS MEADOW COLORFUL",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_sentences_3",
+    "category": "uppercase",
+    "subcategory": "random_sentences",
+    "content": "BUTTERFLIES FLUTTER AMONG THE WILDFLOWERS IN THE MEADOW THEIR COLORFUL WINGS CATCHING THE SUNLIGHT AS THEY SEARCH FOR NECTAR AND POLLEN",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_sentences_4",
+    "category": "uppercase",
+    "subcategory": "random_sentences",
+    "content": "CRICKETS CHIRP IN THE EVENING AIR CREATING A SYMPHONY OF NATURE SOUNDS THAT FILLS THE GARDEN WITH PEACEFUL EVENING AMBIANCE",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_sentences_5",
+    "category": "uppercase",
+    "subcategory": "random_sentences",
+    "content": "SNOWFLAKES DRIFT DOWN FROM THE GRAY SKY COVERING THE GROUND IN A SOFT WHITE BLANKET THAT MUFFLES ALL SOUNDS EXCEPT THE CRUNCH OF FOOTSTEPS",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_random_sentences_6",
+    "category": "uppercase",
+    "subcategory": "random_sentences",
+    "content": "FIREFLIES TWINKLE IN THE DARK NIGHT LIKE TINY STARS THAT HAVE FALLEN TO EARTH CREATING A MAGICAL DISPLAY OF NATURAL LIGHT",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "uppercase_word_definitions_3",
+    "category": "uppercase",
+    "subcategory": "word_definitions",
+    "content": "MELLIFLUOUS DESCRIBES A SOUND THAT IS SWEET AND SMOOTH LIKE HONEY FLOWING OR A VOICE THAT IS PLEASANT AND MUSICAL TO HEAR",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "uppercase_word_definitions_4",
+    "category": "uppercase",
+    "subcategory": "word_definitions",
+    "content": "UBIQUITOUS MEANS PRESENT EVERYWHERE OR EXISTING IN MANY PLACES AT THE SAME TIME LIKE SMARTPHONES IN MODERN SOCIETY",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "uppercase_word_definitions_5",
+    "category": "uppercase",
+    "subcategory": "word_definitions",
+    "content": "PERSPICACIOUS DESCRIBES SOMEONE WHO HAS KEEN INSIGHT AND UNDERSTANDING ABLE TO SEE THROUGH COMPLEXITY TO THE HEART OF MATTERS",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "uppercase_word_definitions_6",
+    "category": "uppercase",
+    "subcategory": "word_definitions",
+    "content": "QUINTESSENTIAL REPRESENTS THE MOST PERFECT EXAMPLE OF SOMETHING EMBODYING ALL THE ESSENTIAL CHARACTERISTICS OF A PARTICULAR QUALITY",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "uppercase_fables_3",
+    "category": "uppercase",
+    "subcategory": "fables",
+    "content": "A LITTLE MOUSE WAS BEING CHASED BY A CAT WHEN IT RAN INTO A HOLE IN THE WALL THE CAT COULD NOT FOLLOW AND THE MOUSE WAS SAFE",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "uppercase_fables_4",
+    "category": "uppercase",
+    "subcategory": "fables",
+    "content": "A CROW FOUND A PIECE OF CHEESE AND FLEW TO A TREE BRANCH TO EAT IT A FOX SAW THIS AND WANTED THE CHEESE FOR HIMSELF",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "uppercase_fables_5",
+    "category": "uppercase",
+    "subcategory": "fables",
+    "content": "A LION WAS SLEEPING IN THE FOREST WHEN A MOUSE RAN OVER HIS FACE THE LION WOKE UP AND WAS ABOUT TO EAT THE MOUSE",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "uppercase_fables_6",
+    "category": "uppercase",
+    "subcategory": "fables",
+    "content": "A SHEPHERD BOY WAS WATCHING HIS SHEEP WHEN HE GOT BORED AND CRIED WOLF TO AMUSE HIMSELF THE VILLAGERS CAME RUNNING BUT THERE WAS NO WOLF",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_random_sentences_3",
+    "category": "punctuation",
+    "subcategory": "random_sentences",
+    "content": "The weather is beautiful today! I think we should go for a walk in the park. What do you think? It's such a lovely afternoon.",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "punctuation_random_sentences_4",
+    "category": "punctuation",
+    "subcategory": "random_sentences",
+    "content": "She asked, \"Where are you going?\" I replied, \"I'm heading to the store.\" \"Can I come with you?\" she inquired.",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "punctuation_random_sentences_5",
+    "category": "punctuation",
+    "subcategory": "random_sentences",
+    "content": "The movie was fantastic! I laughed, cried, and felt inspired. \"This is definitely worth watching again,\" I thought to myself.",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "punctuation_random_sentences_6",
+    "category": "punctuation",
+    "subcategory": "random_sentences",
+    "content": "He said, \"I'll meet you at 3:00 PM.\" \"Perfect!\" I exclaimed. \"I can't wait to see you.\" The anticipation was building.",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "punctuation_word_definitions_punct_3",
+    "category": "punctuation",
+    "subcategory": "word_definitions_punct",
+    "content": "Mellifluous (adjective): Sweet or musical; pleasant to hear. Example: \"Her mellifluous voice captivated the entire audience.\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_word_definitions_punct_4",
+    "category": "punctuation",
+    "subcategory": "word_definitions_punct",
+    "content": "Ubiquitous (adjective): Present, appearing, or found everywhere. Example: \"Smartphones have become ubiquitous in modern society.\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_word_definitions_punct_5",
+    "category": "punctuation",
+    "subcategory": "word_definitions_punct",
+    "content": "Perspicacious (adjective): Having a ready insight into and understanding of things. Example: \"His perspicacious analysis revealed the hidden truth.\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_word_definitions_punct_6",
+    "category": "punctuation",
+    "subcategory": "word_definitions_punct",
+    "content": "Quintessential (adjective): Representing the most perfect or typical example of a quality or class. Example: \"This is the quintessential example of good design.\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_fables_punct_3",
+    "category": "punctuation",
+    "subcategory": "fables_punct",
+    "content": "The Mouse and the Cat: \"I'll never trust a cat again!\" squeaked the mouse as it ran into its hole. The cat purred, \"That's wise.\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_fables_punct_4",
+    "category": "punctuation",
+    "subcategory": "fables_punct",
+    "content": "The Crow and the Fox: \"What a beautiful voice you have!\" said the fox. \"Please sing for me!\" The crow was flattered and opened its beak.",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_fables_punct_5",
+    "category": "punctuation",
+    "subcategory": "fables_punct",
+    "content": "The Lion and the Mouse: \"Spare me!\" begged the mouse. \"I promise to help you someday.\" The lion laughed, \"How could you help me?\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_fables_punct_6",
+    "category": "punctuation",
+    "subcategory": "fables_punct",
+    "content": "The Boy Who Cried Wolf: \"Wolf! Wolf!\" shouted the boy. \"The wolf is attacking the sheep!\" The villagers came running, but there was no wolf.",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "numbers_random_numbers_3",
+    "category": "numbers",
+    "subcategory": "random_numbers",
+    "content": "847 392 156 904 273 581 649 735 418 962 351 784 296 453 871 524 639 187 345 912",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "numbers_random_numbers_4",
+    "category": "numbers",
+    "subcategory": "random_numbers",
+    "content": "123 456 789 012 345 678 901 234 567 890 123 456 789 012 345 678 901 234 567 890",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "numbers_random_numbers_5",
+    "category": "numbers",
+    "subcategory": "random_numbers",
+    "content": "987 654 321 098 765 432 109 876 543 210 987 654 321 098 765 432 109 876 543 210",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "numbers_random_numbers_6",
+    "category": "numbers",
+    "subcategory": "random_numbers",
+    "content": "555 111 999 333 777 444 888 222 666 000 555 111 999 333 777 444 888 222 666 000",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "numbers_phone_numbers_3",
+    "category": "numbers",
+    "subcategory": "phone_numbers",
+    "content": "555-123-4567 555-987-6543 555-456-7890 555-321-0987 555-789-0123 555-654-3210",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "numbers_phone_numbers_4",
+    "category": "numbers",
+    "subcategory": "phone_numbers",
+    "content": "555-111-2222 555-333-4444 555-555-6666 555-777-8888 555-999-0000 555-222-3333",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "numbers_phone_numbers_5",
+    "category": "numbers",
+    "subcategory": "phone_numbers",
+    "content": "555-444-5555 555-666-7777 555-888-9999 555-000-1111 555-222-3333 555-444-5555",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "numbers_phone_numbers_6",
+    "category": "numbers",
+    "subcategory": "phone_numbers",
+    "content": "555-777-8888 555-999-0000 555-111-2222 555-333-4444 555-555-6666 555-777-8888",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "numbers_credit_cards_3",
+    "category": "numbers",
+    "subcategory": "credit_cards",
+    "content": "4111-1111-1111-1111 5555-5555-5555-4444 4000-0000-0000-0002 3782-822463-10005",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "numbers_credit_cards_4",
+    "category": "numbers",
+    "subcategory": "credit_cards",
+    "content": "5105-1051-0510-5100 6011-0009-9013-9424 3566-0020-2036-0505 3714-496353-98431",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "numbers_credit_cards_5",
+    "category": "numbers",
+    "subcategory": "credit_cards",
+    "content": "4222-2222-2222-2222 5555-5555-5555-4444 4000-0000-0000-0002 3782-822463-10005",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "numbers_credit_cards_6",
+    "category": "numbers",
+    "subcategory": "credit_cards",
+    "content": "4111-1111-1111-1111 5555-5555-5555-4444 4000-0000-0000-0002 3782-822463-10005",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "symbols_basic_symbols_3",
+    "category": "symbols",
+    "subcategory": "basic_symbols",
+    "content": "! @ # $ % ^ & * ( ) _ + - = [ ] { } | \\ : ; \" ' < > , . ? / ~ `",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "symbols_basic_symbols_4",
+    "category": "symbols",
+    "subcategory": "basic_symbols",
+    "content": "§ ± ° ² ³ ¼ ½ ¾ × ÷ ≠ ≈ ≤ ≥ < > ≤ ≥ ≡ ≅ ≃ ≅ ≃",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "symbols_basic_symbols_5",
+    "category": "symbols",
+    "subcategory": "basic_symbols",
+    "content": "∞ ∑ ∏ ∫ ∂ ∇ ∆ ∝ ∟ ∠ ∡ ∢ ⊥ ∥ ∦ ∥ ∦ ⊥ ∥ ∦",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "symbols_basic_symbols_6",
+    "category": "symbols",
+    "subcategory": "basic_symbols",
+    "content": "♠ ♥ ♦ ♣ ♤ ♡ ♢ ♧ ♩ ♪ ♫ ♬ ♭ ♮ ♯ ♰ ♱ ♲ ♳ ♴",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "symbols_currency_symbols_3",
+    "category": "symbols",
+    "subcategory": "currency_symbols",
+    "content": "$ € £ ¥ ¢ ₦ ₩ ₪ ₫ ₭ ₮ ₯ ₰ ₱ ₲ ₳ ₴ ₵ ₶ ₷ ₸ ₹",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "symbols_currency_symbols_4",
+    "category": "symbols",
+    "subcategory": "currency_symbols",
+    "content": "₺ ₻ ₼ ₽ ₾ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "symbols_currency_symbols_5",
+    "category": "symbols",
+    "subcategory": "currency_symbols",
+    "content": "₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "symbols_currency_symbols_6",
+    "category": "symbols",
+    "subcategory": "currency_symbols",
+    "content": "₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿ ₿",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "symbols_math_symbols_3",
+    "category": "symbols",
+    "subcategory": "math_symbols",
+    "content": "∑ ∏ ∫ ∬ ∭ ∮ ∯ ∰ ∇ ∆ ∝ ∟ ∠ ∡ ∢ ⊥ ∥ ∦ ∥ ∦ ⊥",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "symbols_math_symbols_4",
+    "category": "symbols",
+    "subcategory": "math_symbols",
+    "content": "∏ ∐ ∑ − ∓ ∔ ∕ ∖ ∗ ∘ ∙ ∝ ∟ ∠ ∡ ∢ ⊥ ∥ ∦ ∥ ∦",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "symbols_math_symbols_5",
+    "category": "symbols",
+    "subcategory": "math_symbols",
+    "content": "∦ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "symbols_math_symbols_6",
+    "category": "symbols",
+    "subcategory": "math_symbols",
+    "content": "⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦ ⊥ ∥ ∦",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_javascript_3",
+    "category": "code",
+    "subcategory": "javascript",
+    "language": "javascript",
+    "content": "class Calculator {\n  constructor() {\n    this.history = [];\n  }\n  \n  add(a, b) {\n    const result = a + b;\n    this.history.push(`${a} + ${b} = ${result}`);\n    return result;\n  }\n}",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_javascript_4",
+    "category": "code",
+    "subcategory": "javascript",
+    "language": "javascript",
+    "content": "const debounce = (func, delay) => {\n  let timeoutId;\n  return (...args) => {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => func.apply(null, args), delay);\n  };\n};",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_javascript_5",
+    "category": "code",
+    "subcategory": "javascript",
+    "language": "javascript",
+    "content": "const memoize = (fn) => {\n  const cache = new Map();\n  return (...args) => {\n    const key = JSON.stringify(args);\n    if (cache.has(key)) return cache.get(key);\n    const result = fn(...args);\n    cache.set(key, result);\n    return result;\n  };\n};",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_javascript_6",
+    "category": "code",
+    "subcategory": "javascript",
+    "language": "javascript",
+    "content": "const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x);\nconst compose = (...fns) => (x) => fns.reduceRight((v, f) => f(v), x);\nconst addOne = x => x + 1;\nconst double = x => x * 2;",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_python_3",
+    "category": "code",
+    "subcategory": "python",
+    "language": "python",
+    "content": "class DataProcessor:\n    def __init__(self, data):\n        self.data = data\n        self.processed = False\n    \n    def process(self):\n        if not self.processed:\n            self.data = [x * 2 for x in self.data if x > 0]\n            self.processed = True\n        return self.data",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_python_4",
+    "category": "code",
+    "subcategory": "python",
+    "language": "python",
+    "content": "from functools import wraps\nfrom time import time\n\ndef timer(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time()\n        result = func(*args, **kwargs)\n        end = time()\n        print(f'{func.__name__} took {end - start:.4f} seconds')\n        return result\n    return wrapper",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_python_5",
+    "category": "code",
+    "subcategory": "python",
+    "language": "python",
+    "content": "import asyncio\nfrom typing import List, Dict\n\nasync def fetch_data(urls: List[str]) -> Dict[str, str]:\n    async def fetch(url):\n        await asyncio.sleep(0.1)  # Simulate network delay\n        return url, f'data_from_{url}'\n    \n    tasks = [fetch(url) for url in urls]\n    results = await asyncio.gather(*tasks)\n    return dict(results)",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_python_6",
+    "category": "code",
+    "subcategory": "python",
+    "language": "python",
+    "content": "from dataclasses import dataclass\nfrom typing import Optional\n\n@dataclass\nclass User:\n    id: int\n    name: str\n    email: str\n    age: Optional[int] = None\n    \n    def is_adult(self) -> bool:\n        return self.age is not None and self.age >= 18\n    \n    def __str__(self) -> str:\n        return f'User({self.name}, {self.email})'",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_java_3",
+    "category": "code",
+    "subcategory": "java",
+    "language": "java",
+    "content": "public class LinkedList<T> {\n    private Node<T> head;\n    private int size;\n    \n    private static class Node<T> {\n        T data;\n        Node<T> next;\n        \n        Node(T data) {\n            this.data = data;\n            this.next = null;\n        }\n    }\n}",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_java_4",
+    "category": "code",
+    "subcategory": "java",
+    "language": "java",
+    "content": "public class StreamProcessor {\n    public static <T> List<T> filterAndMap(\n        List<T> list,\n        Predicate<T> filter,\n        Function<T, T> mapper\n    ) {\n        return list.stream()\n                   .filter(filter)\n                   .map(mapper)\n                   .collect(Collectors.toList());\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_java_5",
+    "category": "code",
+    "subcategory": "java",
+    "language": "java",
+    "content": "@FunctionalInterface\npublic interface Validator<T> {\n    boolean isValid(T value);\n    \n    default Validator<T> and(Validator<T> other) {\n        return value -> this.isValid(value) && other.isValid(value);\n    }\n    \n    default Validator<T> or(Validator<T> other) {\n        return value -> this.isValid(value) || other.isValid(value);\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_java_6",
+    "category": "code",
+    "subcategory": "java",
+    "language": "java",
+    "content": "public class AsyncProcessor {\n    private final ExecutorService executor = Executors.newFixedThreadPool(4);\n    \n    public <T> CompletableFuture<T> processAsync(Supplier<T> task) {\n        return CompletableFuture.supplyAsync(task, executor);\n    }\n    \n    public void shutdown() {\n        executor.shutdown();\n        try {\n            if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {\n                executor.shutdownNow();\n            }\n        } catch (InterruptedException e) {\n            executor.shutdownNow();\n        }\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_cpp_3",
+    "category": "code",
+    "subcategory": "cpp",
+    "language": "cpp",
+    "content": "template<typename T>\nclass SmartPtr {\nprivate:\n    T* ptr;\n    size_t* refCount;\n    \npublic:\n    SmartPtr(T* p = nullptr) : ptr(p), refCount(new size_t(1)) {}\n    \n    ~SmartPtr() {\n        if (--(*refCount) == 0) {\n            delete ptr;\n            delete refCount;\n        }\n    }\n};",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_cpp_4",
+    "category": "code",
+    "subcategory": "cpp",
+    "language": "cpp",
+    "content": "template<typename Container>\nclass Iterator {\nprivate:\n    typename Container::iterator current;\n    typename Container::iterator end;\n    \npublic:\n    Iterator(Container& container) \n        : current(container.begin()), end(container.end()) {}\n    \n    bool hasNext() const { return current != end; }\n    auto next() -> decltype(*current) { return *current++; }\n};",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_cpp_5",
+    "category": "code",
+    "subcategory": "cpp",
+    "language": "cpp",
+    "content": "template<typename T>\nclass Function {\nprivate:\n    struct CallableBase {\n        virtual ~CallableBase() = default;\n        virtual T operator()() const = 0;\n        virtual CallableBase* clone() const = 0;\n    };\n    \n    CallableBase* callable;\n    \npublic:\n    template<typename F>\n    Function(F&& f) : callable(new Callable<F>(std::forward<F>(f))) {}\n};",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_cpp_6",
+    "category": "code",
+    "subcategory": "cpp",
+    "language": "cpp",
+    "content": "template<typename T>\nclass LockFreeQueue {\nprivate:\n    struct Node {\n        T data;\n        std::atomic<Node*> next;\n        Node(const T& value) : data(value), next(nullptr) {}\n    };\n    \n    std::atomic<Node*> head;\n    std::atomic<Node*> tail;\n    \npublic:\n    void enqueue(const T& value) {\n        Node* newNode = new Node(value);\n        Node* oldTail = tail.exchange(newNode);\n        oldTail->next.store(newNode);\n    }\n};",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_csharp_3",
+    "category": "code",
+    "subcategory": "csharp",
+    "language": "csharp",
+    "content": "public class AsyncDataProcessor\n{\n    private readonly SemaphoreSlim _semaphore;\n    \n    public AsyncDataProcessor(int maxConcurrency = 5)\n    {\n        _semaphore = new SemaphoreSlim(maxConcurrency);\n    }\n    \n    public async Task<T> ProcessAsync<T>(Func<Task<T>> operation)\n    {\n        await _semaphore.WaitAsync();\n        try\n        {\n            return await operation();\n        }\n        finally\n        {\n            _semaphore.Release();\n        }\n    }\n}",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_csharp_4",
+    "category": "code",
+    "subcategory": "csharp",
+    "language": "csharp",
+    "content": "public static class ExpressionExtensions\n{\n    public static Expression<Func<T, bool>> And<T>(\n        this Expression<Func<T, bool>> left,\n        Expression<Func<T, bool>> right)\n    {\n        var parameter = Expression.Parameter(typeof(T));\n        var visitor = new ParameterReplacer(parameter);\n        \n        var leftBody = visitor.Visit(left.Body);\n        var rightBody = visitor.Visit(right.Body);\n        \n        return Expression.Lambda<Func<T, bool>>(\n            Expression.AndAlso(leftBody, rightBody), parameter);\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_csharp_5",
+    "category": "code",
+    "subcategory": "csharp",
+    "language": "csharp",
+    "content": "public class Result<T>\n{\n    public bool IsSuccess { get; }\n    public T Value { get; }\n    public string Error { get; }\n    \n    private Result(bool isSuccess, T value, string error)\n    {\n        IsSuccess = isSuccess;\n        Value = value;\n        Error = error;\n    }\n    \n    public static Result<T> Success(T value) => new Result<T>(true, value, null);\n    public static Result<T> Failure(string error) => new Result<T>(false, default, error);\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_csharp_6",
+    "category": "code",
+    "subcategory": "csharp",
+    "language": "csharp",
+    "content": "public class Pipeline<T>\n{\n    private readonly List<Func<T, T>> _steps = new();\n    \n    public Pipeline<T> AddStep(Func<T, T> step)\n    {\n        _steps.Add(step);\n        return this;\n    }\n    \n    public T Execute(T input)\n    {\n        return _steps.Aggregate(input, (current, step) => step(current));\n    }\n    \n    public async Task<T> ExecuteAsync(T input)\n    {\n        var result = input;\n        foreach (var step in _steps)\n        {\n            result = await Task.Run(() => step(result));\n        }\n        return result;\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_go_3",
+    "category": "code",
+    "subcategory": "go",
+    "language": "go",
+    "content": "type WorkerPool struct {\n    workers    int\n    tasks      chan func()\n    wg         sync.WaitGroup\n    ctx        context.Context\n    cancel     context.CancelFunc\n}\n\nfunc NewWorkerPool(workers int) *WorkerPool {\n    ctx, cancel := context.WithCancel(context.Background())\n    wp := &WorkerPool{\n        workers: workers,\n        tasks:   make(chan func(), 100),\n        ctx:     ctx,\n        cancel:  cancel,\n    }\n    wp.start()\n    return wp\n}",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_go_4",
+    "category": "code",
+    "subcategory": "go",
+    "language": "go",
+    "content": "type Middleware func(http.HandlerFunc) http.HandlerFunc\n\ntype Chain struct {\n    middlewares []Middleware\n}\n\nfunc (c *Chain) Use(middleware Middleware) *Chain {\n    c.middlewares = append(c.middlewares, middleware)\n    return c\n}\n\nfunc (c *Chain) Then(h http.HandlerFunc) http.HandlerFunc {\n    for i := len(c.middlewares) - 1; i >= 0; i-- {\n        h = c.middlewares[i](h)\n    }\n    return h\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_go_5",
+    "category": "code",
+    "subcategory": "go",
+    "language": "go",
+    "content": "type Result[T any] struct {\n    Value T\n    Error error\n}\n\nfunc (r Result[T]) IsOk() bool {\n    return r.Error == nil\n}\n\nfunc (r Result[T]) Unwrap() T {\n    if r.Error != nil {\n        panic(r.Error)\n    }\n    return r.Value\n}\n\nfunc Ok[T any](value T) Result[T] {\n    return Result[T]{Value: value}\n}\n\nfunc Err[T any](err error) Result[T] {\n    return Result[T]{Error: err}\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_go_6",
+    "category": "code",
+    "subcategory": "go",
+    "language": "go",
+    "content": "type Observable[T any] struct {\n    subscribers map[chan T]struct{}\n    mu         sync.RWMutex\n}\n\nfunc NewObservable[T any]() *Observable[T] {\n    return &Observable[T]{\n        subscribers: make(map[chan T]struct{}),\n    }\n}\n\nfunc (o *Observable[T]) Subscribe() chan T {\n    ch := make(chan T, 1)\n    o.mu.Lock()\n    o.subscribers[ch] = struct{}{}\n    o.mu.Unlock()\n    return ch\n}\n\nfunc (o *Observable[T]) Publish(value T) {\n    o.mu.RLock()\n    defer o.mu.RUnlock()\n    for ch := range o.subscribers {\n        select {\n        case ch <- value:\n        default:\n        }\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_rust_3",
+    "category": "code",
+    "subcategory": "rust",
+    "language": "rust",
+    "content": "use std::collections::HashMap;\nuse std::sync::{Arc, Mutex};\n\nstruct Cache<K, V> {\n    data: Arc<Mutex<HashMap<K, V>>>,\n    max_size: usize,\n}\n\nimpl<K: Clone + Eq + std::hash::Hash, V: Clone> Cache<K, V> {\n    fn new(max_size: usize) -> Self {\n        Self {\n            data: Arc::new(Mutex::new(HashMap::new())),\n            max_size,\n        }\n    }\n    \n    fn insert(&self, key: K, value: V) -> Option<V> {\n        let mut data = self.data.lock().unwrap();\n        if data.len() >= self.max_size {\n            data.clear();\n        }\n        data.insert(key, value)\n    }\n}",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_rust_4",
+    "category": "code",
+    "subcategory": "rust",
+    "language": "rust",
+    "content": "use std::future::Future;\nuse std::pin::Pin;\nuse std::task::{Context, Poll};\n\nstruct TimeoutFuture<F> {\n    future: F,\n    duration: std::time::Duration,\n}\n\nimpl<F: Future> Future for TimeoutFuture<F> {\n    type Output = Result<F::Output, tokio::time::error::Elapsed>;\n    \n    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {\n        let this = unsafe { self.get_unchecked_mut() };\n        \n        match Pin::new(&mut this.future).poll(cx) {\n            Poll::Ready(value) => Poll::Ready(Ok(value)),\n            Poll::Pending => Poll::Pending,\n        }\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_rust_5",
+    "category": "code",
+    "subcategory": "rust",
+    "language": "rust",
+    "content": "use std::marker::PhantomData;\nuse std::ops::{Deref, DerefMut};\n\nstruct PhantomWrapper<T, U> {\n    value: T,\n    _phantom: PhantomData<U>,\n}\n\nimpl<T, U> PhantomWrapper<T, U> {\n    fn new(value: T) -> Self {\n        Self {\n            value,\n            _phantom: PhantomData,\n        }\n    }\n}\n\nimpl<T, U> Deref for PhantomWrapper<T, U> {\n    type Target = T;\n    \n    fn deref(&self) -> &Self::Target {\n        &self.value\n    }\n}\n\nimpl<T, U> DerefMut for PhantomWrapper<T, U> {\n    fn deref_mut(&mut self) -> &mut Self::Target {\n        &mut self.value\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_rust_6",
+    "category": "code",
+    "subcategory": "rust",
+    "language": "rust",
+    "content": "use std::sync::mpsc;\nuse std::thread;\nuse std::time::Duration;\n\nstruct Actor<Message, Response> {\n    sender: mpsc::Sender<Message>,\n    receiver: mpsc::Receiver<Response>,\n}\n\nimpl<Message, Response> Actor<Message, Response> {\n    fn spawn<F>(handler: F) -> Self\n    where\n        F: Fn(Message) -> Response + Send + 'static,\n        Message: Send + 'static,\n        Response: Send + 'static,\n    {\n        let (tx, rx) = mpsc::channel();\n        let (response_tx, response_rx) = mpsc::channel();\n        \n        thread::spawn(move || {\n            while let Ok(msg) = rx.recv() {\n                let response = handler(msg);\n                let _ = response_tx.send(response);\n            }\n        });\n        \n        Self {\n            sender: tx,\n            receiver: response_rx,\n        }\n    }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_typescript_3",
+    "category": "code",
+    "subcategory": "typescript",
+    "language": "typescript",
+    "content": "type EventMap = {\n  click: { x: number; y: number };\n  keypress: { key: string; code: number };\n  scroll: { position: number };\n};\n\ntype EventHandler<T extends keyof EventMap> = (event: EventMap[T]) => void;\n\nclass EventEmitter {\n  private handlers: Partial<Record<keyof EventMap, EventHandler<any>[]>> = {};\n  \n  on<T extends keyof EventMap>(event: T, handler: EventHandler<T>): void {\n    if (!this.handlers[event]) {\n      this.handlers[event] = [];\n    }\n    this.handlers[event]!.push(handler);\n  }\n}",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_typescript_4",
+    "category": "code",
+    "subcategory": "typescript",
+    "language": "typescript",
+    "content": "type DeepPartial<T> = {\n  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];\n};\n\ntype Mutable<T> = {\n  -readonly [P in keyof T]: T[P];\n};\n\ntype RequiredFields<T, K extends keyof T> = T & {\n  [P in K]-?: T[P];\n};\n\ntype OptionalFields<T, K extends keyof T> = Omit<T, K> & {\n  [P in K]?: T[P];\n};",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_typescript_5",
+    "category": "code",
+    "subcategory": "typescript",
+    "language": "typescript",
+    "content": "type AsyncFunction<T extends any[], R> = (...args: T) => Promise<R>;\n\ntype RetryConfig = {\n  maxAttempts: number;\n  delay: number;\n  backoff: 'linear' | 'exponential';\n};\n\nfunction withRetry<T extends any[], R>(\n  fn: AsyncFunction<T, R>,\n  config: RetryConfig\n): AsyncFunction<T, R> {\n  return async (...args: T): Promise<R> => {\n    let lastError: Error;\n    \n    for (let attempt = 1; attempt <= config.maxAttempts; attempt++) {\n      try {\n        return await fn(...args);\n      } catch (error) {\n        lastError = error as Error;\n        if (attempt === config.maxAttempts) throw lastError;\n        \n        const delay = config.backoff === 'exponential' \n          ? config.delay * Math.pow(2, attempt - 1)\n          : config.delay * attempt;\n        \n        await new Promise(resolve => setTimeout(resolve, delay));\n      }\n    }\n    \n    throw lastError!;\n  };\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_typescript_6",
+    "category": "code",
+    "subcategory": "typescript",
+    "language": "typescript",
+    "content": "type StateMachine<State extends string, Event extends string> = {\n  [S in State]: {\n    [E in Event]?: State;\n  };\n};\n\ntype StateMachineConfig<State extends string, Event extends string> = {\n  initial: State;\n  states: StateMachine<State, Event>;\n  onTransition?: (from: State, to: State, event: Event) => void;\n};\n\nclass StateMachineRunner<State extends string, Event extends string> {\n  private currentState: State;\n  private config: StateMachineConfig<State, Event>;\n  \n  constructor(config: StateMachineConfig<State, Event>) {\n    this.config = config;\n    this.currentState = config.initial;\n  }\n  \n  transition(event: Event): boolean {\n    const nextState = this.config.states[this.currentState]?.[event];\n    if (nextState) {\n      const previousState = this.currentState;\n      this.currentState = nextState;\n      this.config.onTransition?.(previousState, nextState, event);\n      return true;\n    }\n    return false;\n  }\n  \n  getCurrentState(): State {\n    return this.currentState;\n  }\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_html_css_3",
+    "category": "code",
+    "subcategory": "html_css",
+    "language": "html",
+    "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Responsive Grid Layout</title>\n    <style>\n        .grid-container {\n            display: grid;\n            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n            gap: 20px;\n            padding: 20px;\n        }\n        .grid-item {\n            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n            padding: 20px;\n            border-radius: 10px;\n            color: white;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.1);\n        }\n    </style>\n</head>\n<body>\n    <div class=\"grid-container\">\n        <div class=\"grid-item\">Grid Item 1</div>\n        <div class=\"grid-item\">Grid Item 2</div>\n        <div class=\"grid-item\">Grid Item 3</div>\n    </div>\n</body>\n</html>",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_html_css_4",
+    "category": "code",
+    "subcategory": "html_css",
+    "language": "html",
+    "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>CSS Animations</title>\n    <style>\n        @keyframes slideIn {\n            from { transform: translateX(-100%); opacity: 0; }\n            to { transform: translateX(0); opacity: 1; }\n        }\n        \n        @keyframes pulse {\n            0%, 100% { transform: scale(1); }\n            50% { transform: scale(1.05); }\n        }\n        \n        .animated-box {\n            width: 200px;\n            height: 200px;\n            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);\n            margin: 50px auto;\n            animation: slideIn 1s ease-out, pulse 2s infinite;\n            border-radius: 15px;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"animated-box\"></div>\n</body>\n</html>",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_html_css_5",
+    "category": "code",
+    "subcategory": "html_css",
+    "language": "html",
+    "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Flexbox Navigation</title>\n    <style>\n        .nav-container {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            background: #2c3e50;\n            padding: 1rem 2rem;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n        }\n        \n        .nav-brand {\n            color: white;\n            font-size: 1.5rem;\n            font-weight: bold;\n        }\n        \n        .nav-menu {\n            display: flex;\n            list-style: none;\n            margin: 0;\n            padding: 0;\n        }\n        \n        .nav-menu li {\n            margin-left: 2rem;\n        }\n        \n        .nav-menu a {\n            color: white;\n            text-decoration: none;\n            transition: color 0.3s ease;\n        }\n        \n        .nav-menu a:hover {\n            color: #3498db;\n        }\n        \n        @media (max-width: 768px) {\n            .nav-container {\n                flex-direction: column;\n                padding: 1rem;\n            }\n            \n            .nav-menu {\n                margin-top: 1rem;\n            }\n            \n            .nav-menu li {\n                margin: 0 1rem;\n            }\n        }\n    </style>\n</head>\n<body>\n    <nav class=\"nav-container\">\n        <div class=\"nav-brand\">Brand</div>\n        <ul class=\"nav-menu\">\n            <li><a href=\"#\">Home</a></li>\n            <li><a href=\"#\">About</a></li>\n            <li><a href=\"#\">Services</a></li>\n            <li><a href=\"#\">Contact</a></li>\n        </ul>\n    </nav>\n</body>\n</html>",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_html_css_6",
+    "category": "code",
+    "subcategory": "html_css",
+    "language": "html",
+    "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>CSS Grid Dashboard</title>\n    <style>\n        .dashboard {\n            display: grid;\n            grid-template-areas:\n                \"header header header\"\n                \"sidebar main aside\"\n                \"footer footer footer\";\n            grid-template-columns: 250px 1fr 300px;\n            grid-template-rows: 80px 1fr 100px;\n            min-height: 100vh;\n            gap: 20px;\n            padding: 20px;\n        }\n        \n        .header {\n            grid-area: header;\n            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n            border-radius: 15px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: white;\n            font-size: 1.5rem;\n            font-weight: bold;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.1);\n        }\n        \n        .sidebar {\n            grid-area: sidebar;\n            background: #f8f9fa;\n            border-radius: 15px;\n            padding: 20px;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.1);\n        }\n        \n        .main {\n            grid-area: main;\n            background: white;\n            border-radius: 15px;\n            padding: 20px;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.1);\n        }\n        \n        .aside {\n            grid-area: aside;\n            background: #f8f9fa;\n            border-radius: 15px;\n            padding: 20px;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.1);\n        }\n        \n        .footer {\n            grid-area: footer;\n            background: #343a40;\n            border-radius: 15px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: white;\n            box-shadow: 0 4px 15px rgba(0,0,0,0.1);\n        }\n        \n        @media (max-width: 1024px) {\n            .dashboard {\n                grid-template-areas:\n                    \"header\"\n                    \"sidebar\"\n                    \"main\"\n                    \"aside\"\n                    \"footer\";\n                grid-template-columns: 1fr;\n                grid-template-rows: auto;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"dashboard\">\n        <header class=\"header\">Dashboard Header</header>\n        <nav class=\"sidebar\">Sidebar Navigation</nav>\n        <main class=\"main\">Main Content Area</main>\n        <aside class=\"aside\">Additional Information</aside>\n        <footer class=\"footer\">Dashboard Footer</footer>\n    </div>\n</body>\n</html>",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_bash_3",
+    "category": "code",
+    "subcategory": "bash",
+    "language": "bash",
+    "content": "#!/bin/bash\n\n# Function to backup files with timestamp\nbackup_files() {\n    local source_dir=\"$1\"\n    local backup_dir=\"$2\"\n    local timestamp=$(date +%Y%m%d_%H%M%S)\n    \n    if [ ! -d \"$backup_dir\" ]; then\n        mkdir -p \"$backup_dir\"\n    fi\n    \n    tar -czf \"$backup_dir/backup_$timestamp.tar.gz\" -C \"$source_dir\" .\n    echo \"Backup created: backup_$timestamp.tar.gz\"\n}\n\n# Usage\nbackup_files \"/home/user/documents\" \"/home/user/backups\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_bash_4",
+    "category": "code",
+    "subcategory": "bash",
+    "language": "bash",
+    "content": "#!/bin/bash\n\n# Function to monitor system resources\nmonitor_system() {\n    while true; do\n        echo \"=== System Monitor $(date) ===\"\n        echo \"CPU Usage: $(top -bn1 | grep 'Cpu(s)' | awk '{print $2}' | cut -d'%' -f1)%\"\n        echo \"Memory Usage: $(free -m | awk 'NR==2{printf \"%.2f%%\", $3*100/$2}')\"\n        echo \"Disk Usage: $(df -h / | awk 'NR==2{print $5}')\"\n        echo \"Load Average: $(uptime | awk -F'load average:' '{print $2}')\"\n        echo \"===============================\"\n        sleep 5\n    done\n}\n\n# Start monitoring\nmonitor_system",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_bash_5",
+    "category": "code",
+    "subcategory": "bash",
+    "language": "bash",
+    "content": "#!/bin/bash\n\n# Function to process log files\nprocess_logs() {\n    local log_file=\"$1\"\n    local output_file=\"$2\"\n    \n    if [ ! -f \"$log_file\" ]; then\n        echo \"Error: Log file not found\"\n        return 1\n    fi\n    \n    # Extract unique IP addresses and count occurrences\n    echo \"Processing log file: $log_file\"\n    \n    awk '{print $1}' \"$log_file\" | \\\n        sort | uniq -c | \\\n        sort -nr | \\\n        awk '{print $2 \"\\t\" $1}' > \"$output_file\"\n    \n    echo \"Results saved to: $output_file\"\n    echo \"Top 10 IP addresses:\"\n    head -10 \"$output_file\"\n}\n\n# Usage\nprocess_logs \"/var/log/access.log\" \"/tmp/ip_counts.txt\"",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_bash_6",
+    "category": "code",
+    "subcategory": "bash",
+    "language": "bash",
+    "content": "#!/bin/bash\n\n# Function to create a development environment\nsetup_dev_env() {\n    local project_name=\"$1\"\n    local project_type=\"$2\"\n    \n    if [ -z \"$project_name\" ] || [ -z \"$project_type\" ]; then\n        echo \"Usage: $0 <project_name> <project_type>\"\n        echo \"Project types: node, python, go, rust\"\n        return 1\n    fi\n    \n    # Create project directory\n    mkdir -p \"$project_name\"\n    cd \"$project_name\"\n    \n    case \"$project_type\" in\n        \"node\")\n            npm init -y\n            echo \"node_modules/\" > .gitignore\n            echo \"# $project_name\" > README.md\n            echo \"Project setup complete for Node.js\"\n            ;;\n        \"python\")\n            python3 -m venv venv\n            echo \"venv/\" > .gitignore\n            echo \"# $project_name\" > README.md\n            echo \"Project setup complete for Python\"\n            ;;\n        \"go\")\n            go mod init \"$project_name\"\n            echo \"# $project_name\" > README.md\n            echo \"Project setup complete for Go\"\n            ;;\n        \"rust\")\n            cargo init --name \"$project_name\"\n            echo \"# $project_name\" > README.md\n            echo \"Project setup complete for Rust\"\n            ;;\n        *)\n            echo \"Unknown project type: $project_type\"\n            return 1\n            ;;\n    esac\n}\n\n# Usage\nsetup_dev_env \"my-project\" \"node\""
   }
 ]

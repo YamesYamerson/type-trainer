@@ -1,6 +1,7 @@
 import type { TypingTest, TypingMode, TypingSubcategory } from '../types';
 import testData from '../data/typing-tests.json';
 import modeData from '../data/typing-modes.json';
+import { WordGenerator } from './wordGenerator';
 
 export const loadTests = (): TypingTest[] => {
   return testData as TypingTest[];
@@ -38,7 +39,7 @@ export const loadModes = (): TypingMode[] => {
 };
 
 export const loadModeById = (id: string): TypingMode | undefined => {
-  return modeData.find(mode => mode.id === id);
+  return (modeData as TypingMode[]).find(mode => mode.id === id);
 };
 
 export const getRandomTestByCategory = (category: string): TypingTest | undefined => {
@@ -48,6 +49,27 @@ export const getRandomTestByCategory = (category: string): TypingTest | undefine
 };
 
 export const getRandomTestBySubcategory = (category: string, subcategory: string): TypingTest | undefined => {
+  // Special handling for random_words subcategory
+  if (subcategory === 'random_words') {
+    const difficulty = category === 'lowercase' ? 'beginner' : 
+                      category === 'uppercase' ? 'intermediate' : 'beginner';
+    
+    // Use fluid word generation for natural difficulty progression
+    const words = WordGenerator.generateFluidWordList(8, difficulty);
+    
+    const content = category === 'uppercase' ? words.join(' ').toUpperCase() : words.join(' ');
+    
+    return {
+      id: `generated_${category}_${subcategory}_${Date.now()}`,
+      category,
+      subcategory,
+      content,
+      difficulty,
+      language: 'en'
+    };
+  }
+  
+  // Fallback to existing logic for other subcategories
   const tests = loadTestsBySubcategory(category, subcategory);
   if (tests.length === 0) {
     return undefined;

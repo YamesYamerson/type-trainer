@@ -3,6 +3,8 @@
  */
 
 import { DataManager } from '../src/utils/dataManager';
+import { loadTestsBySubcategory, getRandomTestBySubcategory } from '../src/utils/testLoader';
+import { WordGenerator } from '../src/utils/wordGenerator';
 
 describe('localStorage Mock Debug', () => {
   beforeEach(() => {
@@ -122,5 +124,176 @@ describe('localStorage Mock Debug', () => {
     const storedResults = JSON.parse(localStorage.getItem('typing-trainer-results') || '[]');
     expect(storedResults).toHaveLength(1);
     expect(storedResults[0].hash).toBe(mockResult.hash);
+  });
+});
+
+describe('Test Loader Verification', () => {
+  it('should load word-based tests for random_words subcategory', () => {
+    const lowercaseWords = loadTestsBySubcategory('lowercase', 'random_words');
+    const uppercaseWords = loadTestsBySubcategory('uppercase', 'random_words');
+    
+    console.log('Lowercase random_words tests:', lowercaseWords.length);
+    console.log('Uppercase random_words tests:', uppercaseWords.length);
+    
+    // Verify we have tests
+    expect(lowercaseWords.length).toBeGreaterThan(0);
+    expect(uppercaseWords.length).toBeGreaterThan(0);
+    
+    // Check that content is word-based (not full sentences)
+    lowercaseWords.forEach(test => {
+      const wordCount = test.content.split(' ').length;
+      console.log(`Test ${test.id}: "${test.content}" (${wordCount} words)`);
+      // Should be 10 words or less for word-based tests
+      expect(wordCount).toBeLessThanOrEqual(10);
+    });
+    
+    uppercaseWords.forEach(test => {
+      const wordCount = test.content.split(' ').length;
+      console.log(`Test ${test.id}: "${test.content}" (${wordCount} words)`);
+      // Should be 10 words or less for word-based tests
+      expect(wordCount).toBeLessThanOrEqual(10);
+    });
+  });
+  
+  it('should get random word tests correctly', () => {
+    const randomLowercaseTest = getRandomTestBySubcategory('lowercase', 'random_words');
+    const randomUppercaseTest = getRandomTestBySubcategory('uppercase', 'random_words');
+    
+    console.log('Random lowercase test:', randomLowercaseTest?.content);
+    console.log('Random uppercase test:', randomUppercaseTest?.content);
+    
+    expect(randomLowercaseTest).toBeDefined();
+    expect(randomUppercaseTest).toBeDefined();
+    
+    // Should be generated tests with word-based content
+    expect(randomLowercaseTest?.id).toMatch(/^generated_lowercase_random_words_/);
+    expect(randomUppercaseTest?.id).toMatch(/^generated_uppercase_random_words_/);
+    
+    // Content should be words, not sentences
+    const lowercaseWords = randomLowercaseTest?.content.split(' ') || [];
+    const uppercaseWords = randomUppercaseTest?.content.split(' ') || [];
+    
+    expect(lowercaseWords.length).toBeGreaterThan(0);
+    expect(uppercaseWords.length).toBeGreaterThan(0);
+    
+    // Verify content is properly cased
+    lowercaseWords.forEach(word => {
+      expect(word).toBe(word.toLowerCase());
+    });
+    
+    uppercaseWords.forEach(word => {
+      expect(word).toBe(word.toUpperCase());
+    });
+  });
+  
+  it('should generate different random word tests on each call', () => {
+    const test1 = getRandomTestBySubcategory('lowercase', 'random_words');
+    const test2 = getRandomTestBySubcategory('lowercase', 'random_words');
+    const test3 = getRandomTestBySubcategory('lowercase', 'random_words');
+    
+    console.log('Test 1:', test1?.content);
+    console.log('Test 2:', test2?.content);
+    console.log('Test 3:', test3?.content);
+    
+    // All should be different (though there's a small chance they could be the same)
+    const content1 = test1?.content || '';
+    const content2 = test2?.content || '';
+    const content3 = test3?.content || '';
+    
+    // At least two should be different
+    const uniqueContents = new Set([content1, content2, content3]);
+    expect(uniqueContents.size).toBeGreaterThan(1);
+  });
+});
+
+describe('Word Generator Tests', () => {
+  it('should generate fluid word lists with natural difficulty progression', () => {
+    const beginnerWords = WordGenerator.generateFluidWordList(8, 'beginner');
+    const intermediateWords = WordGenerator.generateFluidWordList(8, 'intermediate');
+    const advancedWords = WordGenerator.generateFluidWordList(8, 'advanced');
+    
+    console.log('Beginner fluid words:', beginnerWords);
+    console.log('Intermediate fluid words:', intermediateWords);
+    console.log('Advanced fluid words:', advancedWords);
+    
+    expect(beginnerWords.length).toBe(8);
+    expect(intermediateWords.length).toBe(8);
+    expect(advancedWords.length).toBe(8);
+    
+    // Each difficulty should include some easier words for fluidity
+    const beginnerAvgLength = beginnerWords.reduce((sum, word) => sum + word.length, 0) / beginnerWords.length;
+    const intermediateAvgLength = intermediateWords.reduce((sum, word) => sum + word.length, 0) / intermediateWords.length;
+    const advancedAvgLength = advancedWords.reduce((sum, word) => sum + word.length, 0) / advancedWords.length;
+    
+    // Should have natural progression but not exclusive
+    expect(beginnerAvgLength).toBeLessThan(intermediateAvgLength);
+    expect(intermediateAvgLength).toBeLessThan(advancedAvgLength);
+    
+    // Check that intermediate includes some beginner words
+    const intermediateHasBeginnerWords = intermediateWords.some(word => 
+      word.length <= 4 || ['the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'can'].includes(word)
+    );
+    expect(intermediateHasBeginnerWords).toBe(true);
+    
+    // Check that advanced includes some intermediate words
+    const advancedHasIntermediateWords = advancedWords.some(word => 
+      word.length >= 6 && word.length <= 10
+    );
+    expect(advancedHasIntermediateWords).toBe(true);
+  });
+  
+  it('should generate word lists with easier words included', () => {
+    const intermediateWords = WordGenerator.generateWordList({ 
+      difficulty: 'intermediate', 
+      wordCount: 8, 
+      includeEasier: true 
+    });
+    const advancedWords = WordGenerator.generateWordList({ 
+      difficulty: 'advanced', 
+      wordCount: 8, 
+      includeEasier: true 
+    });
+    
+    console.log('Intermediate with easier words:', intermediateWords);
+    console.log('Advanced with easier words:', advancedWords);
+    
+    expect(intermediateWords.length).toBe(8);
+    expect(advancedWords.length).toBe(8);
+    
+    // Should include some shorter/easier words
+    const intermediateHasShortWords = intermediateWords.some(word => word.length <= 4);
+    const advancedHasShortWords = advancedWords.some(word => word.length <= 4);
+    
+    expect(intermediateHasShortWords).toBe(true);
+    expect(advancedHasShortWords).toBe(true);
+  });
+  
+  it('should generate random word lists', () => {
+    const randomWords1 = WordGenerator.generateRandomWordList(8);
+    const randomWords2 = WordGenerator.generateRandomWordList(8);
+    
+    console.log('Random words 1:', randomWords1);
+    console.log('Random words 2:', randomWords2);
+    
+    expect(randomWords1.length).toBe(8);
+    expect(randomWords2.length).toBe(8);
+    
+    // Should be different (though there's a small chance they could be the same)
+    const content1 = randomWords1.join(' ');
+    const content2 = randomWords2.join(' ');
+    console.log('Content 1:', content1);
+    console.log('Content 2:', content2);
+  });
+  
+  it('should generate mixed word lists', () => {
+    const mixedWords = WordGenerator.generateMixedWordList(10);
+    
+    console.log('Mixed words:', mixedWords);
+    expect(mixedWords.length).toBe(10);
+    
+    // Should contain words of different lengths
+    const lengths = mixedWords.map(word => word.length);
+    const uniqueLengths = [...new Set(lengths)];
+    expect(uniqueLengths.length).toBeGreaterThan(1);
   });
 });

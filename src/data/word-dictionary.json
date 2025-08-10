@@ -1,0 +1,17 @@
+{
+  "beginner": {
+    "core": [
+      "the", "and", "for", "are", "but", "not", "you", "all", "can", "had", "her", "was", "one", "our", "out", "day", "get", "has", "him", "his", "how", "man", "new", "now", "old", "see", "two", "way", "who", "boy", "did", "its", "let", "put", "say", "she", "too", "use", "dad", "mom", "run", "sit", "eat", "big", "red", "hot", "sun", "cat", "dog", "box", "map", "car", "tree", "book", "home", "work", "time", "life", "love", "good", "well", "come", "go", "make", "take", "give", "know", "think", "feel", "want", "need", "help", "play", "walk", "talk", "look", "hear", "find", "keep", "start", "stop", "open", "close", "read", "write", "draw", "sing", "dance", "sleep", "wake", "dream", "hope", "wish", "plan", "try", "fail", "win", "lose"
+    ]
+  },
+  "intermediate": {
+    "mixed": [
+      "about", "after", "again", "always", "around", "because", "before", "better", "between", "different", "every", "family", "father", "friend", "great", "house", "little", "mother", "people", "school", "should", "through", "together", "under", "water", "where", "which", "while", "world", "would", "write", "years", "young", "animal", "another", "answer", "anything", "beautiful", "children", "country", "everything", "important", "something", "sometimes", "thought", "without", "working", "morning", "evening", "kitchen", "garden", "picture", "accomplish", "adventure", "challenge", "character", "community", "confidence", "determine", "difficulty", "education", "experience", "government", "knowledge", "language", "necessary", "opportunity", "particular", "population", "position", "possible", "practice", "question", "remember", "situation", "special", "strength", "structure", "successful", "surprise", "technology", "themselves", "throughout", "understand", "wonderful", "yesterday", "tomorrow", "afternoon", "breakfast", "dinner", "lunch", "holiday", "vacation", "birthday", "wedding", "celebration", "graduation", "anniversary"
+    ]
+  },
+  "advanced": {
+    "progressive": [
+      "accomplishment", "administration", "communication", "comprehensive", "concentration", "consideration", "determination", "development", "environmental", "extraordinary", "identification", "implementation", "infrastructure", "international", "investigation", "manufacturing", "participation", "recommendation", "representation", "responsibility", "sophisticated", "straightforward", "transportation", "understanding", "unfortunately", "accommodation", "characteristic", "classification", "algorithm", "application", "architecture", "authentication", "authorization", "configuration", "deployment", "encryption", "framework", "integration", "maintenance", "optimization", "performance", "persistence", "repository", "scalability", "security", "serialization", "specification", "synchronization", "validation", "virtualization", "visualization"
+    ]
+  }
+}

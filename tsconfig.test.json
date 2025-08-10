@@ -6,7 +6,8 @@
     "jsx": "react-jsx",
     "types": ["jest", "node", "@testing-library/jest-dom"],
     "verbatimModuleSyntax": false,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
   "include": [
     "src",

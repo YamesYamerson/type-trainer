@@ -8,13 +8,45 @@
       {
         "id": "random_words",
         "name": "Random Words",
-        "description": "Practice with random common words",
+        "description": "Practice with individual words in lowercase",
         "difficulty": "beginner"
       },
       {
         "id": "random_sentences",
         "name": "Random Sentences",
-        "description": "Practice with random sentences",
+        "description": "Practice with random sentences in lowercase",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "word_definitions",
+        "name": "Word Definitions",
+        "description": "Practice typing word definitions without punctuation",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "fables",
+        "name": "Fables",
+        "description": "Practice with classic fables and stories",
+        "difficulty": "intermediate"
+      }
+    ]
+  },
+  {
+    "id": "uppercase",
+    "name": "Uppercase Words",
+    "options": ["Uppercase only", "Simple words", "Beginner friendly"],
+    "contentPath": "uppercase",
+    "subcategories": [
+      {
+        "id": "random_words",
+        "name": "Random Words",
+        "description": "Practice with individual words in uppercase",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "random_sentences",
+        "name": "Random Sentences",
+        "description": "Practice with random sentences in uppercase",
         "difficulty": "beginner"
       },
       {
@@ -64,6 +96,58 @@
     ]
   },
   {
+    "id": "numbers",
+    "name": "Numbers",
+    "options": ["Random numbers", "Phone numbers", "Credit cards"],
+    "contentPath": "numbers",
+    "subcategories": [
+      {
+        "id": "random_numbers",
+        "name": "Random Numbers",
+        "description": "Practice typing random number sequences",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "phone_numbers",
+        "name": "Phone Numbers",
+        "description": "Practice typing phone number formats",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "credit_cards",
+        "name": "Credit Card Numbers",
+        "description": "Practice typing credit card number formats",
+        "difficulty": "advanced"
+      }
+    ]
+  },
+  {
+    "id": "symbols",
+    "name": "Symbols",
+    "options": ["Basic symbols", "Currency", "Math symbols"],
+    "contentPath": "symbols",
+    "subcategories": [
+      {
+        "id": "basic_symbols",
+        "name": "Basic Symbols",
+        "description": "Practice typing basic keyboard symbols",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "currency_symbols",
+        "name": "Currency Symbols",
+        "description": "Practice typing currency symbols",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "math_symbols",
+        "name": "Math Symbols",
+        "description": "Practice typing mathematical symbols",
+        "difficulty": "advanced"
+      }
+    ]
+  },
+  {
     "id": "code",
     "name": "Programming Code",
     "options": ["JavaScript", "Python", "Syntax symbols"],
@@ -92,6 +176,42 @@
         "name": "HTML & CSS",
         "description": "Practice typing HTML and CSS markup",
         "difficulty": "beginner"
+      },
+      {
+        "id": "bash",
+        "name": "Bash Scripts",
+        "description": "Practice typing bash shell scripts",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "java",
+        "name": "Java",
+        "description": "Practice typing Java code",
+        "difficulty": "advanced"
+      },
+      {
+        "id": "cpp",
+        "name": "C++",
+        "description": "Practice typing C++ code",
+        "difficulty": "advanced"
+      },
+      {
+        "id": "csharp",
+        "name": "C#",
+        "description": "Practice typing C# code",
+        "difficulty": "advanced"
+      },
+      {
+        "id": "go",
+        "name": "Go",
+        "description": "Practice typing Go code",
+        "difficulty": "advanced"
+      },
+      {
+        "id": "rust",
+        "name": "Rust",
+        "description": "Practice typing Rust code",
+        "difficulty": "advanced"
       }
     ]
   },
