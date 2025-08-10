@@ -2,8 +2,6 @@
  * Server configuration for Type Trainer
  */
 
-require('dotenv').config();
-
 const path = require('path');
 
 const config = {
