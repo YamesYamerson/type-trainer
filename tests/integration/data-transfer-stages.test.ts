@@ -64,6 +64,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase' as const,
+          subcategory: 'basic',
           timeElapsed: 80000
         } as Omit<TypingResult, 'hash'> & { hash?: string };
 
@@ -92,6 +93,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: existingHash
         };
@@ -166,7 +168,8 @@ describe('Data Transfer and Processing Stages', () => {
           errors: 2,
           totalCharacters: 100,
           correctCharacters: 98,
-          category: 'lowercase' as const,
+          category: 'lowercase',
+          subcategory: 'basic' as const,
           timeElapsed: 80000,
           hash: 'test_hash_123'
         } as TypingResult;
@@ -198,6 +201,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -231,6 +235,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -255,6 +260,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -283,6 +289,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -312,6 +319,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -344,6 +352,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -369,6 +378,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -398,6 +408,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -429,6 +440,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -462,6 +474,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -495,6 +508,7 @@ describe('Data Transfer and Processing Stages', () => {
             totalCharacters: 100,
             correctCharacters: 98,
             category: 'lowercase',
+            subcategory: 'basic',
             timeElapsed: 80000,
             hash: 'hash_1'
           }
@@ -536,6 +550,7 @@ describe('Data Transfer and Processing Stages', () => {
             time_elapsed: 80000,
             test_id: 'test_1',
             category: 'lowercase',
+            subcategory: 'basic',
             timestamp: Date.now(),
             hash: 'hash_1'
           }
@@ -572,6 +587,7 @@ describe('Data Transfer and Processing Stages', () => {
             // Missing required fields
             test_id: 'test_1',
             category: 'lowercase',
+            subcategory: 'basic',
             timestamp: Date.now(),
             hash: 'hash_1'
           }
@@ -607,6 +623,7 @@ describe('Data Transfer and Processing Stages', () => {
             time_elapsed: 80000,
             test_id: 'test_1',
             category: 'lowercase',
+            subcategory: 'basic',
             timestamp: Date.now(),
             hash: 'hash_1'
           },
@@ -619,6 +636,7 @@ describe('Data Transfer and Processing Stages', () => {
             time_elapsed: 90000,
             test_id: 'test_2',
             category: 'punctuation',
+            subcategory: 'basic',
             timestamp: Date.now() + 1000,
             hash: 'hash_2'
           }
@@ -648,6 +666,7 @@ describe('Data Transfer and Processing Stages', () => {
           time_elapsed: 80000,
           test_id: `test_${i}`,
           category: 'lowercase',
+          subcategory: 'basic',
           timestamp: Date.now() + i,
           hash: `hash_${i}`
         }));
@@ -683,6 +702,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase' as const,
+          subcategory: 'basic',
           timeElapsed: 80000
         } as Omit<TypingResult, 'hash'> & { hash?: string };
 
@@ -713,6 +733,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -746,6 +767,7 @@ describe('Data Transfer and Processing Stages', () => {
             time_elapsed: 80000,
             test_id: 'test_1',
             category: 'lowercase',
+            subcategory: 'basic',
             timestamp: Date.now(),
             hash: 'hash_1'
           }
@@ -790,6 +812,7 @@ describe('Data Transfer and Processing Stages', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+          subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'test_hash_123'
       };
@@ -818,6 +841,7 @@ describe('Data Transfer and Processing Stages', () => {
           time_elapsed: 80000,
           test_id: 'test_123',
           category: 'lowercase',
+          subcategory: 'basic',
           timestamp: mockResult.timestamp,
           hash: 'test_hash_123'
         }]
@@ -840,6 +864,7 @@ describe('Data Transfer and Processing Stages', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+          subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'test_hash_123'
       };
@@ -891,6 +916,7 @@ describe('Data Transfer and Processing Stages', () => {
             time_elapsed: 80000,
             test_id: 'test_1',
             category: 'lowercase',
+            subcategory: 'basic',
             timestamp: Date.now(),
             hash: 'hash_1'
           },
@@ -903,6 +929,7 @@ describe('Data Transfer and Processing Stages', () => {
             time_elapsed: 90000,
             test_id: 'test_2',
             category: 'punctuation',
+            subcategory: 'basic',
             timestamp: Date.now() + 1000,
             hash: 'hash_2'
           }
@@ -927,9 +954,10 @@ describe('Data Transfer and Processing Stages', () => {
           total_characters: 100,
           correct_characters: 98,
           time_elapsed: 80000,
-          test_id: `test_${i}`,
-          category: 'lowercase',
-          timestamp: Date.now() + i,
+                      test_id: `test_${i}`,
+            category: 'lowercase',
+            subcategory: 'basic',
+            timestamp: Date.now() + i,
           hash: `hash_${i}`
         }));
 
@@ -958,6 +986,7 @@ describe('Data Transfer and Processing Stages', () => {
             time_elapsed: '80000', // String instead of number
             test_id: 'test_1',
             category: 'lowercase',
+            subcategory: 'basic',
             timestamp: Date.now(),
             hash: 'hash_1'
           }
@@ -982,6 +1011,7 @@ describe('Data Transfer and Processing Stages', () => {
             // Missing wpm, accuracy, errors
             test_id: 'test_1',
             category: 'lowercase',
+            subcategory: 'basic',
             timestamp: Date.now(),
             hash: 'hash_1'
           }
@@ -1012,6 +1042,7 @@ describe('Data Transfer and Processing Stages', () => {
             time_elapsed: 80000,
             test_id: 'test_1',
             category: 'lowercase',
+            subcategory: 'basic',
             timestamp: Date.now(),
             hash: 'hash_1'
           }
@@ -1041,6 +1072,7 @@ describe('Data Transfer and Processing Stages', () => {
           time_elapsed: 80000,
           test_id: `test_${i}`,
           category: 'lowercase',
+          subcategory: 'basic',
           timestamp: Date.now() + i,
           hash: `hash_${i}`
         }));
@@ -1067,9 +1099,10 @@ describe('Data Transfer and Processing Stages', () => {
           total_characters: 100,
           correct_characters: 98,
           time_elapsed: 80000,
-          test_id: `test_${i}`,
-          category: 'lowercase',
-          timestamp: Date.now() + i,
+                      test_id: `test_${i}`,
+            category: 'lowercase',
+            subcategory: 'basic',
+            timestamp: Date.now() + i,
           hash: `hash_${i}`,
           // Add large additional data
           largeData: 'x'.repeat(10000) // 10KB per object
@@ -1096,6 +1129,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'hash_1'
         };
@@ -1109,6 +1143,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 120,
           correctCharacters: 108,
           category: 'punctuation',
+          subcategory: 'basic',
           timeElapsed: 90000,
           hash: 'hash_2'
         };
@@ -1149,6 +1184,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1175,6 +1211,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1201,6 +1238,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1226,6 +1264,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 0,
           correctCharacters: 0,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 0,
           hash: 'test_hash_123'
         };
@@ -1253,6 +1292,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1278,6 +1318,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1304,6 +1345,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1331,6 +1373,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1364,6 +1407,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1391,6 +1435,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1421,6 +1466,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'duplicate_hash'
         };
@@ -1447,6 +1493,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: '' // Empty hash
         };
@@ -1472,6 +1519,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1506,6 +1554,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1543,6 +1592,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };
@@ -1576,6 +1626,7 @@ describe('Data Transfer and Processing Stages', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'test_hash_123'
         };

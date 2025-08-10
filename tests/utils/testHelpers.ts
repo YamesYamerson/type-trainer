@@ -13,15 +13,17 @@ import type { TypingResult, TypingTest, UserStats } from '../../src/types';
  */
 export const createMockTypingResult = (overrides: Partial<TypingResult> = {}): TypingResult => ({
   testId: 'test_123',
-  category: 'lowercase',
+  timestamp: Date.now(),
   wpm: 45,
   accuracy: 95,
-  errors: 2,
+  errors: 3,
   totalCharacters: 100,
-  correctCharacters: 98,
-  timeElapsed: 80000,
-  timestamp: Date.now(),
+  correctCharacters: 97,
+  timeElapsed: 120000,
+  category: 'lowercase',
+  subcategory: 'random_words',
   hash: 'mock_hash_123',
+  sessionId: 'session_123',
   ...overrides,
 });
 
@@ -30,8 +32,9 @@ export const createMockTypingResult = (overrides: Partial<TypingResult> = {}): T
  */
 export const createMockTypingTest = (overrides: Partial<TypingTest> = {}): TypingTest => ({
   id: 'test_1',
-  content: 'the quick brown fox jumps over the lazy dog',
   category: 'lowercase',
+  subcategory: 'random_words',
+  content: 'this is a test sentence for typing practice',
   difficulty: 'beginner',
   ...overrides,
 });

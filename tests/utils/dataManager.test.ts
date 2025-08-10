@@ -103,7 +103,8 @@ describe('DataManager', () => {
             correctCharacters: mockResult.correctCharacters,
             timeElapsed: mockResult.timeElapsed,
             timestamp: mockResult.timestamp,
-            hash: mockResult.hash
+            hash: mockResult.hash,
+            sessionId: mockResult.sessionId
           })
         })
       );

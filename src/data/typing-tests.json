@@ -1,52 +1,218 @@
 [
   {
-    "id": "lowercase",
+    "id": "lowercase_random_words_1",
     "category": "lowercase",
+    "subcategory": "random_words",
     "content": "this is a simple typing test for lowercase practice with basic words that are commonly used in everyday writing",
     "difficulty": "beginner"
   },
   {
-    "id": "lowercase", 
+    "id": "lowercase_random_words_2", 
     "category": "lowercase",
+    "subcategory": "random_words",
     "content": "the quick brown fox jumps over the lazy dog this pangram contains every letter of the alphabet at least once",
     "difficulty": "beginner"
   },
   {
-    "id": "punctuation",
+    "id": "lowercase_random_sentences_1",
+    "category": "lowercase",
+    "subcategory": "random_sentences",
+    "content": "birds fly high in the sky during spring migration season many species travel thousands of miles to reach their breeding grounds",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_random_sentences_2",
+    "category": "lowercase",
+    "subcategory": "random_sentences",
+    "content": "ocean waves crash against the rocky shoreline creating a rhythmic sound that soothes the mind and calms the soul",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "lowercase_word_definitions_1",
+    "category": "lowercase",
+    "subcategory": "word_definitions",
+    "content": "serendipity means finding something good without looking for it a serendipitous discovery often leads to unexpected joy and wonder",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_word_definitions_2",
+    "category": "lowercase",
+    "subcategory": "word_definitions",
+    "content": "ephemeral describes something that lasts for a very short time like morning dew or childhood memories that fade with age",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_fables_1",
+    "category": "lowercase",
+    "subcategory": "fables",
+    "content": "the tortoise and the hare once had a race the hare was confident and took a nap while the tortoise kept moving slowly but steadily",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "lowercase_fables_2",
+    "category": "lowercase",
+    "subcategory": "fables",
+    "content": "a hungry fox saw some grapes hanging high on a vine he tried to reach them but could not so he walked away saying they were probably sour",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_random_sentences_1",
     "category": "punctuation",
+    "subcategory": "random_sentences",
     "content": "Hello, world! How are you today? I hope you're doing well. This test includes punctuation marks like commas, periods, and question marks.",
-    "difficulty": "intermediate"
+    "difficulty": "beginner"
   },
   {
-    "id": "punctuation", 
+    "id": "punctuation_random_sentences_2", 
     "category": "punctuation", 
+    "subcategory": "random_sentences",
     "content": "She said, \"I love programming!\" The code was written in JavaScript, Python, and TypeScript. What's your favorite language?",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "punctuation_word_definitions_punct_1",
+    "category": "punctuation",
+    "subcategory": "word_definitions_punct",
+    "content": "Serendipity (noun): The occurrence and development of events by chance in a happy or beneficial way. Example: \"Meeting you here was pure serendipity!\"",
     "difficulty": "intermediate"
   },
   {
-    "id": "code",
+    "id": "punctuation_word_definitions_punct_2",
+    "category": "punctuation",
+    "subcategory": "word_definitions_punct",
+    "content": "Ephemeral (adjective): Lasting for a very short time; transitory. Example: \"The beauty of cherry blossoms is ephemeral, lasting only a few days.\"",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_fables_punct_1",
+    "category": "punctuation",
+    "subcategory": "fables_punct",
+    "content": "The Tortoise and the Hare: \"Slow and steady wins the race,\" said the tortoise. The hare laughed, but who had the last laugh?",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_fables_punct_2",
+    "category": "punctuation",
+    "subcategory": "fables_punct",
+    "content": "The Fox and the Grapes: \"Those grapes are probably sour anyway!\" exclaimed the fox, as he walked away from the unreachable fruit.",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "punctuation_random_topic_info_1",
+    "category": "punctuation",
+    "subcategory": "random_topic_info",
+    "content": "Climate Change: The Earth's average temperature has increased by approximately 1.1°C (2.0°F) since pre-industrial times. This warming trend is primarily attributed to human activities, particularly the burning of fossil fuels.",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "punctuation_random_topic_info_2",
+    "category": "punctuation",
+    "subcategory": "random_topic_info",
+    "content": "Artificial Intelligence: Machine learning algorithms can now recognize patterns in data that humans might miss. However, these systems still require human oversight and ethical considerations in their development and deployment.",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_javascript_1",
     "category": "code",
+    "subcategory": "javascript",
     "language": "javascript",
     "content": "function calculateSum(a, b) {\n  return a + b;\n}\n\nconst result = calculateSum(5, 3);\nconsole.log(result);",
     "difficulty": "intermediate"
   },
   {
-    "id": "code",
+    "id": "code_javascript_2",
     "category": "code",
+    "subcategory": "javascript",
+    "language": "javascript",
+    "content": "const numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(n => n * 2);\nconst sum = doubled.reduce((acc, n) => acc + n, 0);\nconsole.log(sum);",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_python_1",
+    "category": "code",
+    "subcategory": "python",
     "language": "python", 
     "content": "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nprint(fibonacci(10))",
     "difficulty": "intermediate"
   },
   {
-    "id": "data_entry",
+    "id": "code_python_2",
+    "category": "code",
+    "subcategory": "python",
+    "language": "python",
+    "content": "numbers = [1, 2, 3, 4, 5]\ndoubled = [n * 2 for n in numbers]\ntotal = sum(doubled)\nprint(f\"Sum of doubled numbers: {total}\")",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "code_typescript_1",
+    "category": "code",
+    "subcategory": "typescript",
+    "language": "typescript",
+    "content": "interface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nfunction createUser(user: User): User {\n  return { ...user, id: Date.now() };\n}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "code_html_css_1",
+    "category": "code",
+    "subcategory": "html_css",
+    "language": "html",
+    "content": "<div class=\"container\">\n  <h1>Welcome</h1>\n  <p>This is a sample page.</p>\n  <button class=\"btn-primary\">Click me</button>\n</div>",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "data_entry_sku_data_1",
     "category": "data_entry",
+    "subcategory": "sku_data",
+    "content": "PRD-2024-001\tABC123\t$29.99\tElectronics\tIn Stock\t50 units",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "data_entry_sku_data_2",
+    "category": "data_entry",
+    "subcategory": "sku_data",
+    "content": "PRD-2024-002\tXYZ789\t$45.50\tClothing\tLow Stock\t12 units",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "data_entry_database_input_1",
+    "category": "data_entry",
+    "subcategory": "database_input",
+    "content": "INSERT INTO users (id, name, email, created_at) VALUES (1, 'John Doe', 'john@example.com', '2024-01-15 10:30:00');",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "data_entry_database_input_2",
+    "category": "data_entry",
+    "subcategory": "database_input",
+    "content": "SELECT u.name, u.email, o.order_date FROM users u JOIN orders o ON u.id = o.user_id WHERE o.status = 'completed';",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "data_entry_form_fields_1",
+    "category": "data_entry",
+    "subcategory": "form_fields",
     "content": "John Doe\tjohn.doe@email.com\t555-123-4567\t123 Main St, City, ST 12345",
     "difficulty": "beginner"
   },
   {
-    "id": "data_entry",
+    "id": "data_entry_form_fields_2",
     "category": "data_entry",
-    "content": "Product ID: PRD-2024-001\tSKU: ABC123\tPrice: $29.99\tCategory: Electronics",
-    "difficulty": "intermediate"
+    "subcategory": "form_fields",
+    "content": "Jane Smith\tjane.smith@email.com\t555-987-6543\t456 Oak Ave, Town, ST 67890",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "data_entry_api_data_1",
+    "category": "data_entry",
+    "subcategory": "api_data",
+    "content": "{\"id\": 123, \"name\": \"Product Name\", \"price\": 29.99, \"category\": \"electronics\", \"inStock\": true, \"tags\": [\"new\", \"featured\"]}",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "data_entry_api_data_2",
+    "category": "data_entry",
+    "subcategory": "api_data",
+    "content": "{\"status\": \"success\", \"data\": {\"users\": [{\"id\": 1, \"name\": \"John\"}, {\"id\": 2, \"name\": \"Jane\"}], \"total\": 2}}",
+    "difficulty": "advanced"
   }
 ]

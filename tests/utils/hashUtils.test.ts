@@ -21,14 +21,15 @@ import type { TypingResult } from '../../src/types';
 
 describe('Hash Utils', () => {
   const mockResult: Omit<TypingResult, 'hash'> = {
-    wpm: 50,
+    wpm: 45,
     accuracy: 95,
-    errors: 2,
+    errors: 3,
     totalCharacters: 100,
-    correctCharacters: 95,
+    correctCharacters: 97,
     timeElapsed: 120000,
-    testId: 'test-123',
+    testId: 'test_123',
     category: 'lowercase',
+    subcategory: 'random_words',
     timestamp: Date.now()
   };
 
@@ -37,6 +38,7 @@ describe('Hash Utils', () => {
       const result: Omit<TypingResult, 'hash'> = {
         testId: 'test-123',
         category: 'lowercase',
+          subcategory: 'basic',
         wpm: 50,
         accuracy: 95,
         errors: 2,
@@ -58,6 +60,7 @@ describe('Hash Utils', () => {
       const result1: Omit<TypingResult, 'hash'> = {
         testId: 'test-123',
         category: 'lowercase',
+        subcategory: 'basic',
         wpm: 50,
         accuracy: 95,
         errors: 2,

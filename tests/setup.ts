@@ -166,6 +166,7 @@ if (typeof window === 'undefined') {
   createMockTypingResult: (overrides = {}) => ({
     testId: 'test_123',
     category: 'lowercase',
+    subcategory: 'basic',
     wpm: 45,
     accuracy: 95,
     errors: 2,

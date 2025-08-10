@@ -64,6 +64,7 @@ describe('localStorage Mock Debug', () => {
       totalCharacters: 100,
       correctCharacters: 98,
       category: 'lowercase',
+      subcategory: 'basic',
       timeElapsed: 80000,
       hash: 'test_hash_123'
     };
@@ -101,6 +102,7 @@ describe('localStorage Mock Debug', () => {
       totalCharacters: 100,
       correctCharacters: 98,
       category: 'lowercase',
+      subcategory: 'basic',
       timeElapsed: 80000,
       hash: 'test_hash_123'
     };

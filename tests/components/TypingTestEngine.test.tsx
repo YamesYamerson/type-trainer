@@ -18,8 +18,9 @@ jest.mock('../../src/components/VirtualKeyboard', () => ({
 describe('TypingTestEngine', () => {
   const mockTest: TypingTest = {
     id: 'test_1',
-    category: 'practice',
-    content: 'the quick brown fox jumps over the lazy dog',
+    category: 'lowercase',
+    subcategory: 'random_words',
+    content: 'this is a test sentence for typing practice',
     difficulty: 'beginner'
   };
 
@@ -36,7 +37,7 @@ describe('TypingTestEngine', () => {
   describe('Initialization', () => {
     it('should render the component correctly', () => {
       render(<TypingTestEngine test={mockTest} onComplete={mockOnComplete} />);
-      expect(screen.getByText('Practice Test')).toBeInTheDocument();
+      expect(screen.getByText('Lowercase Test')).toBeInTheDocument();
       expect(screen.getByText('Difficulty: beginner')).toBeInTheDocument();
       
       // Check that the text container exists and contains the expected content

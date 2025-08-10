@@ -23,13 +23,54 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({
           const averageWpm = Math.round(results.reduce((sum, r) => sum + r.wpm, 0) / results.length);
           const averageAccuracy = Math.round(results.reduce((sum, r) => sum + r.accuracy, 0) / results.length);
           const bestWpm = Math.max(...results.map(r => r.wpm));
+          
+          // Calculate category and subcategory stats
+          const categoryStats: { [key: string]: { tests: number; averageWpm: number; averageAccuracy: number } } = {};
+          const subcategoryStats: { [key: string]: { tests: number; averageWpm: number; averageAccuracy: number } } = {};
+          
+          results.forEach(result => {
+            // Category stats
+            if (!categoryStats[result.category]) {
+              categoryStats[result.category] = { tests: 0, averageWpm: 0, averageAccuracy: 0, totalWpm: 0, totalAccuracy: 0 };
+            }
+            categoryStats[result.category].tests++;
+            categoryStats[result.category].totalWpm += result.wpm;
+            categoryStats[result.category].totalAccuracy += result.accuracy;
+            
+            // Subcategory stats
+            const subcategoryKey = `${result.category}_${result.subcategory}`;
+            if (!subcategoryStats[subcategoryKey]) {
+              subcategoryStats[subcategoryKey] = { tests: 0, averageWpm: 0, averageAccuracy: 0, totalWpm: 0, totalAccuracy: 0 };
+            }
+            subcategoryStats[subcategoryKey].tests++;
+            subcategoryStats[subcategoryKey].totalWpm += result.wpm;
+            subcategoryStats[subcategoryKey].totalAccuracy += result.accuracy;
+          });
+          
+          // Calculate averages
+          Object.keys(categoryStats).forEach(category => {
+            const cat = categoryStats[category];
+            cat.averageWpm = Math.round(cat.totalWpm / cat.tests);
+            cat.averageAccuracy = Math.round(cat.totalAccuracy / cat.tests);
+            delete (cat as any).totalWpm;
+            delete (cat as any).totalAccuracy;
+          });
+          
+          Object.keys(subcategoryStats).forEach(subcategory => {
+            const sub = subcategoryStats[subcategory];
+            sub.averageWpm = Math.round(sub.totalWpm / sub.tests);
+            sub.averageAccuracy = Math.round(sub.totalAccuracy / sub.tests);
+            delete (sub as any).totalWpm;
+            delete (sub as any).totalAccuracy;
+          });
+          
           setStats({
-            userId: 'default_user',
             totalTests: results.length,
             averageWpm,
             bestWpm,
-            totalAccuracy: averageAccuracy,
-            lastTestDate: Math.max(...results.map(r => r.timestamp))
+            averageAccuracy,
+            lastTestDate: Math.max(...results.map(r => r.timestamp)),
+            categoryStats
           });
         } else {
           // If no results provided, get hybrid stats (localStorage + SQLite)
@@ -44,11 +85,10 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({
           const averageAccuracy = Math.round(results.reduce((sum, r) => sum + r.accuracy, 0) / results.length);
           const bestWpm = Math.max(...results.map(r => r.wpm));
           setStats({
-            userId: 'default_user',
             totalTests: results.length,
             averageWpm,
             bestWpm,
-            totalAccuracy: averageAccuracy,
+            averageAccuracy,
             lastTestDate: Math.max(...results.map(r => r.timestamp))
           });
         }
@@ -87,14 +127,14 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({
         </h3>
       )}
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="text-center">
           <div className="text-2xl font-bold text-blue-600">{stats.averageWpm}</div>
           <div className="text-sm text-gray-600">Avg WPM</div>
         </div>
         
         <div className="text-center">
-          <div className="text-2xl font-bold text-green-600">{stats.totalAccuracy}%</div>
+          <div className="text-2xl font-bold text-green-600">{stats.averageAccuracy}%</div>
           <div className="text-sm text-gray-600">Avg Accuracy</div>
         </div>
         
@@ -108,6 +148,34 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({
           <div className="text-sm text-gray-600">Tests Completed</div>
         </div>
       </div>
+
+      {/* Category Stats */}
+      {stats.categoryStats && Object.keys(stats.categoryStats).length > 0 && (
+        <div className="mt-6">
+          <h4 className="text-md font-semibold text-gray-700 mb-3">Category Performance</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {Object.entries(stats.categoryStats).map(([category, catStats]) => (
+              <div key={category} className="bg-gray-50 rounded-lg p-3">
+                <h5 className="font-medium text-gray-800 capitalize mb-2">{category.replace('_', ' ')}</h5>
+                <div className="grid grid-cols-3 gap-2 text-sm">
+                  <div className="text-center">
+                    <div className="font-semibold text-blue-600">{catStats.tests}</div>
+                    <div className="text-gray-500">Tests</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-green-600">{catStats.averageWpm}</div>
+                    <div className="text-gray-500">WPM</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="font-semibold text-purple-600">{catStats.averageAccuracy}%</div>
+                    <div className="text-gray-500">Acc</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

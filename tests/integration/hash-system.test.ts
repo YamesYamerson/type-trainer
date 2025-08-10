@@ -114,6 +114,7 @@ describe('Hash System Integration Tests', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+        subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'same_hash_123'
       };
@@ -136,6 +137,7 @@ describe('Hash System Integration Tests', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+        subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'hash_1'
       };
@@ -160,6 +162,7 @@ describe('Hash System Integration Tests', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+          subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'test_hash_123'
       };
@@ -211,6 +214,7 @@ describe('Hash System Integration Tests', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+          subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'existing_hash'
       };
@@ -302,6 +306,7 @@ describe('Hash System Integration Tests', () => {
           totalCharacters: 100,
           correctCharacters: 90,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'hash_1'
         },
@@ -314,6 +319,7 @@ describe('Hash System Integration Tests', () => {
           totalCharacters: 120,
           correctCharacters: 114,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 90000,
           hash: 'hash_2'
         }
@@ -343,6 +349,7 @@ describe('Hash System Integration Tests', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'hash_1'
         },
@@ -355,6 +362,7 @@ describe('Hash System Integration Tests', () => {
           totalCharacters: 120,
           correctCharacters: 108,
           category: 'punctuation',
+          subcategory: 'basic',
           timeElapsed: 90000,
           hash: 'hash_1' // Duplicate hash
         },
@@ -367,6 +375,7 @@ describe('Hash System Integration Tests', () => {
           totalCharacters: 150,
           correctCharacters: 128,
           category: 'code',
+          subcategory: 'basic',
           timeElapsed: 100000,
           hash: 'hash_2'
         }
@@ -389,6 +398,7 @@ describe('Hash System Integration Tests', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+          subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'test_hash_123'
       };
@@ -414,6 +424,7 @@ describe('Hash System Integration Tests', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+          subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'test_hash_123'
       };
@@ -476,6 +487,7 @@ describe('Hash System Integration Tests', () => {
         totalCharacters: 100,
         correctCharacters: 98,
         category: 'lowercase',
+          subcategory: 'basic',
         timeElapsed: 80000,
         hash: 'test_hash_123'
       };
@@ -598,6 +610,7 @@ describe('Hash System Integration Tests', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'hash_1'
         }
@@ -631,6 +644,7 @@ describe('Hash System Integration Tests', () => {
           totalCharacters: 100,
           correctCharacters: 98,
           category: 'lowercase',
+          subcategory: 'basic',
           timeElapsed: 80000,
           hash: 'hash_1'
         },
@@ -643,6 +657,7 @@ describe('Hash System Integration Tests', () => {
           totalCharacters: 120,
           correctCharacters: 108,
           category: 'punctuation',
+          subcategory: 'basic',
           timeElapsed: 90000,
           hash: 'hash_2'
         }
@@ -679,6 +694,7 @@ describe('Hash System Integration Tests', () => {
         totalCharacters: 100 + (i % 50),
         correctCharacters: 90 + (i % 40),
         category: ['lowercase', 'punctuation', 'code', 'data_entry'][i % 4] as any,
+        subcategory: 'basic',
         timeElapsed: 80000 + (i * 100),
         hash: `hash_${i}`
       }));

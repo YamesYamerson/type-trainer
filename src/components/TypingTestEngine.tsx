@@ -218,6 +218,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
             timeElapsed,
             testId: test.id,
             category: test.category, // Add the test category
+            subcategory: test.subcategory, // Add the test subcategory
             timestamp: Date.now(),
             hash: generateHashForResult(
               test.id,
@@ -334,6 +335,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
         timeElapsed,
         testId: test.id,
         category: test.category,
+        subcategory: test.subcategory,
         timestamp: Date.now(),
         hash: generateHashForResult(
           test.id,
@@ -446,6 +448,7 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
                   timeElapsed,
                   testId: test.id,
                   category: test.category,
+                  subcategory: test.subcategory,
                   timestamp: Date.now(),
                   hash: generateHashForResult(
                     test.id,

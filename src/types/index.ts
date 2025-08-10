@@ -1,6 +1,7 @@
 export interface TypingTest {
   id: string;
   category: string;
+  subcategory: string;
   content: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   language?: string;
@@ -11,6 +12,14 @@ export interface TypingMode {
   name: string;
   options: string[];
   contentPath: string;
+  subcategories: TypingSubcategory[];
+}
+
+export interface TypingSubcategory {
+  id: string;
+  name: string;
+  description: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
 }
 
 export interface TypingResult {
@@ -22,6 +31,7 @@ export interface TypingResult {
   timeElapsed: number;
   testId: string;
   category: string; // Add category field to track test type
+  subcategory: string; // Add subcategory field to track test subcategory
   timestamp: number;
   hash: string; // Unique hash to prevent duplicates
   sessionId?: string; // Optional session ID to group related test runs

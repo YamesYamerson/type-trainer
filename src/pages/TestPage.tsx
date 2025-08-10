@@ -4,7 +4,7 @@ import { ModeSelector } from '../components/ModeSelector';
 import { StatsDisplay } from '../components/StatsDisplay';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import type { TypingTest, TypingResult, TypingMode } from '../types';
-import { loadTestById, loadModes, getRandomTestByCategory } from '../utils/testLoader';
+import { loadTestById, loadModes, getRandomTestBySubcategory, getSubcategoriesForMode } from '../utils/testLoader';
 import { useTypingResults } from '../hooks/useTypingResults';
 
 export const TestPage: React.FC = () => {
@@ -12,13 +12,22 @@ export const TestPage: React.FC = () => {
   const [testResult, setTestResult] = useState<TypingResult | null>(null);
   const [isTestActive, setIsTestActive] = useState(false);
   const [selectedMode, setSelectedMode] = useState<string>('lowercase');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>('random_words');
   const [showKeyboard, setShowKeyboard] = useState<boolean>(true);
   const [modes] = useState<TypingMode[]>(loadModes());
   const { results, addResult, syncStatus, syncPendingData } = useTypingResults();
 
+  // Initialize with first subcategory of lowercase mode
+  React.useEffect(() => {
+    const lowercaseMode = modes.find(mode => mode.id === 'lowercase');
+    if (lowercaseMode && lowercaseMode.subcategories.length > 0) {
+      setSelectedSubcategory(lowercaseMode.subcategories[0].id);
+    }
+  }, [modes]);
+
   const startTest = () => {
-    // Load a random test from the selected category
-    const test = getRandomTestByCategory(selectedMode);
+    // Load a random test from the selected category and subcategory
+    const test = getRandomTestBySubcategory(selectedMode, selectedSubcategory);
     if (test) {
       setCurrentTest(test);
       setTestResult(null);
@@ -26,8 +35,9 @@ export const TestPage: React.FC = () => {
     }
   };
 
-  const handleModeSelect = (modeId: string) => {
+  const handleModeSelect = (modeId: string, subcategoryId: string) => {
     setSelectedMode(modeId);
+    setSelectedSubcategory(subcategoryId);
   };
 
   const handleTestComplete = async (result: TypingResult) => {
@@ -51,7 +61,15 @@ export const TestPage: React.FC = () => {
     setTestResult(null);
     setIsTestActive(false);
     setSelectedMode('lowercase'); // Reset to default mode
+    const lowercaseMode = modes.find(mode => mode.id === 'lowercase');
+    if (lowercaseMode && lowercaseMode.subcategories.length > 0) {
+      setSelectedSubcategory(lowercaseMode.subcategories[0].id);
+    }
   };
+
+  // Get current mode and subcategory info for display
+  const currentMode = modes.find(mode => mode.id === selectedMode);
+  const currentSubcategory = currentMode?.subcategories.find(sub => sub.id === selectedSubcategory);
 
   if (!currentTest && !testResult) {
     return (
@@ -61,7 +79,7 @@ export const TestPage: React.FC = () => {
             Typing Practice
           </h1>
           <p className="text-gray-600">
-            Choose a mode and start improving your typing skills
+            Choose a mode and subcategory to start improving your typing skills
           </p>
         </div>
         
@@ -71,9 +89,36 @@ export const TestPage: React.FC = () => {
         
         <ModeSelector
           selectedMode={selectedMode}
+          selectedSubcategory={selectedSubcategory}
           onModeSelect={handleModeSelect}
           modes={modes}
         />
+
+        {/* Selected Mode & Subcategory Display */}
+        {currentMode && currentSubcategory && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-blue-800 mb-2">
+                Selected: {currentMode.name} - {currentSubcategory.name}
+              </h3>
+              <p className="text-blue-600 text-sm mb-3">
+                {currentSubcategory.description}
+              </p>
+              <div className="flex items-center justify-center space-x-4">
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  currentSubcategory.difficulty === 'beginner' ? 'bg-green-100 text-green-800' :
+                  currentSubcategory.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}>
+                  {currentSubcategory.difficulty} level
+                </span>
+                <span className="text-blue-600 text-sm">
+                  {getSubcategoriesForMode(selectedMode).length} subcategories available
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
         
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-4">
@@ -98,17 +143,17 @@ export const TestPage: React.FC = () => {
           {/* Sync Status */}
           {syncStatus && (
             <div className="mt-4 p-2 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-700">{syncStatus}</p>
+              <p className="text-sm text-blue-800">{syncStatus}</p>
             </div>
           )}
           
-          {/* Manual Sync Button */}
-          <button
-            onClick={syncPendingData}
-            className="text-sm text-gray-500 hover:text-gray-700 underline"
-          >
-            Sync Data
-          </button>
+          {syncPendingData && (
+            <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-sm text-yellow-800">
+                You have {syncPendingData} test results waiting to sync
+              </p>
+            </div>
+          )}
         </div>
       </div>
     );

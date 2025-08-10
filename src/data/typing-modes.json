@@ -3,24 +3,128 @@
     "id": "lowercase",
     "name": "Basic Words",
     "options": ["Lowercase only", "Simple words", "Beginner friendly"],
-    "contentPath": "lowercase"
+    "contentPath": "lowercase",
+    "subcategories": [
+      {
+        "id": "random_words",
+        "name": "Random Words",
+        "description": "Practice with random common words",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "random_sentences",
+        "name": "Random Sentences",
+        "description": "Practice with random sentences",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "word_definitions",
+        "name": "Word Definitions",
+        "description": "Practice typing word definitions without punctuation",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "fables",
+        "name": "Fables",
+        "description": "Practice with classic fables and stories",
+        "difficulty": "intermediate"
+      }
+    ]
   },
   {
     "id": "punctuation",
     "name": "Punctuation & Capitalization",
     "options": ["Full sentences", "Punctuation marks", "Capital letters"],
-    "contentPath": "punctuation"
+    "contentPath": "punctuation",
+    "subcategories": [
+      {
+        "id": "random_sentences",
+        "name": "Random Sentences",
+        "description": "Practice with random sentences including punctuation",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "word_definitions_punct",
+        "name": "Word Definitions with Punctuation",
+        "description": "Practice typing word definitions with proper punctuation",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "fables_punct",
+        "name": "Fables with Punctuation",
+        "description": "Practice with classic fables including punctuation",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "random_topic_info",
+        "name": "Random Topic Information",
+        "description": "Practice with informational text and punctuation",
+        "difficulty": "advanced"
+      }
+    ]
   },
   {
     "id": "code",
     "name": "Programming Code",
     "options": ["JavaScript", "Python", "Syntax symbols"],
-    "contentPath": "code"
+    "contentPath": "code",
+    "subcategories": [
+      {
+        "id": "javascript",
+        "name": "JavaScript",
+        "description": "Practice typing JavaScript code",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "python",
+        "name": "Python",
+        "description": "Practice typing Python code",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "typescript",
+        "name": "TypeScript",
+        "description": "Practice typing TypeScript code",
+        "difficulty": "advanced"
+      },
+      {
+        "id": "html_css",
+        "name": "HTML & CSS",
+        "description": "Practice typing HTML and CSS markup",
+        "difficulty": "beginner"
+      }
+    ]
   },
   {
     "id": "data_entry",
     "name": "Data Entry",
     "options": ["Form fields", "Tab navigation", "Mixed content"],
-    "contentPath": "data_entry"
+    "contentPath": "data_entry",
+    "subcategories": [
+      {
+        "id": "sku_data",
+        "name": "SKU Data",
+        "description": "Practice typing product SKUs and inventory data",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "database_input",
+        "name": "Database Input",
+        "description": "Practice typing database records and queries",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "form_fields",
+        "name": "Form Fields",
+        "description": "Practice typing various form field data",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "api_data",
+        "name": "API Data",
+        "description": "Practice typing API responses and JSON data",
+        "difficulty": "advanced"
+      }
+    ]
   }
 ]
