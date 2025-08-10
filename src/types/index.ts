@@ -24,6 +24,7 @@ export interface TypingResult {
   category: string; // Add category field to track test type
   timestamp: number;
   hash: string; // Unique hash to prevent duplicates
+  sessionId?: string; // Optional session ID to group related test runs
 }
 
 export interface UserStats {

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import type { TypingTest, TypingState, TypingResult, TypedCharacter } from '../types';
 import { VirtualKeyboard } from './VirtualKeyboard';
-import { generateHashForResult } from '../utils/hashUtils';
+import { generateHashForResult, generateTestSessionId } from '../utils/hashUtils';
 
 interface TypingTestEngineProps {
   test: TypingTest;
-  onComplete: (result: TypingResult) => void;
+  onComplete: (result: TypingResult) => Promise<void>;
   onKeyPress?: (key: string) => void;
   showKeyboard?: boolean;
 }
@@ -226,8 +226,10 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
               accuracy,
               newTotalErrors,
               test.content.length,
-              newTotalCorrect
-            )
+              newTotalCorrect,
+              timeElapsed
+            ),
+            sessionId: generateTestSessionId()
           };
           
           // Set completing flag to prevent multiple calls
@@ -340,8 +342,10 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
           accuracy,
           typingState.totalErrors,
           test.content.length,
-          typingState.totalCorrect
-        )
+          typingState.totalCorrect,
+          timeElapsed
+        ),
+        sessionId: generateTestSessionId()
       };
       
       // Set completing flag to prevent multiple calls
@@ -450,8 +454,10 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
                     accuracy,
                     typingState.totalErrors,
                     test.content.length,
-                    typingState.totalCorrect
-                  )
+                    typingState.totalCorrect,
+                    timeElapsed
+                  ),
+                  sessionId: generateTestSessionId()
                 };
                 
                 console.log('🔧 Manual completion result:', result);

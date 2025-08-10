@@ -23,7 +23,7 @@ describe('TypingTestEngine', () => {
     difficulty: 'beginner'
   };
 
-  const mockOnComplete = jest.fn();
+  const mockOnComplete = jest.fn().mockResolvedValue(undefined);
 
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,50 +1,50 @@
 [
   {
-    "id": "lowercase_basic_1",
+    "id": "lowercase",
     "category": "lowercase",
     "content": "this is a simple typing test for lowercase practice with basic words that are commonly used in everyday writing",
     "difficulty": "beginner"
   },
   {
-    "id": "lowercase_basic_2", 
+    "id": "lowercase", 
     "category": "lowercase",
     "content": "the quick brown fox jumps over the lazy dog this pangram contains every letter of the alphabet at least once",
     "difficulty": "beginner"
   },
   {
-    "id": "punctuation_1",
+    "id": "punctuation",
     "category": "punctuation",
     "content": "Hello, world! How are you today? I hope you're doing well. This test includes punctuation marks like commas, periods, and question marks.",
     "difficulty": "intermediate"
   },
   {
-    "id": "punctuation_2",
+    "id": "punctuation", 
     "category": "punctuation", 
     "content": "She said, \"I love programming!\" The code was written in JavaScript, Python, and TypeScript. What's your favorite language?",
     "difficulty": "intermediate"
   },
   {
-    "id": "code_javascript_1",
+    "id": "code",
     "category": "code",
     "language": "javascript",
     "content": "function calculateSum(a, b) {\n  return a + b;\n}\n\nconst result = calculateSum(5, 3);\nconsole.log(result);",
     "difficulty": "intermediate"
   },
   {
-    "id": "code_python_1",
+    "id": "code",
     "category": "code",
     "language": "python", 
     "content": "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nprint(fibonacci(10))",
     "difficulty": "intermediate"
   },
   {
-    "id": "data_entry_1",
+    "id": "data_entry",
     "category": "data_entry",
     "content": "John Doe\tjohn.doe@email.com\t555-123-4567\t123 Main St, City, ST 12345",
     "difficulty": "beginner"
   },
   {
-    "id": "data_entry_2",
+    "id": "data_entry",
     "category": "data_entry",
     "content": "Product ID: PRD-2024-001\tSKU: ABC123\tPrice: $29.99\tCategory: Electronics",
     "difficulty": "intermediate"

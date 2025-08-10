@@ -48,19 +48,7 @@ export class DataManager {
     console.log('🌐 Online status manually set to:', online);
   }
 
-  // Check if we can actually reach the server
-  private static async checkServerConnectivity(): Promise<boolean> {
-    try {
-      const response = await fetch(`${config.apiBaseUrl}/db-info`, { 
-        method: 'GET',
-        signal: AbortSignal.timeout(5000) // 5 second timeout
-      });
-      return response.ok;
-    } catch (error) {
-      console.warn('⚠️ Server connectivity check failed:', error);
-      return false;
-    }
-  }
+
 
   // Check if localStorage failure is temporary (can be retried)
   private static isTemporaryLocalStorageFailure(error: Error): boolean {
@@ -97,7 +85,8 @@ export class DataManager {
           result.accuracy,
           result.errors,
           result.totalCharacters,
-          result.correctCharacters
+          result.correctCharacters,
+          result.timeElapsed
         );
       }
 
@@ -121,7 +110,8 @@ export class DataManager {
             correctCharacters: result.correctCharacters,
             timeElapsed: result.timeElapsed,
             timestamp: result.timestamp,
-            hash: result.hash
+            hash: result.hash,
+            sessionId: result.sessionId
           })
         });
 
@@ -217,7 +207,8 @@ export class DataManager {
               testId: r.test_id,
               category: r.category,
               timestamp: r.timestamp,
-              hash: r.hash
+              hash: r.hash,
+              sessionId: r.session_id
             }));
             console.log(`✅ Loaded ${results.length} results from database`);
           }

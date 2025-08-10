@@ -117,8 +117,8 @@ describe('Data Transfer and Processing Stages', () => {
         const totalCharacters = 100;
         const correctCharacters = 98;
 
-        const hash1 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters);
-        const hash2 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters);
+        const hash1 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters, 80000);
+        const hash2 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters, 80000);
 
         expect(hash1).toBe(hash2);
         expect(hash1).toHaveLength(16);

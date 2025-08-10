@@ -95,7 +95,7 @@ export const ProfilePage: React.FC = () => {
                      result.category === 'code' ? 'Code' :
                      result.category === 'data_entry' ? 'Data Entry' : result.category}
                   </span>
-                  <span className="text-gray-600 ml-2">• {result.testId}</span>
+                  <span className="text-gray-600 ml-2">• {new Date(result.timestamp).toLocaleDateString()}</span>
                 </div>
                 <div className="text-right">
                   <div className="font-semibold text-gray-800">{result.wpm} WPM</div>

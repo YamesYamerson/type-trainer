@@ -34,8 +34,8 @@ describe('Hash System Integration Tests', () => {
       const totalCharacters = 100;
       const correctCharacters = 98;
 
-      const hash1 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters);
-      const hash2 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters);
+      const hash1 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters, 80000);
+      const hash2 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters, 80000);
 
       expect(hash1).toBe(hash2);
       expect(hash1).toHaveLength(16);
@@ -64,7 +64,8 @@ describe('Hash System Integration Tests', () => {
         baseParams.accuracy,
         baseParams.errors,
         baseParams.totalCharacters,
-        baseParams.correctCharacters
+        baseParams.correctCharacters,
+        80000
       );
 
       const hash2 = generateHashForResult(
@@ -74,7 +75,8 @@ describe('Hash System Integration Tests', () => {
         baseParams.accuracy,
         baseParams.errors,
         baseParams.totalCharacters,
-        baseParams.correctCharacters
+        baseParams.correctCharacters,
+        80000
       );
 
       // Restore the mock
@@ -92,7 +94,8 @@ describe('Hash System Integration Tests', () => {
         95,
         2,
         100,
-        98
+        98,
+        80000
       );
 
       expect(hash).toHaveLength(16);

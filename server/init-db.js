@@ -78,10 +78,10 @@ db.serialize(() => {
   db.run(`
     UPDATE typing_results 
     SET category = CASE 
-      WHEN test_id LIKE 'lowercase%' THEN 'lowercase'
-      WHEN test_id LIKE 'punctuation%' THEN 'punctuation'
-      WHEN test_id LIKE 'code%' THEN 'code'
-      WHEN test_id LIKE 'data_entry%' THEN 'data_entry'
+      WHEN test_id = 'lowercase' THEN 'lowercase'
+      WHEN test_id = 'punctuation' THEN 'punctuation'
+      WHEN test_id = 'code' THEN 'code'
+      WHEN test_id = 'data_entry' THEN 'data_entry'
       ELSE 'unknown'
     END
     WHERE category IS NULL OR category = ''

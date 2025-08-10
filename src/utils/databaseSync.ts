@@ -266,13 +266,13 @@ export class DatabaseSync {
       let category = dbResult.category;
       if (!category) {
         // Try to infer category from test_id for backward compatibility
-        if (dbResult.test_id.startsWith('lowercase')) {
+        if (dbResult.test_id === 'lowercase') {
           category = 'lowercase';
-        } else if (dbResult.test_id.startsWith('punctuation')) {
+        } else if (dbResult.test_id === 'punctuation') {
           category = 'punctuation';
-        } else if (dbResult.test_id.startsWith('code')) {
+        } else if (dbResult.test_id === 'code') {
           category = 'code';
-        } else if (dbResult.test_id.startsWith('data_entry')) {
+        } else if (dbResult.test_id === 'data_entry') {
           category = 'data_entry';
         } else {
           category = 'unknown';

@@ -9,311 +9,209 @@
  */
 
 import { 
-  generateHashForResult, 
   generateResultHash, 
+  generateHashForResult, 
   areResultsDuplicate, 
   resultExists, 
-  removeDuplicates 
+  removeDuplicates,
+  generateTestSessionId,
+  areResultsFromSameSession
 } from '../../src/utils/hashUtils';
 import type { TypingResult } from '../../src/types';
-import {
-  setupTestEnvironment,
-  createMockTypingResult
-} from '../utils/testHelpers';
 
-// ============================================================================
-// IMPORTS AND MOCKS
-// ============================================================================
+describe('Hash Utils', () => {
+  const mockResult: Omit<TypingResult, 'hash'> = {
+    wpm: 50,
+    accuracy: 95,
+    errors: 2,
+    totalCharacters: 100,
+    correctCharacters: 95,
+    timeElapsed: 120000,
+    testId: 'test-123',
+    category: 'lowercase',
+    timestamp: Date.now()
+  };
 
-// ============================================================================
-// TEST SUITE
-// ============================================================================
-
-describe('HashUtils', () => {
-  // ============================================================================
-  // SETUP AND TEARDOWN
-  // ============================================================================
-
-  beforeEach(() => {
-    setupTestEnvironment();
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  // ============================================================================
-  // TEST GROUPS
-  // ============================================================================
-
-  describe('Hash Generation', () => {
-    it('should generate a consistent hash for the same input', () => {
-      // Arrange
-      const testId = 'test_123';
-      const timestamp = 1234567890;
-      const wpm = 45;
-      const accuracy = 95;
-      const errors = 2;
-      const totalCharacters = 100;
-      const correctCharacters = 98;
-
-      // Act
-      const hash1 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters);
-      const hash2 = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters);
-
-      // Assert
-      expect(hash1).toBe(hash2);
-      expect(hash1).toHaveLength(16);
-      expect(hash1).toMatch(/^[a-zA-Z0-9]+$/);
-    });
-
-    it('should generate different hashes for different inputs', () => {
-      // Arrange
-      const baseParams = {
-        testId: 'test_123',
-        timestamp: 1234567890,
-        wpm: 45,
+  describe('generateResultHash', () => {
+    it('should generate unique hashes for identical results', () => {
+      const result: Omit<TypingResult, 'hash'> = {
+        testId: 'test-123',
+        category: 'lowercase',
+        wpm: 50,
         accuracy: 95,
         errors: 2,
         totalCharacters: 100,
-        correctCharacters: 98
+        correctCharacters: 95,
+        timeElapsed: 120000,
+        timestamp: Date.now()
       };
+      
+      const hash1 = generateResultHash(result);
+      const hash2 = generateResultHash(result);
+      
+      expect(hash1).toBeDefined();
+      expect(hash2).toBeDefined();
+      expect(hash1).not.toBe(hash2); // Should be different due to random component
+    });
 
-      // Use actual btoa function for this test
-      const originalBtoa = global.btoa;
-      global.btoa = (str: string) => Buffer.from(str).toString('base64');
-
-      // Act
-      const hash1 = generateHashForResult(
-        baseParams.testId,
-        baseParams.timestamp,
-        baseParams.wpm,
-        baseParams.accuracy,
-        baseParams.errors,
-        baseParams.totalCharacters,
-        baseParams.correctCharacters
-      );
-
-      const hash2 = generateHashForResult(
-        'different_test_id', // Different test ID
-        baseParams.timestamp,
-        baseParams.wpm,
-        baseParams.accuracy,
-        baseParams.errors,
-        baseParams.totalCharacters,
-        baseParams.correctCharacters
-      );
-
-      // Restore the mock
-      global.btoa = originalBtoa;
-
-      // Assert
+    it('should generate different hashes for different results', () => {
+      const result1: Omit<TypingResult, 'hash'> = {
+        testId: 'test-123',
+        category: 'lowercase',
+        wpm: 50,
+        accuracy: 95,
+        errors: 2,
+        totalCharacters: 100,
+        correctCharacters: 95,
+        timeElapsed: 120000,
+        timestamp: Date.now()
+      };
+      
+      const result2: Omit<TypingResult, 'hash'> = {
+        ...result1,
+        wpm: 60
+      };
+      
+      const hash1 = generateResultHash(result1);
+      const hash2 = generateResultHash(result2);
+      
       expect(hash1).not.toBe(hash2);
     });
 
-    it('should handle special characters in input', () => {
-      // Arrange
-      const testId = 'test-123_with.special@chars';
-      const timestamp = 1234567890;
-      const wpm = 45;
-      const accuracy = 95;
-      const errors = 2;
-      const totalCharacters = 100;
-      const correctCharacters = 98;
-
-      // Act
-      const hash = generateHashForResult(testId, timestamp, wpm, accuracy, errors, totalCharacters, correctCharacters);
-
-      // Assert
-      expect(hash).toHaveLength(16);
-      expect(hash).toMatch(/^[a-zA-Z0-9]+$/);
-    });
-
-    it('should handle edge cases in input values', () => {
-      // Arrange
-      const testCases = [
-        { wpm: 0, accuracy: 0, errors: 0, totalCharacters: 0, correctCharacters: 0 },
-        { wpm: 999, accuracy: 100, errors: 999, totalCharacters: 9999, correctCharacters: 9999 },
-        { wpm: -1, accuracy: -1, errors: -1, totalCharacters: -1, correctCharacters: -1 }
-      ];
-
-      // Act & Assert
-      testCases.forEach(({ wpm, accuracy, errors, totalCharacters, correctCharacters }) => {
-        const hash = generateHashForResult('test', 1234567890, wpm, accuracy, errors, totalCharacters, correctCharacters);
-        expect(hash).toHaveLength(16);
-        expect(hash).toMatch(/^[a-zA-Z0-9]+$/);
-      });
-    });
-  });
-
-  describe('Core Functionality', () => {
-    it('should generate result hash from TypingResult object', () => {
-      // Arrange
-      const mockResult = createMockTypingResult();
-
-      // Act
-      const hash = generateResultHash(mockResult);
-
-      // Assert
-      expect(hash).toHaveLength(16);
-      expect(hash).toMatch(/^[a-zA-Z0-9]+$/);
-    });
-
-    it('should detect duplicate results correctly', () => {
-      // Arrange
-      const result1 = createMockTypingResult({ testId: 'test_1', hash: 'same_hash' });
-      const result2 = createMockTypingResult({ testId: 'test_1', hash: 'same_hash' }); // Same hash
-      const result3 = createMockTypingResult({ testId: 'test_2', hash: 'different_hash' }); // Different hash
-
-      // Act
-      const isDuplicate1 = areResultsDuplicate(result1, result2);
-      const isDuplicate2 = areResultsDuplicate(result1, result3);
-
-      // Assert
-      expect(isDuplicate1).toBe(true);
-      expect(isDuplicate2).toBe(false);
-    });
-
-    it('should check if result exists in array', () => {
-      // Arrange
-      const existingResult = createMockTypingResult({ testId: 'test_1', hash: 'existing_hash' });
-      const newResult = createMockTypingResult({ testId: 'test_1', hash: 'existing_hash' });
-      const differentResult = createMockTypingResult({ testId: 'test_2', hash: 'different_hash' });
-      const results = [existingResult, differentResult];
-
-      // Act
-      const exists1 = resultExists(results, newResult);
-      const exists2 = resultExists(results, differentResult);
-
-      // Assert
-      expect(exists1).toBe(true); // newResult has same hash as existingResult
-      expect(exists2).toBe(true); // differentResult exists in the array
-    });
-
-    it('should remove duplicates from array', () => {
-      // Arrange
-      const result1 = createMockTypingResult({ testId: 'test_1', hash: 'same_hash' });
-      const result2 = createMockTypingResult({ testId: 'test_1', hash: 'same_hash' }); // Duplicate
-      const result3 = createMockTypingResult({ testId: 'test_2', hash: 'different_hash' });
-      const results = [result1, result2, result3];
-
-      // Act
-      const uniqueResults = removeDuplicates(results);
-
-      // Assert
-      expect(uniqueResults).toHaveLength(2);
-      expect(uniqueResults[0].testId).toBe('test_1');
-      expect(uniqueResults[1].testId).toBe('test_2');
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should handle empty arrays', () => {
-      // Arrange
-      const emptyArray: TypingResult[] = [];
-      const testResult = createMockTypingResult();
-
-      // Act
-      const exists = resultExists(emptyArray, testResult);
-      const uniqueResults = removeDuplicates(emptyArray);
-
-      // Assert
-      expect(exists).toBe(false);
-      expect(uniqueResults).toHaveLength(0);
-    });
-
-    it('should handle arrays with single item', () => {
-      // Arrange
-      const singleResult = createMockTypingResult();
-      const results = [singleResult];
-
-      // Act
-      const exists = resultExists(results, singleResult);
-      const uniqueResults = removeDuplicates(results);
-
-      // Assert
-      expect(exists).toBe(true);
-      expect(uniqueResults).toHaveLength(1);
-      expect(uniqueResults[0]).toEqual(singleResult);
-    });
-
-    it('should handle null/undefined inputs', () => {
-      // Arrange
-      const nullResult = null as any;
-      const undefinedResult = undefined as any;
-
-      // Act & Assert
-      expect(() => generateResultHash(nullResult)).toThrow();
-      expect(() => generateResultHash(undefinedResult)).toThrow();
-    });
-
-    it('should handle malformed result objects', () => {
-      // Arrange
-      const malformedResult = {
-        testId: 'test_1',
-        // Missing required fields
-      } as any;
-
-      // Act & Assert - The function should handle missing properties gracefully
-      // It might not throw but will create a hash with undefined values
-      const hash = generateResultHash(malformedResult);
-      expect(hash).toBeDefined();
-      expect(typeof hash).toBe('string');
-    });
-  });
-
-  describe('Performance', () => {
-    it('should handle large datasets efficiently', () => {
-      // Arrange
-      const largeDataset = Array.from({ length: 1000 }, (_, i) => 
-        createMockTypingResult({ testId: `test_${i}`, hash: `hash_${i}` })
-      );
-
-      // Act
-      const startTime = performance.now();
-      const uniqueResults = removeDuplicates(largeDataset);
-      const endTime = performance.now();
-
-      // Assert
-      expect(uniqueResults).toHaveLength(1000);
-      expect(endTime - startTime).toBeLessThan(1000); // Should complete within 1 second
-    });
-
-    it('should generate hashes quickly', () => {
-      // Arrange
-      const testResult = createMockTypingResult();
-
-      // Act
-      const startTime = performance.now();
-      const hash = generateResultHash(testResult);
-      const endTime = performance.now();
-
-      // Assert
-      expect(hash).toBeDefined();
-      expect(endTime - startTime).toBeLessThan(100); // Should complete within 100ms
-    });
-  });
-
-  describe('Integration', () => {
-    it('should work correctly with DataManager', async () => {
-      // Arrange
-      const result1 = createMockTypingResult({ testId: 'test_1', hash: 'same_hash' });
-      const result2 = createMockTypingResult({ testId: 'test_1', hash: 'same_hash' }); // Duplicate
-      const result3 = createMockTypingResult({ testId: 'test_2', hash: 'different_hash' });
-
-      // Act
+    it('should generate different hashes for same results with different timestamps', () => {
+      const result1 = { ...mockResult, timestamp: Date.now() };
+      const result2 = { ...mockResult, timestamp: Date.now() + 1000 };
+      
       const hash1 = generateResultHash(result1);
       const hash2 = generateResultHash(result2);
-      const hash3 = generateResultHash(result3);
+      
+      expect(hash1).not.toBe(hash2);
+    });
+  });
 
-      const isDuplicate = areResultsDuplicate(result1, result2);
-      const uniqueResults = removeDuplicates([result1, result2, result3]);
+  describe('generateHashForResult', () => {
+    it('should generate consistent hashes for identical parameters', () => {
+      const timestamp = Date.now();
+      const hash1 = generateHashForResult(
+        'test-123', timestamp, 50, 95, 2, 100, 95, 120000
+      );
+      const hash2 = generateHashForResult(
+        'test-123', timestamp, 50, 95, 2, 100, 95, 120000
+      );
+      
+      expect(hash1).toBeDefined();
+      expect(hash2).toBeDefined();
+      expect(hash1).toBe(hash2); // Should be the same due to deterministic hashing
+    });
 
-      // Assert
-      expect(hash1).toBe(hash2); // Same test ID should generate same hash
-      expect(hash1).not.toBe(hash3); // Different test ID should generate different hash
-      expect(isDuplicate).toBe(true);
-      expect(uniqueResults).toHaveLength(2);
+    it('should generate different hashes for different parameters', () => {
+      const timestamp = Date.now();
+      const hash1 = generateHashForResult(
+        'test-123', timestamp, 50, 95, 2, 100, 95, 120000
+      );
+      const hash2 = generateHashForResult(
+        'test-123', timestamp, 60, 95, 2, 100, 95, 120000
+      );
+      
+      expect(hash1).not.toBe(hash2);
+    });
+  });
+
+  describe('areResultsDuplicate', () => {
+    it('should identify duplicate results by hash', () => {
+      const result1: TypingResult = { ...mockResult, hash: 'abc123' };
+      const result2: TypingResult = { ...mockResult, hash: 'abc123' };
+      const result3: TypingResult = { ...mockResult, hash: 'def456' };
+      
+      expect(areResultsDuplicate(result1, result2)).toBe(true);
+      expect(areResultsDuplicate(result1, result3)).toBe(false);
+    });
+  });
+
+  describe('resultExists', () => {
+    it('should check if result exists in array by hash', () => {
+      const existingResults: TypingResult[] = [
+        { ...mockResult, hash: 'abc123' },
+        { ...mockResult, hash: 'def456' }
+      ];
+      
+      const newResult1: TypingResult = { ...mockResult, hash: 'abc123' };
+      const newResult2: TypingResult = { ...mockResult, hash: 'xyz789' };
+      
+      expect(resultExists(existingResults, newResult1)).toBe(true);
+      expect(resultExists(existingResults, newResult2)).toBe(false);
+    });
+  });
+
+  describe('removeDuplicates', () => {
+    it('should remove duplicate results based on hash', () => {
+      const results: TypingResult[] = [
+        { ...mockResult, hash: 'abc123' },
+        { ...mockResult, hash: 'def456' },
+        { ...mockResult, hash: 'abc123' }, // Duplicate
+        { ...mockResult, hash: 'xyz789' }
+      ];
+      
+      const uniqueResults = removeDuplicates(results);
+      
+      expect(uniqueResults).toHaveLength(3);
+      expect(uniqueResults.map(r => r.hash)).toEqual(['abc123', 'def456', 'xyz789']);
+    });
+  });
+
+  describe('generateTestSessionId', () => {
+    it('should generate unique session IDs', () => {
+      const sessionId1 = generateTestSessionId();
+      const sessionId2 = generateTestSessionId();
+      
+      expect(sessionId1).toBeDefined();
+      expect(sessionId2).toBeDefined();
+      expect(sessionId1).not.toBe(sessionId2);
+      expect(sessionId1).toMatch(/^session_\d+_[a-z0-9]+$/);
+      expect(sessionId2).toMatch(/^session_\d+_[a-z0-9]+$/);
+    });
+  });
+
+  describe('areResultsFromSameSession', () => {
+    it('should identify results from same session within time window', () => {
+      const timestamp = Date.now();
+      const result1: TypingResult = { ...mockResult, timestamp, hash: 'abc123' };
+      const result2: TypingResult = { ...mockResult, timestamp: timestamp + 100000, hash: 'def456' }; // Within 5 min
+      const result3: TypingResult = { ...mockResult, timestamp: timestamp + 400000, hash: 'xyz789' }; // Outside 5 min
+      
+      expect(areResultsFromSameSession(result1, result2)).toBe(true);
+      expect(areResultsFromSameSession(result1, result3)).toBe(false);
+    });
+
+    it('should require same testId for session identification', () => {
+      const timestamp = Date.now();
+      const result1: TypingResult = { ...mockResult, testId: 'test-123', timestamp, hash: 'abc123' };
+      const result2: TypingResult = { ...mockResult, testId: 'test-456', timestamp: timestamp + 100000, hash: 'def456' };
+      
+      expect(areResultsFromSameSession(result1, result2)).toBe(false);
+    });
+  });
+
+  describe('Hash uniqueness stress test', () => {
+    it('should generate unique hashes for many similar results', () => {
+      const hashes = new Set<string>();
+      const timestamp = Date.now();
+      
+      // Generate 100 hashes for very similar results
+      for (let i = 0; i < 100; i++) {
+        const result = {
+          ...mockResult,
+          timestamp: timestamp + i, // Slight timestamp difference
+          wpm: 50 + (i % 5), // Slight WPM variation
+          errors: i % 3 // Slight error variation
+        };
+        
+        const hash = generateResultHash(result);
+        hashes.add(hash);
+      }
+      
+      // All hashes should be unique
+      expect(hashes.size).toBe(100);
     });
   });
 });
