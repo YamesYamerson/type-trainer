@@ -14,7 +14,9 @@ module.exports = {
   
   // Transform files
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      tsconfig: 'tsconfig.test.json'
+    }],
     '^.+\\.(js|jsx)$': 'babel-jest'
   },
   
@@ -75,8 +77,5 @@ module.exports = {
     '<rootDir>/node_modules/',
     '<rootDir>/dist/',
     '<rootDir>/coverage/'
-  ],
-  
-  // Environment variables
-  setupFiles: ['<rootDir>/tests/env-setup.js']
+  ]
 };

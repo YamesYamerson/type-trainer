@@ -36,6 +36,34 @@ export class DataManager {
     });
   }
 
+  // Method to update online status for testing
+  static setOnlineStatus(online: boolean) {
+    this.isOnline = online;
+  }
+
+  // Check if localStorage failure is temporary (can be retried)
+  private static isTemporaryLocalStorageFailure(error: Error): boolean {
+    // Quota exceeded is usually temporary
+    if (error.message.includes('QuotaExceededError') || error.message.includes('quota')) {
+      return true;
+    }
+    
+    // Network or temporary storage issues
+    if (error.message.includes('temporary') || error.message.includes('retry')) {
+      return true;
+    }
+    
+    // Permanent failures
+    if (error.message.includes('localStorage not available') || 
+        error.message.includes('disabled') ||
+        error.message.includes('not supported')) {
+      return false;
+    }
+    
+    // Default to treating as temporary (can retry)
+    return true;
+  }
+
   // Save a typing result
   static async saveResult(result: TypingResult): Promise<SaveResult> {
     try {
@@ -87,19 +115,55 @@ export class DataManager {
         }
       }
 
-      // Always save to localStorage as backup
-      this.saveToLocalStorage(result);
-      savedToLocal = true;
+      // Try to save to localStorage as backup
+      try {
+        this.saveToLocalStorage(result);
+        savedToLocal = true;
+      } catch (error) {
+        console.warn('⚠️ localStorage save failed:', error);
+        
+        // Check if this is a temporary failure that we can recover from
+        const isTemporaryFailure = this.isTemporaryLocalStorageFailure(error as Error);
+        
+        if (isTemporaryFailure) {
+          // For temporary failures, try to save with a smaller payload or retry
+          try {
+            // Try to save with minimal data
+            const minimalResult = {
+              ...result,
+              // Remove large fields that might cause quota issues
+              testId: result.testId.substring(0, 50), // Limit testId length
+            };
+            this.saveToLocalStorage(minimalResult);
+            savedToLocal = true;
+            console.log('✅ Result saved to localStorage after retry with minimal data');
+          } catch (retryError) {
+            console.warn('⚠️ localStorage retry also failed:', retryError);
+            // If retry fails, mark as not saved locally
+            savedToLocal = false;
+          }
+        } else {
+          // For permanent failures, don't mark as saved locally
+          savedToLocal = false;
+        }
+        
+        // If localStorage fails and database also failed, we still want to return success
+        // but indicate that neither storage method worked
+        if (!savedToDatabase && !savedToLocal) {
+          console.error('❌ Both database and localStorage failed');
+        }
+      }
 
       return {
         success: true,
         message: savedToDatabase 
-          ? 'Result saved to database and local storage' 
-          : 'Result saved to local storage (will sync when online)',
+          ? (savedToLocal ? 'Result saved to database and local storage' : 'Result saved to database only (localStorage unavailable)')
+          : savedToLocal
+          ? 'Result saved to local storage (will sync when online)'
+          : 'Result could not be saved to any storage',
         savedToDatabase,
         savedToLocal
       };
-
     } catch (error) {
       console.error('❌ Failed to save result:', error);
       return {
@@ -272,6 +336,8 @@ export class DataManager {
       console.log('✅ Result saved to localStorage');
     } catch (error) {
       console.error('❌ Failed to save to localStorage:', error);
+      // Re-throw the error so the calling code can handle it
+      throw error;
     }
   }
 
