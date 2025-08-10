@@ -22,23 +22,44 @@ const STORAGE_KEYS = {
 };
 
 export class DataManager {
-  private static isOnline = navigator.onLine;
+  private static isOnline = true; // Default to true to ensure immediate saving
 
   // Initialize online/offline detection
   static init() {
+    // Check online status immediately
+    this.isOnline = navigator.onLine;
+    console.log('🌐 DataManager initialized, online status:', this.isOnline);
+    
     window.addEventListener('online', () => {
       this.isOnline = true;
+      console.log('🌐 Back online, syncing local data...');
       this.syncLocalToDatabase();
     });
     
     window.addEventListener('offline', () => {
       this.isOnline = false;
+      console.log('🌐 Went offline, will save locally');
     });
   }
 
   // Method to update online status for testing
   static setOnlineStatus(online: boolean) {
     this.isOnline = online;
+    console.log('🌐 Online status manually set to:', online);
+  }
+
+  // Check if we can actually reach the server
+  private static async checkServerConnectivity(): Promise<boolean> {
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/db-info`, { 
+        method: 'GET',
+        signal: AbortSignal.timeout(5000) // 5 second timeout
+      });
+      return response.ok;
+    } catch (error) {
+      console.warn('⚠️ Server connectivity check failed:', error);
+      return false;
+    }
   }
 
   // Check if localStorage failure is temporary (can be retried)
@@ -83,36 +104,36 @@ export class DataManager {
       let savedToDatabase = false;
       let savedToLocal = false;
 
-      // Try to save to database first (if online)
-      if (this.isOnline) {
-        try {
-          const response = await fetch(`${config.apiBaseUrl}/results`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              userId: 'default_user',
-              testId: result.testId,
-              category: result.category,
-              wpm: result.wpm,
-              accuracy: result.accuracy,
-              errors: result.errors,
-              totalCharacters: result.totalCharacters,
-              correctCharacters: result.correctCharacters,
-              timeElapsed: result.timeElapsed,
-              timestamp: result.timestamp,
-              hash: result.hash
-            })
-          });
+      // Always try to save to database first for immediate persistence
+      try {
+        console.log('🚀 Attempting to save result to database...');
+        const response = await fetch(`${config.apiBaseUrl}/results`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: 'default_user',
+            testId: result.testId,
+            category: result.category,
+            wpm: result.wpm,
+            accuracy: result.accuracy,
+            errors: result.errors,
+            totalCharacters: result.totalCharacters,
+            correctCharacters: result.correctCharacters,
+            timeElapsed: result.timeElapsed,
+            timestamp: result.timestamp,
+            hash: result.hash
+          })
+        });
 
-          if (response.ok) {
-            savedToDatabase = true;
-            console.log('✅ Result saved to database');
-          } else {
-            console.warn('⚠️ Failed to save to database, saving locally');
-          }
-        } catch (error) {
-          console.warn('⚠️ Database save failed, saving locally:', error);
+        if (response.ok) {
+          savedToDatabase = true;
+          console.log('✅ Result saved to database successfully');
+        } else {
+          const errorText = await response.text();
+          console.warn('⚠️ Database save failed with status:', response.status, 'Error:', errorText);
         }
+      } catch (error) {
+        console.warn('⚠️ Database save failed with error:', error);
       }
 
       // Try to save to localStorage as backup

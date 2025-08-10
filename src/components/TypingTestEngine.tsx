@@ -16,6 +16,14 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
   onKeyPress,
   showKeyboard = true
 }) => {
+  console.log('🚀 TypingTestEngine initialized with test:', {
+    id: test.id,
+    category: test.category,
+    contentLength: test.content.length,
+    contentPreview: test.content.substring(0, 50) + (test.content.length > 50 ? '...' : ''),
+    difficulty: test.difficulty,
+    contentChars: test.content.split('').map((char, i) => ({ char, code: char.charCodeAt(0), index: i })).slice(0, 10)
+  });
   const [typingState, setTypingState] = useState<TypingState>({
     currentIndex: 0,
     typedCharacters: [],
@@ -67,6 +75,16 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     if (/[a-zA-Z]/.test(normalizedInput) && /[a-zA-Z]/.test(normalizedExpected)) {
       return normalizedInput.toLowerCase() === normalizedExpected.toLowerCase();
     }
+    
+    // Log any characters that don't match for debugging
+    console.log('🔍 Character comparison failed:', {
+      inputChar: `"${inputChar}"`,
+      expectedChar: `"${expectedChar}"`,
+      inputCharCode: inputChar.charCodeAt(0),
+      expectedCharCode: expectedChar.charCodeAt(0),
+      inputLength: inputChar.length,
+      expectedLength: expectedChar.length
+    });
     
     return false;
   }, []);
@@ -144,7 +162,15 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
         if (prev.currentIndex >= test.content.length) return prev;
         
         const expectedChar = test.content[prev.currentIndex];
+        console.log('🔤 Processing character:', {
+          inputKey: `"${key}"`,
+          expectedChar: `"${expectedChar}"`,
+          currentIndex: prev.currentIndex,
+          totalLength: test.content.length
+        });
+        
         const isCorrect = compareCharacters(key, expectedChar);
+        console.log('✅ Character comparison result:', isCorrect);
         
         // Create new typed character
         const newTypedCharacter: TypedCharacter = {
@@ -166,6 +192,17 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
         // Check if test is complete
         const isComplete = newCurrentIndex >= test.content.length;
         const endTime = isComplete ? Date.now() : null;
+        
+        console.log('🔍 Completion check:', {
+          newCurrentIndex,
+          contentLength: test.content.length,
+          isComplete,
+          endTime: endTime ? new Date(endTime).toISOString() : null,
+          isCompletingRef: isCompletingRef.current,
+          typedCharactersCount: newTypedCharacters.length,
+          totalErrors: newTotalErrors,
+          totalCorrect: newTotalCorrect
+        });
         
         if (isComplete && endTime && !isCompletingRef.current) {
           const timeElapsed = endTime - (prev.startTime || endTime);
@@ -196,19 +233,23 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
           // Set completing flag to prevent multiple calls
           isCompletingRef.current = true;
           
-          // Call onComplete after state update
-          setTimeout(async () => {
-            try {
-              await onComplete(result);
-            } catch (error) {
-              console.error('Error completing test:', error);
-            } finally {
+          console.log('🎯 Test completed, result prepared:', result);
+          
+          // Schedule onComplete call for after state update
+          setTimeout(() => {
+            console.log('📤 Executing onComplete callback...');
+            onComplete(result).then(() => {
+              console.log('✅ onComplete callback executed successfully');
+            }).catch(error => {
+              console.error('❌ Error completing test:', error);
+            }).finally(() => {
               isCompletingRef.current = false;
-            }
+              console.log('🔄 Completion flag reset');
+            });
           }, 0);
         }
         
-        return {
+        const newState = {
           ...prev,
           currentIndex: newCurrentIndex,
           typedCharacters: newTypedCharacters,
@@ -217,6 +258,16 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
           isComplete,
           endTime
         };
+        
+        console.log('🔄 Typing state updated:', {
+          currentIndex: newCurrentIndex,
+          totalErrors: newTotalErrors,
+          totalCorrect: newTotalCorrect,
+          isComplete,
+          endTime: endTime ? new Date(endTime).toISOString() : null
+        });
+        
+        return newState;
       });
     }
 
@@ -231,11 +282,15 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
     const container = containerRef.current;
     if (!container) return;
 
-    container.addEventListener('keydown', handleKeyDown);
+    const handleKeyDownWrapper = (event: KeyboardEvent) => {
+      handleKeyDown(event);
+    };
+
+    container.addEventListener('keydown', handleKeyDownWrapper);
     container.focus();
 
     return () => {
-      container.removeEventListener('keydown', handleKeyDown);
+      container.removeEventListener('keydown', handleKeyDownWrapper);
     };
   }, [handleKeyDown]);
 
@@ -248,6 +303,61 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
       return () => clearTimeout(timer);
     }
   }, [currentKey]);
+
+  // Fallback: Ensure onComplete is called when test is complete
+  useEffect(() => {
+    console.log('🔄 Fallback useEffect triggered, current state:', {
+      isComplete: typingState.isComplete,
+      endTime: typingState.endTime ? new Date(typingState.endTime).toISOString() : null,
+      isCompletingRef: isCompletingRef.current,
+      currentIndex: typingState.currentIndex,
+      contentLength: test.content.length,
+      totalCorrect: typingState.totalCorrect,
+      totalErrors: typingState.totalErrors
+    });
+    
+    if (typingState.isComplete && typingState.endTime && !isCompletingRef.current) {
+      console.log('🔄 Fallback: Test completion detected, ensuring onComplete is called');
+      
+      const timeElapsed = typingState.endTime - (typingState.startTime || typingState.endTime);
+      const wpm = calculateWPM(typingState.totalCorrect, timeElapsed);
+      const accuracy = calculateAccuracy(typingState.totalCorrect, test.content.length);
+      
+      const result: TypingResult = {
+        wpm,
+        accuracy,
+        errors: typingState.totalErrors,
+        totalCharacters: test.content.length,
+        correctCharacters: typingState.totalCorrect,
+        timeElapsed,
+        testId: test.id,
+        category: test.category,
+        timestamp: Date.now(),
+        hash: generateHashForResult(
+          test.id,
+          Date.now(),
+          wpm,
+          accuracy,
+          typingState.totalErrors,
+          test.content.length,
+          typingState.totalCorrect
+        )
+      };
+      
+      // Set completing flag to prevent multiple calls
+      isCompletingRef.current = true;
+      
+      console.log('🔄 Fallback: Calling onComplete with result:', result);
+      
+      // Call onComplete
+      onComplete(result).catch(error => {
+        console.error('❌ Fallback onComplete error:', error);
+      }).finally(() => {
+        isCompletingRef.current = false;
+        console.log('🔄 Fallback completion flag reset');
+      });
+    }
+  }, [typingState.isComplete, typingState.endTime, typingState.startTime, typingState.totalCorrect, typingState.totalErrors, test, onComplete, calculateWPM, calculateAccuracy]);
 
   // Render the text with proper styling using the new character status
   const renderText = () => {
@@ -311,6 +421,46 @@ export const TypingTestEngine: React.FC<TypingTestEngineProps> = ({
         <div className="mb-6">
           <div className="text-lg leading-relaxed font-mono bg-gray-50 p-4 rounded border-2 border-gray-200 min-h-[120px] whitespace-pre-wrap">
             {renderText()}
+          </div>
+          
+          {/* Debug: Manual test completion button */}
+          <div className="mt-4 p-2 bg-yellow-100 border border-yellow-300 rounded">
+            <p className="text-sm text-yellow-800 mb-2">Debug: Manual Test Completion</p>
+            <button 
+              onClick={() => {
+                console.log('🔧 Manual test completion triggered');
+                const timeElapsed = Date.now() - (typingState.startTime || Date.now());
+                const wpm = calculateWPM(typingState.totalCorrect, timeElapsed);
+                const accuracy = calculateAccuracy(typingState.totalCorrect, test.content.length);
+                
+                const result: TypingResult = {
+                  wpm,
+                  accuracy,
+                  errors: typingState.totalErrors,
+                  totalCharacters: test.content.length,
+                  correctCharacters: typingState.totalCorrect,
+                  timeElapsed,
+                  testId: test.id,
+                  category: test.category,
+                  timestamp: Date.now(),
+                  hash: generateHashForResult(
+                    test.id,
+                    Date.now(),
+                    wpm,
+                    accuracy,
+                    typingState.totalErrors,
+                    test.content.length,
+                    typingState.totalCorrect
+                  )
+                };
+                
+                console.log('🔧 Manual completion result:', result);
+                onComplete(result);
+              }}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm"
+            >
+              Force Complete Test
+            </button>
           </div>
         </div>
 
