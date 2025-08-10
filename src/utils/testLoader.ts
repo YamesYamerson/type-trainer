@@ -11,9 +11,10 @@ export const loadTestsByCategory = (category: string): TypingTest[] => {
 };
 
 export const loadTestsBySubcategory = (category: string, subcategory: string): TypingTest[] => {
-  return testData.filter(test => 
+  const tests = testData.filter(test => 
     test.category === category && test.subcategory === subcategory
   ) as TypingTest[];
+  return tests;
 };
 
 export const loadTestById = (id: string): TypingTest | undefined => {
@@ -48,8 +49,11 @@ export const getRandomTestByCategory = (category: string): TypingTest | undefine
 
 export const getRandomTestBySubcategory = (category: string, subcategory: string): TypingTest | undefined => {
   const tests = loadTestsBySubcategory(category, subcategory);
-  if (tests.length === 0) return undefined;
-  return tests[Math.floor(Math.random() * tests.length)];
+  if (tests.length === 0) {
+    return undefined;
+  }
+  const randomIndex = Math.floor(Math.random() * tests.length);
+  return tests[randomIndex];
 };
 
 export const getSubcategoriesForMode = (modeId: string): TypingSubcategory[] => {

@@ -41,16 +41,11 @@ export const TestPage: React.FC = () => {
   };
 
   const handleTestComplete = async (result: TypingResult) => {
-    console.log('📝 TestPage: handleTestComplete called with result:', result);
-    console.log('📝 TestPage: Current state - isTestActive:', isTestActive, 'testResult:', testResult);
-    
     setTestResult(result);
     setIsTestActive(false);
     
-    console.log('📝 TestPage: State updated, about to call addResult...');
     try {
       await addResult(result);
-      console.log('📝 TestPage: addResult completed successfully');
     } catch (error) {
       console.error('📝 TestPage: addResult failed:', error);
     }

@@ -152,11 +152,27 @@
     "difficulty": "advanced"
   },
   {
+    "id": "code_typescript_2",
+    "category": "code",
+    "subcategory": "typescript",
+    "language": "typescript",
+    "content": "type Status = 'pending' | 'completed' | 'failed';\n\ninterface Task {\n  id: string;\n  title: string;\n  status: Status;\n  createdAt: Date;\n}\n\nconst updateTaskStatus = (task: Task, newStatus: Status): Task => ({\n  ...task,\n  status: newStatus\n});",
+    "difficulty": "advanced"
+  },
+  {
     "id": "code_html_css_1",
     "category": "code",
     "subcategory": "html_css",
     "language": "html",
     "content": "<div class=\"container\">\n  <h1>Welcome</h1>\n  <p>This is a sample page.</p>\n  <button class=\"btn-primary\">Click me</button>\n</div>",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "code_html_css_2",
+    "category": "code",
+    "subcategory": "html_css",
+    "language": "html",
+    "content": "<nav class=\"navbar\">\n  <ul class=\"nav-list\">\n    <li><a href=\"/home\">Home</a></li>\n    <li><a href=\"/about\">About</a></li>\n    <li><a href=\"/contact\">Contact</a></li>\n  </ul>\n</nav>\n\n<main class=\"content\">\n  <h2>Page Title</h2>\n  <p>Main content goes here.</p>\n</main>",
     "difficulty": "beginner"
   },
   {
