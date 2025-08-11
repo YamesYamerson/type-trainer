@@ -130,14 +130,14 @@ describe('localStorage Mock Debug', () => {
 describe('Test Loader Verification', () => {
   it('should load word-based tests for random_words subcategory', () => {
     const lowercaseWords = loadTestsBySubcategory('lowercase', 'random_words');
-    const uppercaseWords = loadTestsBySubcategory('uppercase', 'random_words');
+    const punctuationWords = loadTestsBySubcategory('punctuation', 'random_sentences');
     
     console.log('Lowercase random_words tests:', lowercaseWords.length);
-    console.log('Uppercase random_words tests:', uppercaseWords.length);
+    console.log('Punctuation random_sentences tests:', punctuationWords.length);
     
     // Verify we have tests
     expect(lowercaseWords.length).toBeGreaterThan(0);
-    expect(uppercaseWords.length).toBeGreaterThan(0);
+    expect(punctuationWords.length).toBeGreaterThan(0);
     
     // Check that content is word-based (not full sentences)
     lowercaseWords.forEach(test => {
@@ -147,7 +147,7 @@ describe('Test Loader Verification', () => {
       expect(wordCount).toBeLessThanOrEqual(30);
     });
     
-    uppercaseWords.forEach(test => {
+    punctuationWords.forEach(test => {
       const wordCount = test.content.split(' ').length;
       console.log(`Test ${test.id}: "${test.content}" (${wordCount} words)`);
       // Should be 30 words or less for word-based tests (updated from 10 to 30)
@@ -157,33 +157,32 @@ describe('Test Loader Verification', () => {
   
   it('should get random word tests correctly', () => {
     const randomLowercaseTest = getRandomTestBySubcategory('lowercase', 'random_words');
-    const randomUppercaseTest = getRandomTestBySubcategory('uppercase', 'random_words');
+    const randomPunctuationTest = getRandomTestBySubcategory('punctuation', 'random_sentences');
     
     console.log('Random lowercase test:', randomLowercaseTest?.content);
-    console.log('Random uppercase test:', randomUppercaseTest?.content);
+    console.log('Random punctuation test:', randomPunctuationTest?.content);
     
     expect(randomLowercaseTest).toBeDefined();
-    expect(randomUppercaseTest).toBeDefined();
+    expect(randomPunctuationTest).toBeDefined();
     
-    // Should be generated tests with word-based content
+    // Lowercase random_words should be generated tests, punctuation should be existing tests
     expect(randomLowercaseTest?.id).toMatch(/^generated_lowercase_random_words_/);
-    expect(randomUppercaseTest?.id).toMatch(/^generated_uppercase_random_words_/);
+    expect(randomPunctuationTest?.id).toMatch(/^punctuation_random_sentences_/);
     
     // Content should be words, not sentences
     const lowercaseWords = randomLowercaseTest?.content.split(' ') || [];
-    const uppercaseWords = randomUppercaseTest?.content.split(' ') || [];
+    const punctuationWords = randomPunctuationTest?.content.split(' ') || [];
     
     expect(lowercaseWords.length).toBeGreaterThan(0);
-    expect(uppercaseWords.length).toBeGreaterThan(0);
+    expect(punctuationWords.length).toBeGreaterThan(0);
     
     // Verify content is properly cased
     lowercaseWords.forEach(word => {
       expect(word).toBe(word.toLowerCase());
     });
     
-    uppercaseWords.forEach(word => {
-      expect(word).toBe(word.toUpperCase());
-    });
+    // Punctuation tests may have mixed case, so just verify they exist
+    expect(punctuationWords.length).toBeGreaterThan(0);
   });
   
   it('should generate different random word tests on each call', () => {

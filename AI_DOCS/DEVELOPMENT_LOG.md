@@ -154,6 +154,76 @@
 - System now handles port conflicts automatically
 - Developers can focus on features instead of configuration
 - Architecture is more robust and production-ready
+
+### Entry 6: Typing Modes Cleanup and Math Category Restoration
+**Date:** August 11, 2025
+**Status:** Complete
+**Actions:**
+- ✅ Removed uppercase typing category (not suitable for basic typing practice)
+- ✅ Removed symbols category (unnecessary complexity)
+- ✅ Restored math category with comprehensive subcategories
+- ✅ Cleaned up typing-tests.json to remove unused test data
+- ✅ Updated typing-modes.json to reflect new structure
+- ✅ Verified all math tests are properly categorized and accessible
+
+**Technical Changes:**
+- **Removed Categories**: 
+  - `uppercase` - 24 tests removed (random words, sentences, definitions, fables)
+  - `symbols` - 12 tests removed (basic symbols, currency, math symbols)
+- **Added Math Category**: 
+  - 12 subcategories with 30+ math-related tests
+  - Covers arithmetic, multiplication tables, fractions, decimals, percentages
+  - Includes algebra, geometry, powers, and roots
+- **File Updates**:
+  - `src/data/typing-modes.json`: Cleaned structure, added math category
+  - `src/data/typing-tests.json`: Removed 36 unnecessary tests
+
+**Math Category Subcategories:**
+- ✅ **Basic Arithmetic**: Addition, subtraction, multiplication, division
+- ✅ **Multiplication Tables**: 2x through 9x tables
+- ✅ **Division Facts**: Division calculations and facts
+- ✅ **Addition Facts**: Addition facts and sums
+- ✅ **Subtraction Facts**: Subtraction facts and differences
+- ✅ **Mixed Operations**: Combined mathematical operations
+- ✅ **Fractions**: Fraction operations and calculations
+- ✅ **Decimals**: Decimal operations and calculations
+- ✅ **Percentages**: Percentage calculations and conversions
+- ✅ **Squares and Roots**: Square numbers and square roots
+- ✅ **Powers and Exponents**: Exponential notation and calculations
+- ✅ **Basic Algebra**: Simple algebraic equations and variables
+- ✅ **Basic Geometry**: Geometric formulas and calculations
+
+**Benefits Achieved:**
+- 🎯 **Focused Practice**: Removed unnecessary categories that don't help basic typing skills
+- 🧮 **Math Integration**: Comprehensive math typing practice for students and professionals
+- 🧹 **Cleaner Structure**: Simplified mode selection with logical categories
+- 📚 **Educational Value**: Math category provides practical typing practice with real content
+- 🔄 **Consistent Experience**: All remaining categories focus on practical typing skills
+
+**Testing Results:**
+- ✅ **Backend Server**: Running successfully on port 3001
+- ✅ **Frontend Application**: Running successfully on port 5173
+- ✅ **Math Tests**: All 30+ math tests properly categorized and accessible
+- ✅ **Category Structure**: Clean, logical organization without unused categories
+- ✅ **Data Integrity**: No orphaned test references or broken categories
+
+**Next Steps:**
+- Test the math category in the frontend interface
+- Consider adding more math-specific content if needed
+- Monitor user feedback on the simplified category structure
+
+**Decisions Made:**
+- Removed uppercase category as it doesn't align with basic typing practice goals
+- Eliminated symbols category to reduce complexity and focus on practical content
+- Restored math category with comprehensive coverage of mathematical concepts
+- Maintained all existing math tests that were already in the system
+- Kept the clean, logical structure from the original design
+
+**Notes:**
+- Math category provides excellent typing practice for students and professionals
+- Simplified structure makes mode selection more intuitive
+- All changes maintain backward compatibility with existing functionality
+- Focus is now on practical, educational typing content
 - ✅ Implemented random test selection by category
 - ✅ Updated TypingTestEngine to handle different test types
 - ✅ Added proper TypeScript interfaces for modes

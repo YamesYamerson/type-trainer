@@ -32,38 +32,6 @@
     ]
   },
   {
-    "id": "uppercase",
-    "name": "Uppercase Words",
-    "options": ["Uppercase only", "Simple words", "Beginner friendly"],
-    "contentPath": "uppercase",
-    "subcategories": [
-      {
-        "id": "random_words",
-        "name": "Random Words",
-        "description": "Practice with individual words in uppercase",
-        "difficulty": "beginner"
-      },
-      {
-        "id": "random_sentences",
-        "name": "Random Sentences",
-        "description": "Practice with random sentences in uppercase",
-        "difficulty": "beginner"
-      },
-      {
-        "id": "word_definitions",
-        "name": "Word Definitions",
-        "description": "Practice typing word definitions without punctuation",
-        "difficulty": "intermediate"
-      },
-      {
-        "id": "fables",
-        "name": "Fables",
-        "description": "Practice with classic fables and stories",
-        "difficulty": "intermediate"
-      }
-    ]
-  },
-  {
     "id": "punctuation",
     "name": "Punctuation & Capitalization",
     "options": ["Full sentences", "Punctuation marks", "Capital letters"],
@@ -96,6 +64,92 @@
     ]
   },
   {
+    "id": "math",
+    "name": "Mathematics",
+    "options": ["Basic arithmetic", "Multiplication tables", "Fractions and decimals"],
+    "contentPath": "math",
+    "subcategories": [
+      {
+        "id": "basic_arithmetic",
+        "name": "Basic Arithmetic",
+        "description": "Practice with addition, subtraction, multiplication, and division",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "multiplication_tables",
+        "name": "Multiplication Tables",
+        "description": "Practice with multiplication facts and tables",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "division_facts",
+        "name": "Division Facts",
+        "description": "Practice with division facts and calculations",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "addition_facts",
+        "name": "Addition Facts",
+        "description": "Practice with addition facts and sums",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "subtraction_facts",
+        "name": "Subtraction Facts",
+        "description": "Practice with subtraction facts and differences",
+        "difficulty": "beginner"
+      },
+      {
+        "id": "mixed_operations",
+        "name": "Mixed Operations",
+        "description": "Practice with combined mathematical operations",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "fractions",
+        "name": "Fractions",
+        "description": "Practice with fraction operations and calculations",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "decimals",
+        "name": "Decimals",
+        "description": "Practice with decimal operations and calculations",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "percentages",
+        "name": "Percentages",
+        "description": "Practice with percentage calculations and conversions",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "squares_roots",
+        "name": "Squares and Roots",
+        "description": "Practice with square numbers and square roots",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "powers",
+        "name": "Powers and Exponents",
+        "description": "Practice with exponential notation and calculations",
+        "difficulty": "advanced"
+      },
+      {
+        "id": "algebra_basic",
+        "name": "Basic Algebra",
+        "description": "Practice with simple algebraic equations and variables",
+        "difficulty": "intermediate"
+      },
+      {
+        "id": "geometry_basic",
+        "name": "Basic Geometry",
+        "description": "Practice with geometric formulas and calculations",
+        "difficulty": "intermediate"
+      }
+    ]
+  },
+  {
     "id": "numbers",
     "name": "Numbers",
     "options": ["Random numbers", "Phone numbers", "Credit cards"],
@@ -117,32 +171,6 @@
         "id": "credit_cards",
         "name": "Credit Card Numbers",
         "description": "Practice typing credit card number formats",
-        "difficulty": "advanced"
-      }
-    ]
-  },
-  {
-    "id": "symbols",
-    "name": "Symbols",
-    "options": ["Basic symbols", "Currency", "Math symbols"],
-    "contentPath": "symbols",
-    "subcategories": [
-      {
-        "id": "basic_symbols",
-        "name": "Basic Symbols",
-        "description": "Practice typing basic keyboard symbols",
-        "difficulty": "beginner"
-      },
-      {
-        "id": "currency_symbols",
-        "name": "Currency Symbols",
-        "description": "Practice typing currency symbols",
-        "difficulty": "intermediate"
-      },
-      {
-        "id": "math_symbols",
-        "name": "Math Symbols",
-        "description": "Practice typing mathematical symbols",
         "difficulty": "advanced"
       }
     ]
