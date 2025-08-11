@@ -7,7 +7,9 @@
     "types": ["jest", "node", "@testing-library/jest-dom"],
     "verbatimModuleSyntax": false,
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
   "include": [
     "src",

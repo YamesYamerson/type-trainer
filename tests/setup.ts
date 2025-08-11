@@ -2,7 +2,7 @@
  * Jest setup file for Type Trainer tests
  */
 
-import '@testing-library/jest-dom';
+require('@testing-library/jest-dom');
 
 // Set up environment variables for tests
 process.env.NODE_ENV = 'test';
@@ -192,7 +192,7 @@ if (typeof window === 'undefined') {
 };
 
 // Import and initialize DataManager after all mocks are set up
-import { DataManager } from '../src/utils/dataManager';
+const { DataManager } = require('../src/utils/dataManager');
 DataManager.setOnlineStatus(true);
 
 // Reset localStorage mock before each test

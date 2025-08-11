@@ -10,7 +10,7 @@ interface PetProps {
 
 export const Pet: React.FC<PetProps> = ({ className = '', onPetInteraction }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
   const lastTimeRef = useRef<number>(0);
   
   const [petState, setPetState] = useState<PetState>(PetManager.getInstance().getPetState());

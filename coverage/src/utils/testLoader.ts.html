@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.93% </span>
+                <span class="strong">62.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/59</span>
+                <span class='fraction'>37/59</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.53% </span>
+                <span class="strong">38.46% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/13</span>
+                <span class='fraction'>5/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.16% </span>
+                <span class="strong">60.46% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>22/43</span>
+                <span class='fraction'>26/43</span>
             </div>
         
             
@@ -161,10 +161,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">344x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">426x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -200,31 +200,31 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -285,12 +285,12 @@ export const getRandomTestBySubcategory = (category: string, subcategory: string
   // Special handling for random_words subcategory
   if (subcategory === 'random_words') {
     const difficulty = category === 'lowercase' ? 'beginner' : 
-                      category === 'uppercase' ? 'intermediate' : <span class="branch-1 cbranch-no" title="branch not covered" >'beginner';</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >                      category === 'uppercase' ? 'intermediate' : 'beginner';</span>
     
     // Use fluid word generation for natural difficulty progression
     const words = WordGenerator.generateFluidWordList(8, difficulty);
     
-    const content = category === 'uppercase' ? words.join(' ').toUpperCase() : words.join(' ');
+    const content = category === 'uppercase' ? <span class="branch-0 cbranch-no" title="branch not covered" >words.join(' ').toUpperCase() </span>: words.join(' ');
     
     return {
       id: `generated_${category}_${subcategory}_${Date.now()}`,
@@ -303,12 +303,12 @@ export const getRandomTestBySubcategory = (category: string, subcategory: string
   }
   
   // Fallback to existing logic for other subcategories
-  const tests = <span class="cstat-no" title="statement not covered" >loadTestsBySubcategory(category, subcategory);</span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (tests.length === 0) {</span>
+  const tests = loadTestsBySubcategory(category, subcategory);
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (tests.length === 0) {
 <span class="cstat-no" title="statement not covered" >    return undefined;</span>
   }
-  const randomIndex = <span class="cstat-no" title="statement not covered" >Math.floor(Math.random() * tests.length);</span>
-<span class="cstat-no" title="statement not covered" >  return tests[randomIndex];</span>
+  const randomIndex = Math.floor(Math.random() * tests.length);
+  return tests[randomIndex];
 };
 &nbsp;
 export const getSubcategoriesForMode = <span class="fstat-no" title="function not covered" >(m</span>odeId: string): TypingSubcategory[] =&gt; {
@@ -322,7 +322,7 @@ export const getSubcategoriesForMode = <span class="fstat-no" title="function no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-11T00:59:26.544Z
+                at 2025-08-11T04:06:21.363Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

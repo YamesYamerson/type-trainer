@@ -120,7 +120,7 @@ export class WordGenerator {
     const difficulties: Array<keyof typeof wordDictionary> = ['beginner', 'intermediate', 'advanced'];
     const startIndex = difficulties.indexOf(startDifficulty);
     
-    let allWords: string[] = [];
+    const allWords: string[] = [];
     
     // Add words from starting difficulty and beyond, with easier words included
     for (let i = startIndex; i < difficulties.length; i++) {
@@ -182,7 +182,7 @@ export class WordGenerator {
     let availableSecondary = Math.min(secondaryCount, shuffledSecondary.length);
     let availableTertiary = Math.min(tertiaryCount, shuffledTertiary.length);
     
-    let result = [
+    const result = [
       ...shuffledPrimary.slice(0, availablePrimary),
       ...shuffledSecondary.slice(0, availableSecondary),
       ...shuffledTertiary.slice(0, availableTertiary)

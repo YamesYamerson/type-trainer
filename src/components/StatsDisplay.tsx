@@ -25,8 +25,8 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({
           const bestWpm = Math.max(...results.map(r => r.wpm));
           
           // Calculate category and subcategory stats
-          const categoryStats: { [key: string]: { tests: number; averageWpm: number; averageAccuracy: number } } = {};
-          const subcategoryStats: { [key: string]: { tests: number; averageWpm: number; averageAccuracy: number } } = {};
+          const categoryStats: { [key: string]: { tests: number; averageWpm: number; averageAccuracy: number; totalWpm: number; totalAccuracy: number } } = {};
+          const subcategoryStats: { [key: string]: { tests: number; averageWpm: number; averageAccuracy: number; totalWpm: number; totalAccuracy: number } } = {};
           
           results.forEach(result => {
             // Category stats

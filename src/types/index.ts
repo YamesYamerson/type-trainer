@@ -50,6 +50,8 @@ export interface UserStats {
       tests: number;
       averageWpm: number;
       averageAccuracy: number;
+      totalWpm: number;
+      totalAccuracy: number;
     };
   };
 }

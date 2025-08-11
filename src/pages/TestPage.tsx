@@ -14,18 +14,25 @@ export const TestPage: React.FC = () => {
   const [currentTest, setCurrentTest] = useState<TypingTest | null>(null);
   const [testResult, setTestResult] = useState<TypingResult | null>(null);
   const [isTestActive, setIsTestActive] = useState(false);
-  const [selectedMode, setSelectedMode] = useState<string>('lowercase');
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string>('random_words');
+  const [selectedMode, setSelectedMode] = useState<string>('');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>('');
   const [showKeyboard, setShowKeyboard] = useState<boolean>(true);
   const [modes] = useState<TypingMode[]>(loadModes());
-  const { results, addResult, syncStatus, syncPendingData } = useTypingResults();
+  const { results, addResult, syncStatus } = useTypingResults();
   const [petKey, setPetKey] = useState(0); // Force pet re-render
 
   // Initialize with first subcategory of lowercase mode
   React.useEffect(() => {
-    const lowercaseMode = modes.find(mode => mode.id === 'lowercase');
-    if (lowercaseMode && lowercaseMode.subcategories.length > 0) {
-      setSelectedSubcategory(lowercaseMode.subcategories[0].id);
+    if (modes.length > 0) {
+      const lowercaseMode = modes.find(mode => mode.id === 'lowercase');
+      if (lowercaseMode && lowercaseMode.subcategories.length > 0) {
+        setSelectedMode('lowercase');
+        setSelectedSubcategory(lowercaseMode.subcategories[0].id);
+      } else if (modes[0] && modes[0].subcategories.length > 0) {
+        // Fallback to first available mode if lowercase doesn't exist
+        setSelectedMode(modes[0].id);
+        setSelectedSubcategory(modes[0].subcategories[0].id);
+      }
     }
   }, [modes]);
 
@@ -100,10 +107,18 @@ export const TestPage: React.FC = () => {
     setCurrentTest(null);
     setTestResult(null);
     setIsTestActive(false);
-    setSelectedMode('lowercase'); // Reset to default mode
-    const lowercaseMode = modes.find(mode => mode.id === 'lowercase');
-    if (lowercaseMode && lowercaseMode.subcategories.length > 0) {
-      setSelectedSubcategory(lowercaseMode.subcategories[0].id);
+    
+    // Reset to default mode safely
+    if (modes.length > 0) {
+      const lowercaseMode = modes.find(mode => mode.id === 'lowercase');
+      if (lowercaseMode && lowercaseMode.subcategories.length > 0) {
+        setSelectedMode('lowercase');
+        setSelectedSubcategory(lowercaseMode.subcategories[0].id);
+      } else if (modes[0] && modes[0].subcategories.length > 0) {
+        // Fallback to first available mode if lowercase doesn't exist
+        setSelectedMode(modes[0].id);
+        setSelectedSubcategory(modes[0].subcategories[0].id);
+      }
     }
   };
 
@@ -189,12 +204,21 @@ export const TestPage: React.FC = () => {
           )}
         </div>
         
-        <ModeSelector
-          selectedMode={selectedMode}
-          selectedSubcategory={selectedSubcategory}
-          onModeSelect={handleModeSelect}
-          modes={modes}
-        />
+        {!selectedMode || !selectedSubcategory || modes.length === 0 ? (
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-8 max-w-6xl mx-auto">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading typing modes...</p>
+            </div>
+          </div>
+        ) : (
+          <ModeSelector
+            selectedMode={selectedMode}
+            selectedSubcategory={selectedSubcategory}
+            onModeSelect={handleModeSelect}
+            modes={modes}
+          />
+        )}
 
         {/* Selected Mode & Subcategory Display */}
         {currentMode && currentSubcategory && (
@@ -256,13 +280,7 @@ export const TestPage: React.FC = () => {
             </div>
           )}
           
-          {syncPendingData && (
-            <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                You have {syncPendingData} test results waiting to sync
-              </p>
-            </div>
-          )}
+
         </div>
       </div>
     );
