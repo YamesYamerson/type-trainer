@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egg Sprite Generator - Type Trainer</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #00ff00;
+            margin-bottom: 30px;
+        }
+        
+        .generator-section {
+            background: #2a2a2a;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .preview-section {
+            background: #1a1a1a;
+            border: 2px solid #0088ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .sprite-preview {
+            border: 2px solid #00ff00;
+            margin: 20px auto;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 10px;
+        }
+        
+        button:hover {
+            background: #00dd00;
+        }
+        
+        .download-btn {
+            background: #0088ff;
+            color: #fff;
+        }
+        
+        .download-btn:hover {
+            background: #0066cc;
+        }
+        
+        .instructions {
+            background: #333;
+            border: 1px solid #666;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        
+        .frame-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .frame-detail {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .frame-detail h4 {
+            color: #00ff00;
+            margin: 0 0 10px 0;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .status.success {
+            background: #2d5a2d;
+            border: 1px solid #00ff00;
+        }
+        
+        .status.info {
+            background: #2d4a5a;
+            border: 1px solid #0088ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🥚 Egg Sprite Generator</h1>
+        
+        <div class="instructions">
+            <h3>🎯 Purpose:</h3>
+            <p>This tool automatically generates a complete egg sprite sheet for the Type Trainer pet system. The egg will have 20 animation frames covering idle, walking, happy, and sad states.</p>
+            
+            <h3>📋 What it generates:</h3>
+            <ul>
+                <li><strong>Idle Animation:</strong> Gentle bobbing motion (frames 0-3)</li>
+                <li><strong>Walk Left:</strong> Egg rolling left (frames 4-7)</li>
+                <li><strong>Walk Right:</strong> Egg rolling right (frames 8-11)</li>
+                <li><strong>Happy:</strong> Bouncing with sparkles (frames 12-15)</li>
+                <li><strong>Sad:</strong> Drooping with sad expression (frames 16-19)</li>
+            </ul>
+        </div>
+        
+        <div class="generator-section">
+            <h2>🎨 Generate Egg Sprite</h2>
+            
+            <div class="frame-info">
+                <div class="frame-detail">
+                    <h4>Idle (0-3)</h4>
+                    <p>Gentle bobbing</p>
+                </div>
+                <div class="frame-detail">
+                    <h4>Walk Left (4-7)</h4>
+                    <p>Rolling left</p>
+                </div>
+                <div class="frame-detail">
+                    <h4>Walk Right (8-11)</h4>
+                    <p>Rolling right</p>
+                </div>
+                <div class="frame-detail">
+                    <h4>Happy (12-15)</h4>
+                    <p>Bouncing + sparkles</p>
+                </div>
+                <div class="frame-detail">
+                    <h4>Sad (16-19)</h4>
+                    <p>Drooping + sad face</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button onclick="generateEggSprite()">🥚 Generate Egg Sprite</button>
+                <button onclick="previewEggSprite()" class="download-btn">👀 Preview Sprite</button>
+            </div>
+            
+            <div id="status"></div>
+        </div>
+        
+        <div class="preview-section">
+            <h2>🖼️ Sprite Preview</h2>
+            <canvas id="spriteCanvas" class="sprite-preview" width="128" height="160"></canvas>
+            <div id="downloadSection" style="display: none;">
+                <button onclick="downloadSpriteSheet()" class="download-btn">💾 Download Egg Sprite Sheet</button>
+                <p><small>Save this file as <code>egg-sheet.png</code> in your <code>/public/sprites/</code> folder</small></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let generatedSpriteData = null;
+        
+        // Egg design configuration
+        const EGG_CONFIG = {
+            width: 128,
+            height: 160,
+            frameSize: 32,
+            framesPerRow: 4,
+            totalFrames: 20
+        };
+        
+        // Generate egg frame data
+        function createEggFrame(offsetX = 0, offsetY = 0, isHappy = false, isSad = false) {
+            const pixels = [];
+            
+            for (let y = 0; y < 16; y++) {
+                for (let x = 0; x < 16; x++) {
+                    let color = '#000000'; // Transparent
+                    
+                    // Calculate egg shape
+                    const centerX = 8 + offsetX;
+                    const centerY = 8 + offsetY;
+                    
+                    // Egg shape using ellipse formula
+                    const dx = (x - centerX) / 6;
+                    const dy = (y - centerY) / 8;
+                    const eggValue = (dx * dx) + (dy * dy);
+                    
+                    if (eggValue <= 1) {
+                        // Main egg body
+                        color = '#f5f5dc'; // Beige
+                        
+                        // Add texture variation
+                        if (eggValue > 0.7) {
+                            color = '#e8e8d0'; // Slightly darker
+                        }
+                        
+                        // Add highlights
+                        if (eggValue < 0.3 && y < centerY) {
+                            color = '#ffffff'; // White highlight
+                        }
+                        
+                        // Add face features
+                        if (eggValue <= 0.8) {
+                            // Eyes
+                            if (y >= centerY - 2 && y <= centerY && 
+                                ((x >= centerX - 3 && x <= centerX - 1) || 
+                                 (x >= centerX + 1 && x <= centerX + 3))) {
+                                if (isSad) {
+                                    color = '#ff6b6b'; // Red sad eyes
+                                } else {
+                                    color = '#333333'; // Black eyes
+                                }
+                            }
+                            
+                            // Mouth
+                            if (y === centerY + 2 && x >= centerX - 2 && x <= centerX + 2) {
+                                if (isSad) {
+                                    color = '#ff6b6b'; // Red sad mouth
+                                } else if (isHappy) {
+                                    color = '#4ecdc4'; // Teal happy mouth
+                                } else {
+                                    color = '#333333'; // Black neutral mouth
+                                }
+                            }
+                            
+                            // Happy sparkles
+                            if (isHappy && eggValue > 0.6 && eggValue < 0.8) {
+                                if (Math.random() > 0.7) {
+                                    color = '#ffd700'; // Gold sparkles
+                                }
+                            }
+                        }
+                    }
+                    
+                    pixels.push(color);
+                }
+            }
+            
+            return pixels;
+        }
+        
+        // Generate the complete egg sprite
+        function generateEggSprite() {
+            showStatus('Generating egg sprite...', 'info');
+            
+            const spriteData = {};
+            
+            // Generate all 20 frames
+            for (let frameIndex = 0; frameIndex < EGG_CONFIG.totalFrames; frameIndex++) {
+                let frameData;
+                
+                if (frameIndex < 4) {
+                    // Idle animation (gentle bobbing)
+                    const offsetY = frameIndex === 1 ? -1 : frameIndex === 3 ? 1 : 0;
+                    frameData = createEggFrame(0, offsetY, false, false);
+                } else if (frameIndex < 8) {
+                    // Walk left (egg rolling left)
+                    const offsetX = frameIndex === 4 ? -1 : frameIndex === 5 ? -2 : frameIndex === 6 ? -1 : 0;
+                    frameData = createEggFrame(offsetX, 0, false, false);
+                } else if (frameIndex < 12) {
+                    // Walk right (egg rolling right)
+                    const offsetX = frameIndex === 8 ? 1 : frameIndex === 9 ? 2 : frameIndex === 10 ? 1 : 0;
+                    frameData = createEggFrame(offsetX, 0, false, false);
+                } else if (frameIndex < 16) {
+                    // Happy (egg bouncing with sparkles)
+                    const offsetY = frameIndex === 12 || frameIndex === 14 ? -2 : frameIndex === 13 ? -1 : 0;
+                    frameData = createEggFrame(0, offsetY, true, false);
+                } else {
+                    // Sad (egg drooping)
+                    const offsetY = frameIndex === 16 ? 1 : frameIndex === 17 ? 2 : frameIndex === 18 ? 1 : 0;
+                    frameData = createEggFrame(0, offsetY, false, true);
+                }
+                
+                spriteData[frameIndex] = frameData;
+            }
+            
+            generatedSpriteData = spriteData;
+            showStatus('✅ Egg sprite generated successfully!', 'success');
+            document.getElementById('downloadSection').style.display = 'block';
+            
+            // Auto-preview
+            previewEggSprite();
+        }
+        
+        // Preview the generated sprite
+        function previewEggSprite() {
+            if (!generatedSpriteData) {
+                showStatus('❌ Please generate the sprite first!', 'info');
+                return;
+            }
+            
+            const canvas = document.getElementById('spriteCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 4; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, i * 32);
+                ctx.lineTo(128, i * 32);
+                ctx.stroke();
+            }
+            for (let i = 0; i <= 4; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * 32, 0);
+                ctx.lineTo(i * 32, 160);
+                ctx.stroke();
+            }
+            
+            // Draw all frames
+            Object.keys(generatedSpriteData).forEach(frameIndex => {
+                const frameNum = parseInt(frameIndex);
+                const row = Math.floor(frameNum / 4);
+                const col = frameNum % 4;
+                const x = col * 32;
+                const y = row * 32;
+                
+                const frameData = generatedSpriteData[frameIndex];
+                
+                // Draw pixels (scale up 2x from 16x16 to 32x32)
+                for (let py = 0; py < 16; py++) {
+                    for (let px = 0; px < 16; px++) {
+                        const color = frameData[py * 16 + px];
+                        if (color !== '#000000') {
+                            ctx.fillStyle = color;
+                            ctx.fillRect(x + (px * 2), y + (py * 2), 2, 2);
+                        }
+                    }
+                }
+            });
+            
+            showStatus('👀 Sprite preview generated!', 'success');
+        }
+        
+        // Download the sprite sheet
+        function downloadSpriteSheet() {
+            if (!generatedSpriteData) {
+                showStatus('❌ Please generate the sprite first!', 'info');
+                return;
+            }
+            
+            const canvas = document.getElementById('spriteCanvas');
+            const link = document.createElement('a');
+            link.download = 'egg-sheet.png';
+            link.href = canvas.toDataURL();
+            link.click();
+            
+            showStatus('💾 Sprite sheet downloaded!', 'success');
+        }
+        
+        // Show status messages
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        // Auto-generate on page load
+        window.addEventListener('load', () => {
+            showStatus('🎯 Ready to generate egg sprite! Click the generate button to start.', 'info');
+        });
+    </script>
+</body>
+</html>

@@ -34,7 +34,7 @@ export const ModeSelector: React.FC<ModeSelectorProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <div className="bg-white rounded-lg shadow-lg p-6 mb-8 max-w-6xl mx-auto">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">
         Select Typing Mode & Subcategory
       </h2>

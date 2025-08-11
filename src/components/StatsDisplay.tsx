@@ -120,32 +120,32 @@ export const StatsDisplay: React.FC<StatsDisplayProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
+    <div className="bg-white rounded-lg shadow-sm p-6 w-full max-w-md">
       {showTitle && (
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
           Your Stats
         </h3>
       )}
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="text-center">
-          <div className="text-2xl font-bold text-blue-600">{stats.averageWpm}</div>
-          <div className="text-sm text-gray-600">Avg WPM</div>
+          <div className="text-xl font-bold text-blue-600">{stats.averageWpm}</div>
+          <div className="text-xs text-gray-600">Avg WPM</div>
         </div>
         
         <div className="text-center">
-          <div className="text-2xl font-bold text-green-600">{stats.averageAccuracy}%</div>
-          <div className="text-sm text-gray-600">Avg Accuracy</div>
+          <div className="text-xl font-bold text-green-600">{stats.averageAccuracy}%</div>
+          <div className="text-xs text-gray-600">Avg Accuracy</div>
         </div>
         
         <div className="text-center">
-          <div className="text-2xl font-bold text-purple-600">{stats.bestWpm}</div>
-          <div className="text-sm text-gray-600">Best WPM</div>
+          <div className="text-xl font-bold text-purple-600">{stats.bestWpm}</div>
+          <div className="text-xs text-gray-600">Best WPM</div>
         </div>
         
         <div className="text-center">
-          <div className="text-2xl font-bold text-orange-600">{stats.totalTests}</div>
-          <div className="text-sm text-gray-600">Tests Completed</div>
+          <div className="text-xl font-bold text-orange-600">{stats.totalTests}</div>
+          <div className="text-xs text-gray-600">Tests Completed</div>
         </div>
       </div>
 

@@ -72,3 +72,60 @@ export interface TypingState {
   totalErrors: number; // Cached for performance
   totalCorrect: number; // Cached for performance
 }
+
+// Pet System Types
+export interface PetStats {
+  happiness: number; // 0-100
+  energy: number; // 0-100
+  experience: number; // 0-1000
+  level: number; // 1-10
+  evolutionStage: number; // 0-7 (8 evolutions total)
+  lastFed: number; // timestamp
+  lastPlayed: number; // timestamp
+  totalTestsCompleted: number;
+  averageWpm: number;
+  bestWpm: number;
+}
+
+export interface PetEvolution {
+  stage: number;
+  name: string;
+  spriteSheet: string;
+  frameWidth: number;
+  frameHeight: number;
+  animationFrames: {
+    idle: number[];
+    walkLeft: number[];
+    walkRight: number[];
+    happy: number[];
+    sad: number[];
+  };
+  scale: number;
+  requirements: {
+    level: number;
+    experience: number;
+    happiness: number;
+  };
+}
+
+export interface PetAnimation {
+  currentAnimation: 'idle' | 'walkLeft' | 'walkRight' | 'happy' | 'sad';
+  currentFrame: number;
+  frameCount: number;
+  animationSpeed: number;
+  lastFrameTime: number;
+  isMoving: boolean;
+  direction: 'left' | 'right';
+  targetX: number;
+  currentX: number;
+}
+
+export interface PetState {
+  stats: PetStats;
+  animation: PetAnimation;
+  isVisible: boolean;
+  position: {
+    x: number;
+    y: number;
+  };
+}

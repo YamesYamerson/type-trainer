@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet System Test - Type Trainer</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #00ff00;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            background: #2a2a2a;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .pet-display {
+            background: #1a1a1a;
+            border: 2px solid #0088ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .pet-canvas {
+            border: 2px solid #00ff00;
+            margin: 20px auto;
+            display: block;
+            background: #f8f9fa;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: #00dd00;
+        }
+        
+        .status {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .sprite-info {
+            background: #333;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .sprite-info h3 {
+            color: #00ff00;
+            margin-top: 0;
+        }
+        
+        .sprite-info pre {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🥚 Pet System Test</h1>
+        
+        <div class="test-section">
+            <h2>🎯 Test Purpose</h2>
+            <p>This page tests the pet system to ensure the egg sprite is loading and animating correctly. It will help identify any issues with sprite loading, animation, or rendering.</p>
+        </div>
+        
+        <div class="pet-display">
+            <h2>🐾 Pet Display</h2>
+            <canvas id="petCanvas" class="pet-canvas" width="64" height="64"></canvas>
+            
+            <div class="controls">
+                <button onclick="testSpriteLoading()">🔄 Test Sprite Loading</button>
+                <button onclick="testAnimation()">🎬 Test Animation</button>
+                <button onclick="testEvolution()">⭐ Test Evolution</button>
+                <button onclick="resetPet()">🔄 Reset Pet</button>
+            </div>
+            
+            <div id="status"></div>
+        </div>
+        
+        <div class="sprite-info">
+            <h3>📋 Sprite Information</h3>
+            <div id="spriteInfo">
+                <p>Click "Test Sprite Loading" to see sprite information...</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔍 Debug Information</h2>
+            <div id="debugInfo">
+                <p>Debug information will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple pet system for testing
+        class SimplePetManager {
+            constructor() {
+                this.petState = {
+                    stats: {
+                        level: 1,
+                        experience: 0,
+                        happiness: 50,
+                        energy: 100,
+                        evolutionStage: 0
+                    },
+                    animation: {
+                        currentAnimation: 'idle',
+                        currentFrame: 0,
+                        lastFrameTime: Date.now()
+                    }
+                };
+                
+                this.evolution = {
+                    stage: 0,
+                    name: 'Egg',
+                    spriteSheet: '/sprites/egg-sheet.png',
+                    frameWidth: 32,
+                    frameHeight: 32,
+                    scale: 1.0,
+                    animationFrames: {
+                        'idle': [0, 1, 2, 3],
+                        'walkLeft': [0, 1, 2, 3],
+                        'walkRight': [0, 1, 2, 3],
+                        'happy': [4, 5, 6, 7],
+                        'sad': [8, 9, 10, 11]
+                    }
+                };
+            }
+            
+            getPetState() {
+                return this.petState;
+            }
+            
+            getCurrentEvolution() {
+                return this.evolution;
+            }
+            
+            updateAnimation() {
+                const animation = this.petState.animation;
+                if (Date.now() - animation.lastFrameTime >= 150) {
+                    const frames = this.evolution.animationFrames[animation.currentAnimation];
+                    animation.currentFrame = (animation.currentFrame + 1) % frames.length;
+                    animation.lastFrameTime = Date.now();
+                }
+            }
+            
+            setAnimation(animName) {
+                this.petState.animation.currentAnimation = animName;
+                this.petState.animation.currentFrame = 0;
+            }
+        }
+        
+        const petManager = new SimplePetManager();
+        let spriteImage = null;
+        let spriteLoadError = false;
+        
+        // Canvas setup
+        const canvas = document.getElementById('petCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Animation loop
+        function animate() {
+            petManager.updateAnimation();
+            renderPet();
+            requestAnimationFrame(animate);
+        }
+        
+        // Render pet
+        function renderPet() {
+            const state = petManager.getPetState();
+            const evolution = petManager.getCurrentEvolution();
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set canvas size
+            const scaledWidth = evolution.frameWidth * evolution.scale;
+            const scaledHeight = evolution.frameHeight * evolution.scale;
+            
+            if (canvas.width !== scaledWidth || canvas.height !== scaledHeight) {
+                canvas.width = scaledWidth;
+                canvas.height = scaledHeight;
+            }
+            
+            // Render sprite if available
+            if (spriteImage && !spriteLoadError) {
+                const animationFrames = evolution.animationFrames[state.animation.currentAnimation];
+                const currentFrame = state.animation.currentFrame % animationFrames.length;
+                const frameIndex = animationFrames[currentFrame];
+                
+                const spritesPerRow = Math.floor(spriteImage.width / evolution.frameWidth);
+                const spriteRow = Math.floor(frameIndex / spritesPerRow);
+                const spriteCol = frameIndex % spritesPerRow;
+                
+                const sourceX = spriteCol * evolution.frameWidth;
+                const sourceY = spriteRow * evolution.frameHeight;
+                
+                ctx.drawImage(
+                    spriteImage,
+                    sourceX, sourceY, evolution.frameWidth, evolution.frameHeight,
+                    0, 0, scaledWidth, scaledHeight
+                );
+            } else {
+                // Fallback rendering
+                renderFallbackSprite();
+            }
+            
+            // Draw pet info
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(evolution.name, scaledWidth / 2, -5);
+            ctx.fillText(`Lv.${state.stats.level}`, scaledWidth / 2, -20);
+        }
+        
+        // Fallback sprite rendering
+        function renderFallbackSprite() {
+            const evolution = petManager.getCurrentEvolution();
+            const width = evolution.frameWidth * evolution.scale;
+            const height = evolution.frameHeight * evolution.scale;
+            
+            // Draw simple egg shape
+            ctx.fillStyle = '#f5f5dc';
+            ctx.beginPath();
+            ctx.ellipse(width/2, height/2, width/3, height/2, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = '#d3d3d3';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Draw face
+            ctx.fillStyle = '#333';
+            ctx.beginPath();
+            ctx.arc(width/2 - width/8, height/2 - height/8, width/16, 0, Math.PI * 2);
+            ctx.arc(width/2 + width/8, height/2 - height/8, width/16, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Test functions
+        function testSpriteLoading() {
+            showStatus('🔄 Testing sprite loading...', 'info');
+            
+            const img = new Image();
+            img.onload = () => {
+                spriteImage = img;
+                spriteLoadError = false;
+                showStatus('✅ Sprite loaded successfully!', 'success');
+                updateSpriteInfo();
+            };
+            img.onerror = () => {
+                spriteImage = null;
+                spriteLoadError = true;
+                showStatus('❌ Failed to load sprite!', 'error');
+                updateSpriteInfo();
+            };
+            img.src = petManager.getCurrentEvolution().spriteSheet;
+        }
+        
+        function testAnimation() {
+            const animations = ['idle', 'walkLeft', 'walkRight', 'happy', 'sad'];
+            const currentAnim = petManager.getPetState().animation.currentAnimation;
+            const currentIndex = animations.indexOf(currentAnim);
+            const nextIndex = (currentIndex + 1) % animations.length;
+            
+            petManager.setAnimation(animations[nextIndex]);
+            showStatus(`🎬 Animation changed to: ${animations[nextIndex]}`, 'success');
+        }
+        
+        function testEvolution() {
+            showStatus('⭐ Evolution test: Pet would evolve here in real system', 'info');
+        }
+        
+        function resetPet() {
+            petManager.setAnimation('idle');
+            showStatus('🔄 Pet reset to idle animation', 'success');
+        }
+        
+        function updateSpriteInfo() {
+            const evolution = petManager.getCurrentEvolution();
+            const info = document.getElementById('spriteInfo');
+            
+            info.innerHTML = `
+                <h3>📋 Current Evolution</h3>
+                <pre>Stage: ${evolution.stage}
+Name: ${evolution.name}
+Sprite: ${evolution.spriteSheet}
+Frame Size: ${evolution.frameWidth}x${evolution.frameHeight}
+Scale: ${evolution.scale}</pre>
+                
+                <h3>🎬 Animation Frames</h3>
+                <pre>${JSON.stringify(evolution.animationFrames, null, 2)}</pre>
+                
+                <h3>🖼️ Sprite Status</h3>
+                <pre>Loaded: ${spriteImage ? 'Yes' : 'No'}
+Error: ${spriteLoadError ? 'Yes' : 'No'}
+Dimensions: ${spriteImage ? `${spriteImage.width}x${spriteImage.height}` : 'N/A'}</pre>
+            `;
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        // Start animation
+        animate();
+        
+        // Initial sprite info
+        updateSpriteInfo();
+    </script>
+</body>
+</html>

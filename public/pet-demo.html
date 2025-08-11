@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet System Demo - Type Trainer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .demo-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #3730a3;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 2px solid #e0e7ff;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+        
+        .demo-section h2 {
+            color: #3730a3;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        
+        .evolution-stages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .evolution-stage {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #fbbf24;
+            text-align: center;
+        }
+        
+        .evolution-stage h4 {
+            color: #92400e;
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+        
+        .evolution-stage p {
+            color: #92400e;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .code-example {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 5px;
+            font-weight: 500;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #92400e;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #fbbf24;
+            margin: 20px 0;
+        }
+        
+        .success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #10b981;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🐾 Pet System Demo</h1>
+        
+        <div class="demo-section">
+            <h2>🎯 What is the Pet System?</h2>
+            <p>
+                The Pet System is a Tamagotchi-like experience integrated into your typing trainer! 
+                As you complete typing tests, your pet will grow, evolve, and respond to your performance.
+            </p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🌟 8 Evolution Stages</h3>
+                    <p>Your pet starts as an egg and evolves through 8 unique stages, each with different appearances and abilities.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🎮 Interactive Features</h3>
+                    <p>Feed your pet, play with it, and watch it respond to your typing performance with animations.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📊 Performance Tracking</h3>
+                    <p>Your pet's stats are directly tied to your typing performance - accuracy, speed, and consistency matter!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🎨 Canvas-Based Animation</h3>
+                    <p>Built with HTML5 Canvas for smooth, sprite-based animations with walking, idle, happy, and sad states.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🔄 Evolution Stages</h2>
+            <div class="evolution-stages">
+                <div class="evolution-stage">
+                    <h4>🥚 Egg</h4>
+                    <p>Starting point</p>
+                </div>
+                <div class="evolution-stage">
+                    <h4>👶 Baby</h4>
+                    <p>Level 2, 100 exp</p>
+                </div>
+                <div class="evolution-stage">
+                    <h4>🧒 Child</h4>
+                    <p>Level 3, 250 exp</p>
+                </div>
+                <div class="evolution-stage">
+                    <h4>👧 Teen</h4>
+                    <p>Level 4, 400 exp</p>
+                </div>
+                <div class="evolution-stage">
+                    <h4>👨‍🎓 Young Adult</h4>
+                    <p>Level 6, 600 exp</p>
+                </div>
+                <div class="evolution-stage">
+                    <h4>👨‍💼 Adult</h4>
+                    <p>Level 7, 750 exp</p>
+                </div>
+                <div class="evolution-stage">
+                    <h4>👨‍🏫 Master</h4>
+                    <p>Level 9, 900 exp</p>
+                </div>
+                <div class="evolution-stage">
+                    <h4>👑 Legend</h4>
+                    <p>Level 10, 1000 exp</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🎮 How It Works</h2>
+            <p>
+                The pet system integrates seamlessly with your typing tests:
+            </p>
+            
+            <div class="code-example">
+// When you complete a typing test:
+const result = {
+  wpm: 60,
+  accuracy: 98,
+  errors: 2,
+  // ... other test data
+};
+
+// Your pet gains experience and happiness
+petManager.updatePetFromTestResult(result);
+
+// Good performance = happy pet + experience gain
+// Poor performance = sad pet + slower growth
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📈 Experience Gain</h3>
+                    <p>
+                        <span class="highlight">WPM Bonus:</span> Up to 20 exp based on speed<br>
+                        <span class="highlight">Accuracy Bonus:</span> 5-15 exp based on accuracy<br>
+                        <span class="highlight">Level Up:</span> Every 100 experience points
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>😊 Happiness System</h3>
+                    <p>
+                        <span class="highlight">High Performance:</span> +5 happiness<br>
+                        <span class="highlight">Low Performance:</span> -3 happiness<br>
+                        <span class="highlight">Feeding:</span> +5 happiness<br>
+                        <span class="highlight">Playing:</span> +10 happiness
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🎨 Animation System</h2>
+            <p>
+                Each pet evolution stage has unique sprite sheets with multiple animation states:
+            </p>
+            
+            <div class="code-example">
+// Animation states for each pet:
+const animations = {
+  idle: [0, 1, 2, 3],        // Gentle breathing/movement
+  walkLeft: [4, 5, 6, 7],    // Walking left animation
+  walkRight: [8, 9, 10, 11], // Walking right animation
+  happy: [12, 13, 14, 15],   // Happy/excited animation
+  sad: [16, 17, 18, 19]      // Sad/disappointed animation
+};
+            </div>
+            
+            <div class="warning">
+                <strong>⚠️ Note:</strong> You'll need to create or obtain sprite sheets for each evolution stage. 
+                Check the <code>/public/sprites/README.md</code> file for detailed requirements and examples.
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🚀 Getting Started</h2>
+            <p>
+                To use the pet system in your typing trainer:
+            </p>
+            
+            <ol>
+                <li><strong>Import the Pet component:</strong> <code>import { Pet } from './components/Pet';</code></li>
+                <li><strong>Add it to your page:</strong> <code>&lt;Pet onPetInteraction={handleInteraction} /&gt;</code></li>
+                <li><strong>Update pet after tests:</strong> <code>petManager.updatePetFromTestResult(result);</code></li>
+                <li><strong>Create sprite sheets:</strong> Follow the README guidelines in the sprites folder</li>
+            </ol>
+            
+            <div class="success">
+                <strong>✅ Success!</strong> The pet system is now fully integrated into your typing trainer! 
+                Your users will have a fun, engaging way to track their progress and stay motivated.
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h2>🔧 Technical Details</h2>
+            <p>
+                The pet system is built with:
+            </p>
+            
+            <ul>
+                <li><strong>TypeScript:</strong> Fully typed interfaces and classes</li>
+                <li><strong>Canvas API:</strong> Hardware-accelerated sprite rendering</li>
+                <li><strong>Local Storage:</strong> Persistent pet state across sessions</li>
+                <li><strong>Singleton Pattern:</strong> Centralized pet management</li>
+                <li><strong>Responsive Design:</strong> Works on all screen sizes</li>
+                <li><strong>Animation Loop:</strong> Smooth 60fps animations</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

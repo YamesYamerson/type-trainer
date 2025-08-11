@@ -1,0 +1,162 @@
+[
+  {
+    "stage": 0,
+    "name": "Egg",
+    "spriteSheet": "/sprites/egg-sheet.png",
+    "frameWidth": 32,
+    "frameHeight": 32,
+    "animationFrames": {
+      "idle": [0, 1, 2, 3],
+      "walkLeft": [0, 1, 2, 3],
+      "walkRight": [0, 1, 2, 3],
+      "happy": [4, 5, 6, 7],
+      "sad": [8, 9, 10, 11]
+    },
+    "scale": 1.0,
+    "requirements": {
+      "level": 1,
+      "experience": 0,
+      "happiness": 0
+    }
+  },
+  {
+    "stage": 1,
+    "name": "Baby",
+    "spriteSheet": "/sprites/baby-sheet.png",
+    "frameWidth": 32,
+    "frameHeight": 32,
+    "animationFrames": {
+      "idle": [0, 1, 2, 3],
+      "walkLeft": [4, 5, 6, 7],
+      "walkRight": [8, 9, 10, 11],
+      "happy": [12, 13, 14, 15],
+      "sad": [16, 17, 18, 19]
+    },
+    "scale": 1.2,
+    "requirements": {
+      "level": 2,
+      "experience": 100,
+      "happiness": 50
+    }
+  },
+  {
+    "stage": 2,
+    "name": "Child",
+    "spriteSheet": "/sprites/child-sheet.png",
+    "frameWidth": 40,
+    "frameHeight": 40,
+    "animationFrames": {
+      "idle": [0, 1, 2, 3],
+      "walkLeft": [4, 5, 6, 7],
+      "walkRight": [8, 9, 10, 11],
+      "happy": [12, 13, 14, 15],
+      "sad": [16, 17, 18, 19]
+    },
+    "scale": 1.4,
+    "requirements": {
+      "level": 3,
+      "experience": 250,
+      "happiness": 60
+    }
+  },
+  {
+    "stage": 3,
+    "name": "Teen",
+    "spriteSheet": "/sprites/teen-sheet.png",
+    "frameWidth": 48,
+    "frameHeight": 48,
+    "animationFrames": {
+      "idle": [0, 1, 2, 3],
+      "walkLeft": [4, 5, 6, 7],
+      "walkRight": [8, 9, 10, 11],
+      "happy": [12, 13, 14, 15],
+      "sad": [16, 17, 18, 19]
+    },
+    "scale": 1.6,
+    "requirements": {
+      "level": 4,
+      "experience": 400,
+      "happiness": 70
+    }
+  },
+  {
+    "stage": 4,
+    "name": "Young Adult",
+    "spriteSheet": "/sprites/young-adult-sheet.png",
+    "frameWidth": 56,
+    "frameHeight": 56,
+    "animationFrames": {
+      "idle": [0, 1, 2, 3],
+      "walkLeft": [4, 5, 6, 7],
+      "walkRight": [8, 9, 10, 11],
+      "happy": [12, 13, 14, 15],
+      "sad": [16, 17, 18, 19]
+    },
+    "scale": 1.8,
+    "requirements": {
+      "level": 6,
+      "experience": 600,
+      "happiness": 80
+    }
+  },
+  {
+    "stage": 5,
+    "name": "Adult",
+    "spriteSheet": "/sprites/adult-sheet.png",
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "animationFrames": {
+      "idle": [0, 1, 2, 3],
+      "walkLeft": [4, 5, 6, 7],
+      "walkRight": [8, 9, 10, 11],
+      "happy": [12, 13, 14, 15],
+      "sad": [16, 17, 18, 19]
+    },
+    "scale": 2.0,
+    "requirements": {
+      "level": 7,
+      "experience": 750,
+      "happiness": 85
+    }
+  },
+  {
+    "stage": 6,
+    "name": "Master",
+    "spriteSheet": "/sprites/master-sheet.png",
+    "frameWidth": 72,
+    "frameHeight": 72,
+    "animationFrames": {
+      "idle": [0, 1, 2, 3],
+      "walkLeft": [4, 5, 6, 7],
+      "walkRight": [8, 9, 10, 11],
+      "happy": [12, 13, 14, 15],
+      "sad": [16, 17, 18, 19]
+    },
+    "scale": 2.2,
+    "requirements": {
+      "level": 9,
+      "experience": 900,
+      "happiness": 90
+    }
+  },
+  {
+    "stage": 7,
+    "name": "Legend",
+    "spriteSheet": "/sprites/legend-sheet.png",
+    "frameWidth": 80,
+    "frameHeight": 80,
+    "animationFrames": {
+      "idle": [0, 1, 2, 3],
+      "walkLeft": [4, 5, 6, 7],
+      "walkRight": [8, 9, 10, 11],
+      "happy": [12, 13, 14, 15],
+      "sad": [16, 17, 18, 19]
+    },
+    "scale": 2.5,
+    "requirements": {
+      "level": 10,
+      "experience": 1000,
+      "happiness": 95
+    }
+  }
+]
