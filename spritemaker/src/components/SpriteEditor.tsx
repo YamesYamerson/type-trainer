@@ -1,0 +1,282 @@
+import React, { useRef, useEffect, useState, useCallback } from 'react'
+import { Tool, Color, Layer, PixelData, GridSettings } from '../types'
+
+interface SpriteEditorProps {
+  selectedTool: Tool
+  primaryColor: Color
+  secondaryColor: Color
+  brushSize: number
+  canvasSize: number
+  layers: Layer[]
+  onCanvasRef?: (ref: React.RefObject<HTMLCanvasElement>) => void
+  gridSettings: GridSettings
+}
+
+const SpriteEditor: React.FC<SpriteEditorProps> = ({
+  selectedTool,
+  primaryColor,
+  canvasSize,
+  layers,
+  onCanvasRef,
+  gridSettings
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [isDrawing, setIsDrawing] = useState(false)
+  const [pixels, setPixels] = useState<Map<string, PixelData>>(new Map())
+  const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null)
+
+  const activeLayer = layers.find(l => l.visible && l.active)
+  const pixelSize = Math.max(1, Math.floor(512 / canvasSize))
+
+  // Expose canvas ref to parent
+  useEffect(() => {
+    if (onCanvasRef) {
+      onCanvasRef(canvasRef)
+    }
+  }, [onCanvasRef])
+
+  // Initialize canvas when size changes
+  useEffect(() => {
+    setPixels(new Map())
+    setLastPos(null)
+  }, [canvasSize])
+
+  // Draw function
+  const drawPixel = useCallback((x: number, y: number, color: Color) => {
+    if (!activeLayer) return
+
+    const key = `${x},${y}`
+    const newPixels = new Map(pixels)
+    
+    if (color === 'transparent') {
+      newPixels.delete(key)
+    } else {
+      newPixels.set(key, {
+        x,
+        y,
+        color,
+        layerId: activeLayer.id
+      })
+    }
+    
+    setPixels(newPixels)
+  }, [pixels, activeLayer])
+
+  // Flood fill algorithm
+  const floodFill = useCallback((startX: number, startY: number, targetColor: Color, replacementColor: Color) => {
+    if (targetColor === replacementColor) return
+    
+    const stack: [number, number][] = [[startX, startY]]
+    const visited = new Set<string>()
+    
+    while (stack.length > 0) {
+      const [x, y] = stack.pop()!
+      const key = `${x},${y}`
+      
+      if (visited.has(key)) continue
+      visited.add(key)
+      
+      const currentPixel = pixels.get(key)
+      if (!currentPixel || currentPixel.color !== targetColor) continue
+      
+      drawPixel(x, y, replacementColor)
+      
+      // Add neighbors
+      const neighbors = [
+        [x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]
+      ]
+      
+      for (const [nx, ny] of neighbors) {
+        if (nx >= 0 && nx < canvasSize && ny >= 0 && ny < canvasSize) {
+          stack.push([nx, ny])
+        }
+      }
+    }
+  }, [pixels, drawPixel, canvasSize])
+
+  // Get color at position
+  const getColorAt = useCallback((x: number, y: number): Color => {
+    const key = `${x},${y}`
+    const pixel = pixels.get(key)
+    return pixel ? pixel.color : 'transparent'
+  }, [pixels])
+
+  // Handle mouse events
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!activeLayer) return
+    
+    const rect = canvasRef.current!.getBoundingClientRect()
+    const x = Math.floor((e.clientX - rect.left) / pixelSize)
+    const y = Math.floor((e.clientY - rect.top) / pixelSize)
+    
+    if (x < 0 || x >= canvasSize || y < 0 || y >= canvasSize) return
+    
+    setIsDrawing(true)
+    setLastPos({ x, y })
+    
+    switch (selectedTool) {
+      case 'pencil':
+        drawPixel(x, y, primaryColor)
+        break
+      case 'eraser':
+        drawPixel(x, y, 'transparent')
+        break
+      case 'fill':
+        const targetColor = getColorAt(x, y)
+        floodFill(x, y, targetColor, primaryColor)
+        break
+      case 'eyedropper':
+        const color = getColorAt(x, y)
+        if (color !== 'transparent') {
+          // Update primary color (you might want to add a callback for this)
+        }
+        break
+    }
+  }
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || !lastPos || !activeLayer) return
+    
+    const rect = canvasRef.current!.getBoundingClientRect()
+    const x = Math.floor((e.clientX - rect.left) / pixelSize)
+    const y = Math.floor((e.clientY - rect.top) / pixelSize)
+    
+    if (x < 0 || x >= canvasSize || y < 0 || y >= canvasSize) return
+    
+    if (selectedTool === 'pencil' || selectedTool === 'eraser') {
+      // Simple line drawing between last position and current
+      const dx = Math.abs(x - lastPos.x)
+      const dy = Math.abs(y - lastPos.y)
+      const sx = lastPos.x < x ? 1 : -1
+      const sy = lastPos.y < y ? 1 : -1
+      let err = dx - dy
+      
+      let currentX = lastPos.x
+      let currentY = lastPos.y
+      
+      while (true) {
+        if (selectedTool === 'pencil') {
+          drawPixel(currentX, currentY, primaryColor)
+        } else if (selectedTool === 'eraser') {
+          drawPixel(currentX, currentY, 'transparent')
+        }
+        
+        if (currentX === x && currentY === y) break
+        
+        const e2 = 2 * err
+        if (e2 > -dy) {
+          err -= dy
+          currentX += sx
+        }
+        if (e2 < dx) {
+          err += dx
+          currentY += sy
+        }
+      }
+    }
+    
+    setLastPos({ x, y })
+  }
+
+  const handleMouseUp = () => {
+    setIsDrawing(false)
+    setLastPos(null)
+  }
+
+  // Render canvas
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    
+    // Debug logging
+    console.log('SpriteEditor render:', {
+      canvasSize,
+      pixelSize,
+      canvasWidth: canvas.width,
+      canvasHeight: canvas.height,
+      checkerSize: 16 * pixelSize
+    })
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    
+    // Draw checkered transparent background aligned with pixel grid
+    const checkerSize = 16 * pixelSize // Each checker represents a 16x16 pixel area
+    console.log('Drawing checkered background with checker size:', checkerSize)
+    
+    for (let y = 0; y < canvas.height; y += checkerSize) {
+      for (let x = 0; x < canvas.width; x += checkerSize) {
+        const isEvenRow = Math.floor(y / checkerSize) % 2 === 0
+        const isEvenCol = Math.floor(x / checkerSize) % 2 === 0
+        const isLight = (isEvenRow && isEvenCol) || (!isEvenRow && !isEvenCol)
+        
+        // Calculate actual checker size for this position (handles partial checkers at edges)
+        const actualWidth = Math.min(checkerSize, canvas.width - x)
+        const actualHeight = Math.min(checkerSize, canvas.height - y)
+        
+        ctx.fillStyle = isLight ? '#e0e0e0' : '#c0c0c0'
+        ctx.fillRect(x, y, actualWidth, actualHeight)
+      }
+    }
+    
+    // Draw grid (only if enabled)
+    if (gridSettings.visible) {
+      ctx.strokeStyle = gridSettings.color
+      ctx.globalAlpha = gridSettings.opacity
+      ctx.lineWidth = 1
+      
+      for (let i = 0; i <= canvasSize; i++) {
+        const pos = i * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(pos, 0)
+        ctx.lineTo(pos, canvas.height)
+        ctx.stroke()
+        
+        ctx.beginPath()
+        ctx.moveTo(0, pos)
+        ctx.lineTo(canvas.width, pos)
+        ctx.stroke()
+      }
+      
+      // Reset global alpha
+      ctx.globalAlpha = 1.0
+    }
+    
+    // Draw pixels
+    pixels.forEach((pixel) => {
+      const layer = layers.find(l => l.id === pixel.layerId)
+      if (layer && layer.visible) {
+        ctx.fillStyle = pixel.color
+        ctx.fillRect(
+          pixel.x * pixelSize,
+          pixel.y * pixelSize,
+          pixelSize,
+          pixelSize
+        )
+      }
+    })
+  }, [pixels, layers, canvasSize, pixelSize, gridSettings])
+
+  return (
+    <div className="canvas-container">
+      <canvas
+        ref={canvasRef}
+        width={canvasSize * pixelSize}
+        height={canvasSize * pixelSize}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        style={{
+          cursor: 'crosshair',
+          backgroundColor: 'transparent'
+        }}
+      />
+    </div>
+  )
+}
+
+export default SpriteEditor
