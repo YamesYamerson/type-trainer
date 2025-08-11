@@ -5,6 +5,34 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const config = require('./config');
 
+// Smart port selection utility
+const findAvailablePort = async (startPort) => {
+  const net = require('net');
+  
+  const isPortAvailable = (port) => {
+    return new Promise((resolve) => {
+      const server = net.createServer();
+      server.listen(port, () => {
+        server.once('close', () => resolve(true));
+        server.close();
+      });
+      server.on('error', () => resolve(false));
+    });
+  };
+
+  let port = startPort;
+  const maxAttempts = 10; // Try up to 10 different ports
+  
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    if (await isPortAvailable(port)) {
+      return port;
+    }
+    port++; // Try next port
+  }
+  
+  throw new Error(`Could not find available port after ${maxAttempts} attempts`);
+};
+
 const app = express();
 
 // Middleware
@@ -175,13 +203,28 @@ app.get('/api/db-info', (req, res) => {
   });
 });
 
-// Start server
-app.listen(config.port, () => {
-  console.log(`🚀 Server running on http://localhost:${config.port}`);
-  console.log('📊 Database endpoints:');
-  console.log('  GET  /api/users - List all users');
-  console.log('  GET  /api/users/:id/results - Get user results');
-  console.log('  POST /api/results - Submit typing result');
-  console.log('  GET  /api/db-info - Database information');
-  console.log('  POST /api/clear-stats - Clear all results');
-});
+// Start server with smart port selection
+const startServer = async () => {
+  try {
+    const actualPort = await findAvailablePort(config.port);
+    
+    app.listen(actualPort, () => {
+      console.log(`🚀 Server running on http://localhost:${actualPort}`);
+      console.log(`📝 Configured port: ${config.port}, Actual port: ${actualPort}`);
+      console.log('📊 Database endpoints:');
+      console.log('  GET  /api/users - List all users');
+      console.log('  GET  /api/users/:id/results - Get user results');
+      console.log('  POST /api/results - Submit typing result');
+      console.log('  GET  /api/db-info - Database information');
+      console.log('  POST /api/clear-stats - Clear all results');
+      
+      // Export the actual port for potential use by other processes
+      process.env.ACTUAL_SERVER_PORT = actualPort.toString();
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+startServer();

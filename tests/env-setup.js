@@ -4,7 +4,7 @@
 
 // Set up environment variables for tests
 process.env.NODE_ENV = 'test';
-process.env.VITE_API_BASE_URL = 'http://localhost:3001/api';
+process.env.VITE_API_BASE_URL = 'http://localhost:3002/api';
 process.env.VITE_APP_NAME = 'Type Trainer';
 process.env.VITE_APP_VERSION = '1.0.0';
 

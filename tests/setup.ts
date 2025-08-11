@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 
 // Set up environment variables for tests
 process.env.NODE_ENV = 'test';
-process.env.VITE_API_BASE_URL = 'http://localhost:3001/api';
+process.env.VITE_API_BASE_URL = 'http://localhost:3002/api';
 process.env.VITE_APP_NAME = 'Type Trainer';
 process.env.VITE_APP_VERSION = '1.0.0';
 
@@ -131,7 +131,7 @@ Object.defineProperty(global, 'localStorage', {
 // Mock environment config to avoid import.meta issues
 jest.mock('../src/config/environment', () => ({
   config: {
-    apiBaseUrl: 'http://localhost:3001/api',
+    apiBaseUrl: 'http://localhost:3002/api',
     appName: 'Type Trainer',
     appVersion: '1.0.0',
     isDevelopment: true,

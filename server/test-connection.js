@@ -1,9 +1,43 @@
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 const fetch = require('node-fetch');
 
-const BASE_URL = 'http://localhost:3001/api';
+// Smart port detection utility
+const detectBackendPort = async () => {
+  const basePorts = [3001, 3002, 3003, 3004, 3005];
+  
+  for (const port of basePorts) {
+    try {
+      const response = await fetch(`http://localhost:${port}/api/db-info`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(1000) // 1 second timeout
+      });
+      if (response.ok) {
+        return port;
+      }
+    } catch (error) {
+      // Port not available or server not responding, try next
+      continue;
+    }
+  }
+  
+  throw new Error('Could not detect backend server on any common port');
+};
+
+let BASE_URL;
 
 async function testConnection() {
-  console.log('🔍 Testing database connection and API endpoints...\n');
+  try {
+    // Detect backend port first
+    const detectedPort = await detectBackendPort();
+    BASE_URL = `http://localhost:${detectedPort}/api`;
+    console.log(`🔍 Backend detected on port ${detectedPort}`);
+    console.log('🔍 Testing database connection and API endpoints...\n');
+  } catch (error) {
+    console.error('❌ Could not detect backend server:', error.message);
+    console.log('💡 Make sure the server is running first');
+    process.exit(1);
+  }
 
   try {
     // Test database info

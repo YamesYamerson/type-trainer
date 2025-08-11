@@ -68,7 +68,7 @@ export const TestPage: React.FC = () => {
 
   if (!currentTest && !testResult) {
     return (
-      <div className="max-w-6xl mx-auto">
+      <div className="flex-1 max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">
             Typing Practice
@@ -156,7 +156,7 @@ export const TestPage: React.FC = () => {
 
   if (testResult) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div className="flex-1 max-w-4xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
             Test Complete!
@@ -206,7 +206,7 @@ export const TestPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="flex-1 max-w-6xl mx-auto">
       {currentTest && (
         <ErrorBoundary>
           <TypingTestEngine

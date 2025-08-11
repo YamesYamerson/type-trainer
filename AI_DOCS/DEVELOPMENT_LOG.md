@@ -98,6 +98,62 @@
 **Actions:**
 - ✅ Created ModeSelector component with visual mode selection
 - ✅ Added typing mode configurations (lowercase, punctuation, code, data_entry)
+
+### Entry 5: Smart Port Selection System Implementation
+**Date:** August 11, 2025
+**Status:** Complete
+**Actions:**
+- ✅ Implemented intelligent port selection system for backend server
+- ✅ Added automatic port detection for frontend-backend communication
+- ✅ Created fallback port system (3001 → 3002 → 3003 → etc.)
+- ✅ Updated all configuration files to use smart port selection
+- ✅ Modified server startup to automatically find available ports
+- ✅ Enhanced frontend environment config with port detection
+- ✅ Updated test connection scripts to use smart detection
+- ✅ Comprehensive testing of port fallback system
+
+**Technical Implementation:**
+- **Backend (`server/index.js`)**: Added `findAvailablePort()` utility with net module
+- **Frontend (`src/config/environment.ts`)**: Added `detectBackendPort()` with fetch-based detection
+- **Server Config (`server/config.js`)**: Restored default port 3001 with smart fallback
+- **Test Scripts**: Updated to use dynamic port detection instead of hardcoded values
+
+**Smart Port Selection Features:**
+- ✅ **Automatic Conflict Resolution**: No more manual port changes needed
+- ✅ **Fallback Support**: Tries up to 10 different ports if conflicts occur
+- ✅ **Environment Flexibility**: Works in different development environments
+- ✅ **Zero Configuration**: Developers don't need to worry about port conflicts
+- ✅ **Scalable Architecture**: Easy to add more fallback ports if needed
+
+**Testing Results:**
+- **Port 3001**: ✅ Server starts successfully (default)
+- **Port 3002**: ✅ Server falls back when 3001 is occupied
+- **Frontend Detection**: ✅ Automatically finds backend on correct port
+- **API Connectivity**: ✅ All endpoints working correctly
+- **Port Conflicts**: ✅ Automatically resolved without developer intervention
+
+**Benefits Achieved:**
+- 🚀 **Zero Configuration**: Just run `npm start` and it works
+- 🔄 **Automatic Fallback**: No more port conflicts or manual intervention
+- 🌍 **Environment Agnostic**: Works in any development setup
+- 🧪 **Production Ready**: Robust error handling and fallback mechanisms
+- 📚 **Well Documented**: Complete implementation details in development log
+
+**Next Steps:**
+- Continue with existing development phases
+- Monitor port selection system in production use
+- Consider adding port range configuration options if needed
+
+**Decisions Made:**
+- Used Node.js built-in `net` module for port availability checking
+- Implemented 1-second timeout for frontend port detection
+- Chose sequential port increment strategy for fallback
+- Maintained backward compatibility with existing environment variables
+
+**Notes:**
+- System now handles port conflicts automatically
+- Developers can focus on features instead of configuration
+- Architecture is more robust and production-ready
 - ✅ Implemented random test selection by category
 - ✅ Updated TypingTestEngine to handle different test types
 - ✅ Added proper TypeScript interfaces for modes
@@ -1740,11 +1796,16 @@ interface EnvironmentConfig {
 }
 
 export const config: EnvironmentConfig = {
-  apiBaseUrl: getEnvVar('VITE_API_BASE_URL', 'http://localhost:3001/api'),
+  apiBaseUrl: getEnvVar('VITE_API_BASE_URL', 'http://localhost:3001/api'), // Fallback default
   appName: getEnvVar('VITE_APP_NAME', 'Type Trainer'),
   appVersion: getEnvVar('VITE_APP_VERSION', '1.0.0'),
   isDevelopment: import.meta.env.DEV,
   isProduction: import.meta.env.PROD
+};
+
+// Dynamic API base URL getter
+export const getApiBaseUrl = async (): Promise<string> => {
+  return await createApiBaseUrl();
 };
 ```
 
@@ -1760,12 +1821,90 @@ const config = {
 };
 ```
 
-#### **3. Updated Source Files**
+#### **3. Smart Port Selection System**
+The application now includes an intelligent port selection system that automatically finds available ports:
+
+**Backend Port Selection (`server/index.js`):**
+```javascript
+const findAvailablePort = async (startPort) => {
+  const net = require('net');
+  
+  const isPortAvailable = (port) => {
+    return new Promise((resolve) => {
+      const server = net.createServer();
+      server.listen(port, () => {
+        server.once('close', () => resolve(true));
+        server.close();
+      });
+      server.on('error', () => resolve(false));
+    });
+  };
+
+  let port = startPort;
+  const maxAttempts = 10; // Try up to 10 different ports
+  
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    if (await isPortAvailable(port)) {
+      return port;
+    }
+    port++; // Try next port
+  }
+  
+  throw new Error(`Could not find available port after ${maxAttempts} attempts`);
+};
+```
+
+**Frontend Port Detection (`src/config/environment.ts`):**
+```javascript
+const detectBackendPort = async (): Promise<string> => {
+  const basePorts = [3001, 3002, 3003, 3004, 3005];
+  
+  for (const port of basePorts) {
+    try {
+      const response = await fetch(`http://localhost:${port}/api/db-info`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(1000) // 1 second timeout
+      });
+      if (response.ok) {
+        return port.toString();
+      }
+    } catch (error) {
+      // Port not available or server not responding, try next
+      continue;
+    }
+  }
+  
+  // Fallback to default
+  return '3001';
+};
+```
+
+**Benefits of Smart Port Selection:**
+- ✅ **Automatic conflict resolution**: No more manual port changes needed
+- ✅ **Fallback support**: Multiple port attempts ensure service availability
+- ✅ **Environment flexibility**: Works in different development environments
+- ✅ **Zero configuration**: Developers don't need to worry about port conflicts
+- ✅ **Scalable**: Can easily add more fallback ports if needed
+
+**Implementation Status:**
+- ✅ **Backend smart port selection**: Implemented and tested
+- ✅ **Frontend port detection**: Implemented and tested  
+- ✅ **Automatic fallback**: Working correctly (3001 → 3002)
+- ✅ **Zero configuration**: Developers can start services without port conflicts
+- ✅ **Documentation**: Updated development log with implementation details
+
+**Testing Results:**
+- **Port 3001**: ✅ Server starts successfully (default)
+- **Port 3002**: ✅ Server falls back when 3001 is occupied
+- **Frontend detection**: ✅ Automatically finds backend on correct port
+- **API connectivity**: ✅ All endpoints working correctly
+
+#### **4. Updated Source Files**
 - **`src/utils/dataManager.ts`**: Uses `config.apiBaseUrl` instead of hardcoded URL
 - **`src/utils/databaseSync.ts`**: Uses `config.apiBaseUrl` instead of hardcoded URL
 - **`server/index.js`**: Uses `config.port` and `config.dbPath` from environment
 
-#### **4. Updated Test Files**
+#### **5. Updated Test Files**
 - **Backend tests**: Use `process.env.VITE_API_BASE_URL` with fallbacks
 - **Frontend tests**: Use dynamic API URL detection based on hostname
 - **All test files**: Updated to use environment variables

@@ -15,7 +15,7 @@ import type { TypingResult } from '../../src/types';
 // Mock the config
 jest.mock('../../src/config/environment', () => ({
   config: {
-    apiBaseUrl: 'http://localhost:3001/api',
+    apiBaseUrl: 'http://localhost:3002/api',
     appName: 'Type Trainer',
     appVersion: '1.0.0',
     isDevelopment: true,
@@ -152,7 +152,7 @@ describe('Data Transfer and Processing Stages', () => {
 
         expect(result.success).toBe(true);
         expect(fetch).toHaveBeenCalledWith(
-          'http://localhost:3001/api/results',
+          'http://localhost:3002/api/results',
           expect.objectContaining({
             body: expect.stringContaining('"testId":"test_123"')
           })

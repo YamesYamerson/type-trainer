@@ -24,7 +24,7 @@ import {
 // Mock the config
 jest.mock('../../src/config/environment', () => ({
   config: {
-    apiBaseUrl: 'http://localhost:3001/api',
+    apiBaseUrl: 'http://localhost:3002/api',
     appName: 'Type Trainer',
     appVersion: '1.0.0',
     isDevelopment: true,
@@ -88,7 +88,7 @@ describe('DataManager', () => {
       expect(result.success).toBe(true);
       expect(result.message).toBe('Result saved to database and local storage');
       expect(fetch).toHaveBeenCalledWith(
-        'http://localhost:3001/api/results',
+        'http://localhost:3002/api/results',
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

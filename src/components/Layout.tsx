@@ -76,11 +76,11 @@ export const Layout: React.FC<LayoutProps> = ({
         </header>
       )}
       
-      <main className="flex-1">
+      <main className="flex-1 flex flex-col">
         {children}
       </main>
       
-      <footer className="bg-white border-t border-gray-200 flex-shrink-0">
+      <footer className="bg-white border-t border-gray-200 flex-shrink-0 mt-auto">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="text-center text-sm text-gray-500">
             <p>Built with React, TypeScript, and Tailwind CSS</p>

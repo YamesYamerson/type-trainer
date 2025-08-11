@@ -1047,5 +1047,208 @@
     "subcategory": "bash",
     "language": "bash",
     "content": "#!/bin/bash\n\n# Function to create a development environment\nsetup_dev_env() {\n    local project_name=\"$1\"\n    local project_type=\"$2\"\n    \n    if [ -z \"$project_name\" ] || [ -z \"$project_type\" ]; then\n        echo \"Usage: $0 <project_name> <project_type>\"\n        echo \"Project types: node, python, go, rust\"\n        return 1\n    fi\n    \n    # Create project directory\n    mkdir -p \"$project_name\"\n    cd \"$project_name\"\n    \n    case \"$project_type\" in\n        \"node\")\n            npm init -y\n            echo \"node_modules/\" > .gitignore\n            echo \"# $project_name\" > README.md\n            echo \"Project setup complete for Node.js\"\n            ;;\n        \"python\")\n            python3 -m venv venv\n            echo \"venv/\" > .gitignore\n            echo \"# $project_name\" > README.md\n            echo \"Project setup complete for Python\"\n            ;;\n        \"go\")\n            go mod init \"$project_name\"\n            echo \"# $project_name\" > README.md\n            echo \"Project setup complete for Go\"\n            ;;\n        \"rust\")\n            cargo init --name \"$project_name\"\n            echo \"# $project_name\" > README.md\n            echo \"Project setup complete for Rust\"\n            ;;\n        *)\n            echo \"Unknown project type: $project_type\"\n            return 1\n            ;;\n    esac\n}\n\n# Usage\nsetup_dev_env \"my-project\" \"node\""
+  },
+  {
+    "id": "math_basic_arithmetic_1",
+    "category": "math",
+    "subcategory": "basic_arithmetic",
+    "content": "2 + 3 = 5, 7 - 4 = 3, 6 × 8 = 48, 15 ÷ 3 = 5, 9 + 11 = 20, 25 - 7 = 18, 4 × 9 = 36, 32 ÷ 8 = 4",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_basic_arithmetic_2",
+    "category": "math",
+    "subcategory": "basic_arithmetic",
+    "content": "12 + 8 = 20, 19 - 6 = 13, 5 × 7 = 35, 24 ÷ 6 = 4, 16 + 14 = 30, 31 - 9 = 22, 8 × 6 = 48, 45 ÷ 9 = 5",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_multiplication_tables_1",
+    "category": "math",
+    "subcategory": "multiplication_tables",
+    "content": "2 × 1 = 2, 2 × 2 = 4, 2 × 3 = 6, 2 × 4 = 8, 2 × 5 = 10, 2 × 6 = 12, 2 × 7 = 14, 2 × 8 = 16, 2 × 9 = 18, 2 × 10 = 20",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_multiplication_tables_2",
+    "category": "math",
+    "subcategory": "multiplication_tables",
+    "content": "3 × 1 = 3, 3 × 2 = 6, 3 × 3 = 9, 3 × 4 = 12, 3 × 5 = 15, 3 × 6 = 18, 3 × 7 = 21, 3 × 8 = 24, 3 × 9 = 27, 3 × 10 = 30",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_multiplication_tables_3",
+    "category": "math",
+    "subcategory": "multiplication_tables",
+    "content": "5 × 1 = 5, 5 × 2 = 10, 5 × 3 = 15, 5 × 4 = 20, 5 × 5 = 25, 5 × 6 = 30, 5 × 7 = 35, 5 × 8 = 40, 5 × 9 = 45, 5 × 10 = 50",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_multiplication_tables_4",
+    "category": "math",
+    "subcategory": "multiplication_tables",
+    "content": "7 × 1 = 7, 7 × 2 = 14, 7 × 3 = 21, 7 × 4 = 28, 7 × 5 = 35, 7 × 6 = 42, 7 × 7 = 49, 7 × 8 = 56, 7 × 9 = 63, 7 × 10 = 70",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_multiplication_tables_5",
+    "category": "math",
+    "subcategory": "multiplication_tables",
+    "content": "9 × 1 = 9, 9 × 2 = 18, 9 × 3 = 27, 9 × 4 = 36, 9 × 5 = 45, 9 × 6 = 54, 9 × 7 = 63, 9 × 8 = 72, 9 × 9 = 81, 9 × 10 = 90",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_division_facts_1",
+    "category": "math",
+    "subcategory": "division_facts",
+    "content": "8 ÷ 2 = 4, 12 ÷ 3 = 4, 16 ÷ 4 = 4, 20 ÷ 5 = 4, 24 ÷ 6 = 4, 28 ÷ 7 = 4, 32 ÷ 8 = 4, 36 ÷ 9 = 4, 40 ÷ 10 = 4, 44 ÷ 11 = 4",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_division_facts_2",
+    "category": "math",
+    "subcategory": "division_facts",
+    "content": "15 ÷ 3 = 5, 20 ÷ 4 = 5, 25 ÷ 5 = 5, 30 ÷ 6 = 5, 35 ÷ 7 = 5, 40 ÷ 8 = 5, 45 ÷ 9 = 5, 50 ÷ 10 = 5, 55 ÷ 11 = 5, 60 ÷ 12 = 5",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_addition_facts_1",
+    "category": "math",
+    "subcategory": "addition_facts",
+    "content": "1 + 1 = 2, 2 + 2 = 4, 3 + 3 = 6, 4 + 4 = 8, 5 + 5 = 10, 6 + 6 = 12, 7 + 7 = 14, 8 + 8 = 16, 9 + 9 = 18, 10 + 10 = 20",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_addition_facts_2",
+    "category": "math",
+    "subcategory": "addition_facts",
+    "content": "11 + 11 = 22, 12 + 12 = 24, 13 + 13 = 26, 14 + 14 = 28, 15 + 15 = 30, 16 + 16 = 32, 17 + 17 = 34, 18 + 18 = 36, 19 + 19 = 38, 20 + 20 = 40",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_subtraction_facts_1",
+    "category": "math",
+    "subcategory": "subtraction_facts",
+    "content": "10 - 1 = 9, 10 - 2 = 8, 10 - 3 = 7, 10 - 4 = 6, 10 - 5 = 5, 10 - 6 = 4, 10 - 7 = 3, 10 - 8 = 2, 10 - 9 = 1, 10 - 10 = 0",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_subtraction_facts_2",
+    "category": "math",
+    "subcategory": "subtraction_facts",
+    "content": "20 - 1 = 19, 20 - 2 = 18, 20 - 3 = 17, 20 - 4 = 16, 20 - 5 = 15, 20 - 6 = 14, 20 - 7 = 13, 20 - 8 = 12, 20 - 9 = 11, 20 - 10 = 10",
+    "difficulty": "beginner"
+  },
+  {
+    "id": "math_mixed_operations_1",
+    "category": "math",
+    "subcategory": "mixed_operations",
+    "content": "5 + 3 × 2 = 11, 10 - 4 ÷ 2 = 8, 6 × 2 + 7 = 19, 15 ÷ 3 + 9 = 14, 8 + 6 - 3 = 11, 12 × 2 ÷ 4 = 6, 20 - 5 + 3 = 18, 16 ÷ 2 × 3 = 24",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_mixed_operations_2",
+    "category": "math",
+    "subcategory": "mixed_operations",
+    "content": "7 + 4 × 3 = 19, 18 - 6 ÷ 2 = 15, 9 × 2 + 5 = 23, 24 ÷ 4 + 8 = 14, 11 + 7 - 4 = 14, 15 × 3 ÷ 5 = 9, 25 - 8 + 6 = 23, 20 ÷ 5 × 4 = 16",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_fractions_1",
+    "category": "math",
+    "subcategory": "fractions",
+    "content": "1/2 + 1/2 = 1, 1/4 + 1/4 = 1/2, 1/3 + 1/3 = 2/3, 1/6 + 1/6 = 1/3, 2/5 + 3/5 = 1, 3/8 + 5/8 = 1, 1/10 + 9/10 = 1, 2/7 + 5/7 = 1",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_fractions_2",
+    "category": "math",
+    "subcategory": "fractions",
+    "content": "1/2 × 1/2 = 1/4, 1/3 × 1/3 = 1/9, 2/3 × 3/4 = 1/2, 1/5 × 5/6 = 1/6, 3/4 × 2/3 = 1/2, 2/5 × 5/8 = 1/4, 1/6 × 6/7 = 1/7, 4/9 × 3/8 = 1/6",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_decimals_1",
+    "category": "math",
+    "subcategory": "decimals",
+    "content": "0.5 + 0.5 = 1.0, 0.25 + 0.75 = 1.0, 0.3 + 0.7 = 1.0, 0.1 + 0.9 = 1.0, 0.6 + 0.4 = 1.0, 0.8 + 0.2 = 1.0, 0.45 + 0.55 = 1.0, 0.12 + 0.88 = 1.0",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_decimals_2",
+    "category": "math",
+    "subcategory": "decimals",
+    "content": "0.5 × 0.5 = 0.25, 0.2 × 0.3 = 0.06, 0.4 × 0.25 = 0.1, 0.6 × 0.5 = 0.3, 0.8 × 0.125 = 0.1, 0.3 × 0.4 = 0.12, 0.7 × 0.2 = 0.14, 0.9 × 0.1 = 0.09",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_percentages_1",
+    "category": "math",
+    "subcategory": "percentages",
+    "content": "50% of 100 = 50, 25% of 200 = 50, 10% of 500 = 50, 75% of 80 = 60, 20% of 150 = 30, 40% of 125 = 50, 60% of 100 = 60, 80% of 75 = 60",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_percentages_2",
+    "category": "math",
+    "subcategory": "percentages",
+    "content": "15% of 400 = 60, 35% of 200 = 70, 45% of 300 = 135, 55% of 180 = 99, 65% of 120 = 78, 85% of 160 = 136, 95% of 140 = 133, 5% of 1000 = 50",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_squares_roots_1",
+    "category": "math",
+    "subcategory": "squares_roots",
+    "content": "√1 = 1, √4 = 2, √9 = 3, √16 = 4, √25 = 5, √36 = 6, √49 = 7, √64 = 8, √81 = 9, √100 = 10, √121 = 11, √144 = 12",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_squares_roots_2",
+    "category": "math",
+    "subcategory": "squares_roots",
+    "content": "√169 = 13, √196 = 14, √225 = 15, √256 = 16, √289 = 17, √324 = 18, √361 = 19, √400 = 20, √441 = 21, √484 = 22, √529 = 23, √576 = 24",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_powers_1",
+    "category": "math",
+    "subcategory": "powers",
+    "content": "2² = 4, 3² = 9, 4² = 16, 5² = 25, 6² = 36, 7² = 49, 8² = 64, 9² = 81, 10² = 100, 11² = 121, 12² = 144, 13² = 169",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_powers_2",
+    "category": "math",
+    "subcategory": "powers",
+    "content": "2³ = 8, 3³ = 27, 4³ = 64, 5³ = 125, 6³ = 216, 7³ = 343, 8³ = 512, 9³ = 729, 10³ = 1000, 11³ = 1331, 12³ = 1728, 13³ = 2197",
+    "difficulty": "advanced"
+  },
+  {
+    "id": "math_algebra_basic_1",
+    "category": "math",
+    "subcategory": "algebra_basic",
+    "content": "x + 5 = 10, x = 5, 2x = 16, x = 8, 3x = 21, x = 7, x - 3 = 12, x = 15, 4x = 32, x = 8, x + 7 = 20, x = 13",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_algebra_basic_2",
+    "category": "math",
+    "subcategory": "algebra_basic",
+    "content": "x + 8 = 25, x = 17, 5x = 45, x = 9, x - 6 = 14, x = 20, 3x = 36, x = 12, x + 12 = 30, x = 18, 6x = 54, x = 9",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_geometry_basic_1",
+    "category": "math",
+    "subcategory": "geometry_basic",
+    "content": "area of square = side², area of rectangle = length × width, area of triangle = ½ × base × height, area of circle = π × radius², perimeter of square = 4 × side",
+    "difficulty": "intermediate"
+  },
+  {
+    "id": "math_geometry_basic_2",
+    "category": "math",
+    "subcategory": "geometry_basic",
+    "content": "perimeter of rectangle = 2 × (length + width), circumference of circle = 2 × π × radius, volume of cube = side³, volume of rectangular prism = length × width × height",
+    "difficulty": "intermediate"
   }
 ]

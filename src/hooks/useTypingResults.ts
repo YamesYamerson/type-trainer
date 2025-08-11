@@ -31,11 +31,8 @@ export const useTypingResults = () => {
   }, []);
 
   const addResult = async (result: TypingResult) => {
-    console.log('🔄 useTypingResults: addResult called with:', result);
     try {
-      console.log('🔄 useTypingResults: Calling DataManager.saveResult...');
       const saveResult = await DataManager.saveResult(result);
-      console.log('🔄 useTypingResults: DataManager.saveResult returned:', saveResult);
       setSyncStatus(saveResult.message);
       
       // Update local state
@@ -43,10 +40,8 @@ export const useTypingResults = () => {
         // Check for duplicates
         const exists = prev.some(r => r.hash === result.hash);
         if (exists) {
-          console.log('🔄 useTypingResults: Duplicate result found, not adding to state');
           return prev;
         }
-        console.log('🔄 useTypingResults: Adding result to local state');
         return [result, ...prev];
       });
       

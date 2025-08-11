@@ -95,7 +95,6 @@ export class DataManager {
 
       // Always try to save to database first for immediate persistence
       try {
-        console.log('🚀 Attempting to save result to database...');
         const response = await fetch(`${config.apiBaseUrl}/results`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -117,7 +116,6 @@ export class DataManager {
 
         if (response.ok) {
           savedToDatabase = true;
-          console.log('✅ Result saved to database successfully');
         } else {
           const errorText = await response.text();
           console.warn('⚠️ Database save failed with status:', response.status, 'Error:', errorText);
@@ -147,7 +145,7 @@ export class DataManager {
             };
             this.saveToLocalStorage(minimalResult);
             savedToLocal = true;
-            console.log('✅ Result saved to localStorage after retry with minimal data');
+            // Result saved to localStorage after retry with minimal data
           } catch (retryError) {
             console.warn('⚠️ localStorage retry also failed:', retryError);
             // If retry fails, mark as not saved locally
@@ -210,7 +208,7 @@ export class DataManager {
               hash: r.hash,
               sessionId: r.session_id
             }));
-            console.log(`✅ Loaded ${results.length} results from database`);
+            // Loaded results from database
           }
         } catch (error) {
           console.warn('⚠️ Could not load from database, using local storage:', error);
@@ -220,7 +218,7 @@ export class DataManager {
       // If no database results, use localStorage
       if (results.length === 0) {
         results = this.getLocalResults();
-        console.log(`✅ Loaded ${results.length} results from local storage`);
+        // Loaded results from local storage
       }
 
       // Sort by timestamp (newest first) and limit
