@@ -53,7 +53,12 @@ export const hsvToRgb = (h: number, s: number, v: number): Color => {
   const green = Math.round((g + m) * 255)
   const blue = Math.round((b + m) * 255)
   
-  return `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`
+  // Ensure values are within valid range (0-255)
+  const clampedRed = Math.max(0, Math.min(255, red))
+  const clampedGreen = Math.max(0, Math.min(255, green))
+  const clampedBlue = Math.max(0, Math.min(255, blue))
+  
+  return `#${clampedRed.toString(16).padStart(2, '0')}${clampedGreen.toString(16).padStart(2, '0')}${clampedBlue.toString(16).padStart(2, '0')}`
 }
 
 /**

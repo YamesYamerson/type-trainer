@@ -27,6 +27,7 @@ body {
   margin: 0 auto;
   padding: 2rem;
   padding-left: 240px;
+  padding-right: 240px;
   text-align: center;
   width: 100%;
 }
@@ -137,13 +138,13 @@ body {
 
 .layer-panel {
   position: fixed;
-  left: 20px;
+  right: 20px;
   top: 20px;
   background: #333;
   border: 1px solid #555;
   border-radius: 4px;
   padding: 15px;
-  min-width: 200px;
+  width: 200px;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
 }

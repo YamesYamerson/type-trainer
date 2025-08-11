@@ -25,13 +25,13 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ canvasRef, canvasSize }) => {
   return (
     <div style={{
       position: 'fixed',
-      left: '20px',
+      right: '20px',
       top: '280px',
       background: '#333',
       border: '1px solid #555',
       borderRadius: '4px',
       padding: '15px',
-      minWidth: '150px'
+      width: '200px'
     }}>
       <h3>Export</h3>
       <button

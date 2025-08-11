@@ -25,6 +25,11 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   const [hue, setHue] = useState(0)
   const [saturation, setSaturation] = useState(100)
   const [value, setValue] = useState(100)
+  const [alpha, setAlpha] = useState(1)
+
+  // Drag state
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragType, setDragType] = useState<'gradient' | 'hue' | 'alpha' | null>(null)
 
   const gradientRef = useRef<HTMLCanvasElement>(null)
   const hueRef = useRef<HTMLCanvasElement>(null)
@@ -47,6 +52,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       setHue(hsv.h)
       setSaturation(hsv.s)
       setValue(hsv.v)
+      // Note: alpha is not part of hex colors, so we keep the current alpha value
     } catch (error) {
       console.warn('Failed to convert color to HSV:', error)
       // Set default values if conversion fails
@@ -58,23 +64,39 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 
   // Stable callback for color changes
   const handleColorChange = useCallback((newColor: Color) => {
+    console.log('handleColorChange called with:', newColor)
+    console.log('Calling onPrimaryColorChange with:', newColor)
     onPrimaryColorChange(newColor)
   }, [onPrimaryColorChange])
 
   // Handle HSV changes without triggering infinite loops
-  const handleHSVChange = useCallback((h: number, s: number, v: number) => {
+  const handleHSVChange = useCallback((h: number, s: number, v: number, a: number = alpha) => {
+    console.log('handleHSVChange called with:', { h, s, v, a, currentAlpha: alpha })
+    
     setHue(h)
     setSaturation(s)
     setValue(v)
+    setAlpha(a)
     
     try {
       const newColor = hsvToRgb(h, s, v)
-      console.log('HSV to RGB conversion:', { h, s, v, result: newColor })
+      console.log('HSV to RGB conversion:', { h, s, v, a, result: newColor })
+      console.log('Calling handleColorChange with:', newColor)
       handleColorChange(newColor)
     } catch (error) {
       console.warn('Failed to convert HSV to RGB:', error)
     }
-  }, [handleColorChange])
+  }, [handleColorChange, alpha])
+
+  // Handle alpha changes
+  const handleAlphaChange = useCallback((newAlpha: number) => {
+    setAlpha(newAlpha)
+    // Since hex colors don't support alpha, we'll update the HSV values
+    // to trigger a color update (this will keep the current hue/sat/val but update alpha)
+    console.log('Alpha changed to:', newAlpha)
+    // Trigger a color update by calling handleHSVChange with current values
+    handleHSVChange(hue, saturation, value, newAlpha)
+  }, [hue, saturation, value, handleHSVChange])
 
   // Draw gradient canvas - only when hue changes
   useEffect(() => {
@@ -149,7 +171,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     ctx.clearRect(0, 0, width, height)
     
     try {
-      // Create alpha gradient
+      // Create alpha gradient from transparent to full color
       const gradient = createSafeGradient(ctx, 0, 0, width, 0, [
         { offset: 0, color: 'transparent' },
         { offset: 1, color: hsvToRgb(hue, saturation, value) }
@@ -157,6 +179,11 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       
       if (gradient) {
         ctx.fillStyle = gradient
+        ctx.fillRect(0, 0, width, height)
+      } else {
+        // Fallback to solid color if gradient creation fails
+        const color = hsvToRgb(hue, saturation, value)
+        ctx.fillStyle = color
         ctx.fillRect(0, 0, width, height)
       }
     } catch (error) {
@@ -181,9 +208,12 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
     
-    const s = (x / rect.width) * 100
-    const v = ((rect.height - y) / rect.height) * 100
+    // Calculate saturation (0-100) from x position
+    const s = Math.max(0, Math.min(100, (x / rect.width) * 100))
+    // Calculate value (0-100) from y position (inverted since y=0 is at top)
+    const v = Math.max(0, Math.min(100, ((rect.height - y) / rect.height) * 100))
     
+    console.log('Gradient click:', { x, y, rect: { width: rect.width, height: rect.height }, s, v })
     handleHSVChange(hue, s, v)
   }, [hue, handleHSVChange])
 
@@ -192,7 +222,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     const rect = canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     
-    const h = (x / rect.width) * 360
+    // Calculate hue (0-360) from x position
+    const h = Math.max(0, Math.min(360, (x / rect.width) * 360))
+    
+    console.log('Hue click:', { x, rect: { width: rect.width }, h, currentSaturation: saturation, currentValue: value })
     handleHSVChange(h, saturation, value)
   }, [saturation, value, handleHSVChange])
 
@@ -201,9 +234,55 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     const rect = canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     
-    // For now, alpha is not implemented in the color output
-    // This could be extended later
-    console.log('Alpha clicked:', x / rect.width)
+    // Calculate alpha value (0-1) from x position
+    const newAlpha = Math.max(0, Math.min(1, x / rect.width))
+    
+    console.log('Alpha click:', { x, rect: { width: rect.width }, alpha: newAlpha })
+    handleAlphaChange(newAlpha)
+  }, [handleAlphaChange])
+
+  // Mouse event handlers for drag functionality
+  const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>, type: 'gradient' | 'hue' | 'alpha') => {
+    setIsDragging(true)
+    setDragType(type)
+    e.preventDefault()
+    
+    // Handle the initial click
+    if (type === 'gradient') {
+      handleGradientClick(e)
+    } else if (type === 'hue') {
+      handleHueClick(e)
+    } else if (type === 'alpha') {
+      handleAlphaClick(e)
+    }
+  }, [handleGradientClick, handleHueClick, handleAlphaClick])
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDragging || !dragType) return
+    
+    if (dragType === 'gradient') {
+      handleGradientClick(e)
+    } else if (dragType === 'hue') {
+      handleHueClick(e)
+    } else if (dragType === 'alpha') {
+      handleAlphaClick(e)
+    }
+  }, [isDragging, dragType, handleGradientClick, handleHueClick, handleAlphaClick])
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false)
+    setDragType(null)
+  }, [])
+
+  // Global mouse up handler to ensure drag stops even if mouse leaves canvas
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      setIsDragging(false)
+      setDragType(null)
+    }
+
+    document.addEventListener('mouseup', handleGlobalMouseUp)
+    return () => document.removeEventListener('mouseup', handleGlobalMouseUp)
   }, [])
 
   // Handle color swatch clicks
@@ -214,6 +293,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       setHue(hsv.h)
       setSaturation(hsv.s)
       setValue(hsv.v)
+      // Keep current alpha value when selecting from swatches
     } catch (error) {
       console.warn('Failed to convert color to HSV:', error)
     }
@@ -229,6 +309,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         setHue(hsv.h)
         setSaturation(hsv.s)
         setValue(hsv.v)
+        // Keep current alpha value when changing hex
       } catch (error) {
         console.warn('Failed to convert hex to HSV:', error)
       }
@@ -245,7 +326,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   return (
     <div className="color-picker" style={{
       position: 'fixed',
-      right: '20px',
+      left: '20px',
       top: '20px',
       width: '200px',
       backgroundColor: '#2d2d2d',
@@ -304,52 +385,106 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       </div>
 
       {/* Gradient picker */}
-      <div style={{ marginBottom: '15px' }}>
+      <div style={{ marginBottom: '15px', position: 'relative' }}>
         <canvas
           ref={gradientRef}
           width={160}
           height={120}
-          onClick={handleGradientClick}
+          onMouseDown={(e) => handleMouseDown(e, 'gradient')}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
           style={{
             width: '100%',
             height: 'auto',
             border: '1px solid #555',
             borderRadius: '4px',
-            cursor: 'crosshair'
+            cursor: isDragging && dragType === 'gradient' ? 'grabbing' : 'crosshair'
+          }}
+        />
+        {/* Current color marker on gradient */}
+        <div
+          style={{
+            position: 'absolute',
+            left: `${(saturation / 100) * 100}%`,
+            top: `${((100 - value) / 100) * 100}%`,
+            width: '12px',
+            height: '12px',
+            border: '2px solid #fff',
+            borderRadius: '50%',
+            backgroundColor: 'transparent',
+            transform: 'translate(-50%, -50%)',
+            pointerEvents: 'none',
+            boxShadow: '0 0 4px rgba(0,0,0,0.8)'
           }}
         />
       </div>
 
       {/* Hue bar */}
-      <div style={{ marginBottom: '15px' }}>
+      <div style={{ marginBottom: '15px', position: 'relative' }}>
         <canvas
           ref={hueRef}
           width={160}
           height={20}
-          onClick={handleHueClick}
+          onMouseDown={(e) => handleMouseDown(e, 'hue')}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
           style={{
             width: '100%',
             height: 'auto',
             border: '1px solid #555',
             borderRadius: '4px',
-            cursor: 'crosshair'
+            cursor: isDragging && dragType === 'hue' ? 'grabbing' : 'crosshair'
+          }}
+        />
+        {/* Current hue marker */}
+        <div
+          style={{
+            position: 'absolute',
+            left: `${(hue / 360) * 100}%`,
+            top: '50%',
+            width: '8px',
+            height: '20px', // Match the canvas height
+            border: '2px solid #fff',
+            borderRadius: '2px',
+            backgroundColor: 'transparent',
+            transform: 'translate(-50%, -50%)',
+            pointerEvents: 'none',
+            boxShadow: '0 0 4px rgba(0,0,0,0.8)'
           }}
         />
       </div>
 
       {/* Alpha bar */}
-      <div style={{ marginBottom: '15px' }}>
+      <div style={{ marginBottom: '15px', position: 'relative' }}>
         <canvas
           ref={alphaRef}
           width={160}
           height={20}
-          onClick={handleAlphaClick}
+          onMouseDown={(e) => handleMouseDown(e, 'alpha')}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
           style={{
             width: '100%',
             height: 'auto',
             border: '1px solid #555',
             borderRadius: '4px',
-            cursor: 'crosshair'
+            cursor: isDragging && dragType === 'alpha' ? 'grabbing' : 'crosshair'
+          }}
+        />
+        {/* Current alpha marker - now positioned based on actual alpha value */}
+        <div
+          style={{
+            position: 'absolute',
+            left: `${alpha * 100}%`,
+            top: '50%',
+            width: '8px',
+            height: '20px', // Match the canvas height
+            border: '2px solid #fff',
+            borderRadius: '2px',
+            backgroundColor: 'transparent',
+            transform: 'translate(-50%, -50%)',
+            pointerEvents: 'none',
+            boxShadow: '0 0 4px rgba(0,0,0,0.8)'
           }}
         />
       </div>
@@ -407,11 +542,27 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
               width: '20px',
               height: '20px',
               backgroundColor: color,
-              border: '1px solid #555',
+              border: color === primaryColor ? '2px solid #fff' : '1px solid #555',
               borderRadius: '2px',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              position: 'relative',
+              boxShadow: color === primaryColor ? '0 0 6px rgba(255,255,255,0.8)' : 'none'
             }}
-          />
+          >
+            {/* Selection indicator */}
+            {color === primaryColor && (
+              <div style={{
+                position: 'absolute',
+                top: '-2px',
+                right: '-2px',
+                width: '8px',
+                height: '8px',
+                backgroundColor: '#fff',
+                borderRadius: '50%',
+                border: '1px solid #000'
+              }} />
+            )}
+          </div>
         ))}
       </div>
 
@@ -420,6 +571,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         <div>H: {Math.round(hue)}°</div>
         <div>S: {Math.round(saturation)}%</div>
         <div>V: {Math.round(value)}%</div>
+        <div>A: {Math.round(alpha * 100)}%</div>
       </div>
     </div>
   )
