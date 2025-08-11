@@ -163,7 +163,7 @@ describe('WordGenerator', () => {
     it('should handle empty options', () => {
       const words = WordGenerator.generateWordList();
       
-      expect(words).toHaveLength(10); // Default word count
+      expect(words).toHaveLength(30); // Default word count (updated from 10 to 30)
       expect(words.every(word => typeof word === 'string')).toBe(true);
     });
 

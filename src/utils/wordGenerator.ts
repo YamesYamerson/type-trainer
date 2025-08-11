@@ -25,7 +25,7 @@ export class WordGenerator {
   static generateWordList(options: WordListOptions = {}): string[] {
     const {
       difficulty = 'beginner',
-      wordCount = 10,
+      wordCount = 30,
       minLength = 0,
       maxLength = Infinity,
       includeEasier = true
@@ -76,7 +76,7 @@ export class WordGenerator {
     return shuffled.slice(0, Math.min(wordCount, shuffled.length));
   }
 
-  static generateRandomWordList(wordCount: number = 10): string[] {
+  static generateRandomWordList(wordCount: number = 30): string[] {
     // Handle invalid word counts
     if (wordCount <= 0) {
       return [];
@@ -93,7 +93,7 @@ export class WordGenerator {
     });
   }
 
-  static generateMixedWordList(wordCount: number = 10): string[] {
+  static generateMixedWordList(wordCount: number = 30): string[] {
     // Handle invalid word counts
     if (wordCount <= 0) {
       return [];
@@ -111,7 +111,7 @@ export class WordGenerator {
     return shuffled.slice(0, Math.min(wordCount, shuffled.length));
   }
 
-  static generateProgressiveWordList(startDifficulty: 'beginner' | 'intermediate' | 'advanced' = 'beginner', wordCount: number = 10): string[] {
+  static generateProgressiveWordList(startDifficulty: 'beginner' | 'intermediate' | 'advanced' = 'beginner', wordCount: number = 30): string[] {
     // Handle invalid word counts
     if (wordCount <= 0) {
       return [];
@@ -144,7 +144,7 @@ export class WordGenerator {
     return shuffled.slice(0, Math.min(wordCount, shuffled.length));
   }
 
-  static generateFluidWordList(wordCount: number = 10, targetDifficulty: 'beginner' | 'intermediate' | 'advanced' = 'intermediate'): string[] {
+  static generateFluidWordList(wordCount: number = 30, targetDifficulty: 'beginner' | 'intermediate' | 'advanced' = 'intermediate'): string[] {
     // Handle invalid word counts
     if (wordCount <= 0) {
       return [];

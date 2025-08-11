@@ -3,14 +3,14 @@
     "id": "lowercase_random_words_1",
     "category": "lowercase",
     "subcategory": "random_words",
-    "content": "the quick brown fox jumps over lazy dog",
+    "content": "the quick brown fox jumps over lazy dog while sunlight streams through window casting warm golden rays across wooden floorboards creating beautiful patterns that dance with gentle breeze",
     "difficulty": "beginner"
   },
   {
     "id": "lowercase_random_words_2", 
     "category": "lowercase",
     "subcategory": "random_words",
-    "content": "sunlight streams through window casting warm golden rays",
+    "content": "sunlight streams through window casting warm golden rays while children play outside in garden filled with colorful flowers and tall trees providing shade for picnic blankets spread across soft grass",
     "difficulty": "beginner"
   },
   {
@@ -243,28 +243,28 @@
     "id": "lowercase_random_words_3",
     "category": "lowercase",
     "subcategory": "random_words",
-    "content": "mountain peaks rise majestically above valley covered snow",
+    "content": "mountain peaks rise majestically above valley covered snow while eagles soar through crisp mountain air searching for prey below rocky cliffs where ancient trees cling to life in harsh conditions",
     "difficulty": "beginner"
   },
   {
     "id": "lowercase_random_words_4",
     "category": "lowercase",
     "subcategory": "random_words",
-    "content": "forest trees sway gently wind leaves rustling softly",
+    "content": "forest trees sway gently wind leaves rustling softly while squirrels scamper across branches collecting acorns for winter storage beneath moss covered roots where mushrooms grow in damp soil",
     "difficulty": "beginner"
   },
   {
     "id": "lowercase_random_words_5",
     "category": "lowercase",
     "subcategory": "random_words",
-    "content": "raindrops fall gently roof creating soothing rhythm",
+    "content": "raindrops fall gently roof creating soothing rhythm while thunder rumbles in distance lightning flashes across dark sky illuminating puddles forming on sidewalk where children splash happily",
     "difficulty": "beginner"
   },
   {
     "id": "lowercase_random_words_6",
     "category": "lowercase",
     "subcategory": "random_words",
-    "content": "butterflies flutter wildflowers meadow colorful wings",
+    "content": "butterflies flutter wildflowers meadow colorful wings while bees buzz busily collecting nectar from blooming flowers spreading pollen across vibrant landscape where grass sways rhythmically",
     "difficulty": "beginner"
   },
   {
@@ -355,42 +355,42 @@
     "id": "uppercase_random_words_1",
     "category": "uppercase",
     "subcategory": "random_words",
-    "content": "THE QUICK BROWN FOX JUMPS OVER LAZY DOG",
+    "content": "THE QUICK BROWN FOX JUMPS OVER LAZY DOG WHILE SUNLIGHT STREAMS THROUGH WINDOW CASTING WARM GOLDEN RAYS ACROSS WOODEN FLOORBOARDS CREATING BEAUTIFUL PATTERNS THAT DANCE WITH GENTLE BREEZE",
     "difficulty": "beginner"
   },
   {
     "id": "uppercase_random_words_2",
     "category": "uppercase",
     "subcategory": "random_words",
-    "content": "SUNLIGHT STREAMS THROUGH WINDOW CASTING WARM",
+    "content": "SUNLIGHT STREAMS THROUGH WINDOW CASTING WARM GOLDEN RAYS ACROSS WOODEN FLOORBOARDS CREATING BEAUTIFUL PATTERNS THAT DANCE WITH GENTLE BREEZE WHILE CURTAINS SWAY SOFTLY",
     "difficulty": "beginner"
   },
   {
     "id": "uppercase_random_words_3",
     "category": "uppercase",
     "subcategory": "random_words",
-    "content": "MOUNTAIN PEAKS RISE MAJESTICALLY ABOVE VALLEY",
+    "content": "MOUNTAIN PEAKS RISE MAJESTICALLY ABOVE VALLEY WHILE EAGLES SOAR THROUGH CRISP MOUNTAIN AIR SEARCHING FOR PREY BELOW ROCKY CLIFFS WHERE ANCIENT TREES CLING TO LIFE",
     "difficulty": "beginner"
   },
   {
     "id": "uppercase_random_words_4",
     "category": "uppercase",
     "subcategory": "random_words",
-    "content": "FOREST TREES SWAY GENTLY WIND LEAVES RUSTLING",
+    "content": "FOREST TREES SWAY GENTLY WIND LEAVES RUSTLING SOFTLY WHILE SQUIRRELS SCAMPER ACROSS BRANCHES COLLECTING ACORNS FOR WINTER STORAGE BENEATH MOSS COVERED ROOTS WHERE MUSHROOMS GROW",
     "difficulty": "beginner"
   },
   {
     "id": "uppercase_random_words_5",
     "category": "uppercase",
     "subcategory": "random_words",
-    "content": "RAINDROPS FALL GENTLY ROOF CREATING SOOTHING",
+    "content": "RAINDROPS FALL GENTLY ROOF CREATING SOOTHING RHYTHM WHILE THUNDER RUMBLES IN DISTANCE LIGHTNING FLASHES ACROSS DARK SKY ILLUMINATING PUDDLES FORMING ON SIDEWALK WHERE CHILDREN SPLASH HAPPILY",
     "difficulty": "beginner"
   },
   {
     "id": "uppercase_random_words_6",
     "category": "uppercase",
     "subcategory": "random_words",
-    "content": "BUTTERFLIES FLUTTER WILDFLOWERS MEADOW COLORFUL",
+    "content": "BUTTERFLIES FLUTTER WILDFLOWERS MEADOW COLORFUL WINGS WHILE BEES BUZZ BUSILY COLLECTING NECTAR FROM BLOOMING FLOWERS SPREADING POLLEN ACROSS VIBRANT LANDSCAPE WHERE GRASS SWAYS RHYTHMICALLY",
     "difficulty": "beginner"
   },
   {
