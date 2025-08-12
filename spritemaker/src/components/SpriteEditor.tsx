@@ -59,15 +59,21 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
       })
     }
     
-    setPixels(newPixels)
+    // Force a new Map instance to ensure React detects the change
+    setPixels(new Map(newPixels))
   }, [pixels, activeLayer])
 
   // Flood fill algorithm
   const floodFill = useCallback((startX: number, startY: number, targetColor: Color, replacementColor: Color) => {
-    if (targetColor === replacementColor) return
+    // Only return early if we're trying to fill with the exact same color AND it's not transparent
+    // This allows filling transparent areas with transparent colors (useful for erasing)
+    if (targetColor === replacementColor && targetColor !== 'transparent') return
     
+    // Create a local copy of pixels to avoid race conditions during the fill
+    const localPixels = new Map(pixels)
     const stack: [number, number][] = [[startX, startY]]
     const visited = new Set<string>()
+    let filledCount = 0
     
     while (stack.length > 0) {
       const [x, y] = stack.pop()!
@@ -76,10 +82,25 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
       if (visited.has(key)) continue
       visited.add(key)
       
-      const currentPixel = pixels.get(key)
-      if (!currentPixel || currentPixel.color !== targetColor) continue
+      // Check if current position matches target color
+      // For transparent areas, we need to check if there's no pixel OR if the pixel is transparent
+      const currentPixel = localPixels.get(key)
+      const currentColor = currentPixel ? currentPixel.color : 'transparent'
       
-      drawPixel(x, y, replacementColor)
+      if (currentColor !== targetColor) continue
+      
+      // Update the local pixels Map instead of calling drawPixel
+      if (replacementColor === 'transparent') {
+        localPixels.delete(key)
+      } else {
+        localPixels.set(key, {
+          x,
+          y,
+          color: replacementColor,
+          layerId: activeLayer!.id
+        })
+      }
+      filledCount++
       
       // Add neighbors
       const neighbors = [
@@ -92,7 +113,10 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
         }
       }
     }
-  }, [pixels, drawPixel, canvasSize])
+    
+    // After flood fill is complete, update the state with all changes at once
+    setPixels(new Map(localPixels))
+  }, [pixels, activeLayer, canvasSize])
 
   // Get color at position
   const getColorAt = useCallback((x: number, y: number): Color => {
@@ -106,8 +130,10 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
     if (!activeLayer) return
     
     const rect = canvasRef.current!.getBoundingClientRect()
-    const x = Math.floor((e.clientX - rect.left) / pixelSize)
-    const y = Math.floor((e.clientY - rect.top) / pixelSize)
+    const rawX = e.clientX - rect.left
+    const rawY = e.clientY - rect.top
+    const x = Math.floor(rawX / pixelSize)
+    const y = Math.floor(rawY / pixelSize)
     
     if (x < 0 || x >= canvasSize || y < 0 || y >= canvasSize) return
     
@@ -191,21 +217,11 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
     const ctx = canvas.getContext('2d')
     if (!ctx) return
     
-    // Debug logging
-    console.log('SpriteEditor render:', {
-      canvasSize,
-      pixelSize,
-      canvasWidth: canvas.width,
-      canvasHeight: canvas.height,
-      checkerSize: 16 * pixelSize
-    })
-    
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     
     // Draw checkered transparent background aligned with pixel grid
     const checkerSize = 16 * pixelSize // Each checker represents a 16x16 pixel area
-    console.log('Drawing checkered background with checker size:', checkerSize)
     
     for (let y = 0; y < canvas.height; y += checkerSize) {
       for (let x = 0; x < canvas.width; x += checkerSize) {
@@ -359,6 +375,7 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
     // Draw pixels
     pixels.forEach((pixel) => {
       const layer = layers.find(l => l.id === pixel.layerId)
+      
       if (layer && layer.visible) {
         ctx.fillStyle = pixel.color
         ctx.fillRect(
@@ -385,6 +402,7 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
           cursor: 'crosshair',
           backgroundColor: 'transparent'
         }}
+        data-testid="sprite-canvas"
       />
     </div>
   )
