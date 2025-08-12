@@ -4,6 +4,9 @@
 
 require('@testing-library/jest-dom');
 
+// Import jest-canvas-mock for better Canvas API support
+import 'jest-canvas-mock';
+
 // Set up environment variables for tests
 process.env.NODE_ENV = 'test';
 

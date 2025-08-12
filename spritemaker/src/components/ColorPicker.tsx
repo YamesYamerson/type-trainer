@@ -69,34 +69,9 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     onPrimaryColorChange(newColor)
   }, [onPrimaryColorChange])
 
-  // Handle HSV changes without triggering infinite loops
-  const handleHSVChange = useCallback((h: number, s: number, v: number, a: number = alpha) => {
-    console.log('handleHSVChange called with:', { h, s, v, a, currentAlpha: alpha })
-    
-    setHue(h)
-    setSaturation(s)
-    setValue(v)
-    setAlpha(a)
-    
-    try {
-      const newColor = hsvToRgb(h, s, v)
-      console.log('HSV to RGB conversion:', { h, s, v, a, result: newColor })
-      console.log('Calling handleColorChange with:', newColor)
-      handleColorChange(newColor)
-    } catch (error) {
-      console.warn('Failed to convert HSV to RGB:', error)
-    }
-  }, [handleColorChange, alpha])
 
-  // Handle alpha changes
-  const handleAlphaChange = useCallback((newAlpha: number) => {
-    setAlpha(newAlpha)
-    // Since hex colors don't support alpha, we'll update the HSV values
-    // to trigger a color update (this will keep the current hue/sat/val but update alpha)
-    console.log('Alpha changed to:', newAlpha)
-    // Trigger a color update by calling handleHSVChange with current values
-    handleHSVChange(hue, saturation, value, newAlpha)
-  }, [hue, saturation, value, handleHSVChange])
+
+
 
   // Draw gradient canvas - only when hue changes
   useEffect(() => {
@@ -213,9 +188,21 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     // Calculate value (0-100) from y position (inverted since y=0 is at top)
     const v = Math.max(0, Math.min(100, ((rect.height - y) / rect.height) * 100))
     
-    console.log('Gradient click:', { x, y, rect: { width: rect.width, height: rect.height }, s, v })
-    handleHSVChange(hue, s, v)
-  }, [hue, handleHSVChange])
+    console.log('Gradient click:', { x, y, rect: { width: rect.width, height: rect.height }, s, v, currentHue: hue })
+    // Use the current state values directly to avoid stale closure issues
+    setHue(hue)
+    setSaturation(s)
+    setValue(v)
+    
+    try {
+      const newColor = hsvToRgb(hue, s, v)
+      console.log('Gradient change - HSV to RGB conversion:', { h: hue, s, v, result: newColor })
+      console.log('Gradient change - Calling handleColorChange with:', newColor)
+      handleColorChange(newColor)
+    } catch (error) {
+      console.warn('Failed to convert HSV to RGB in gradient click:', error)
+    }
+  }, [hue, handleColorChange])
 
   const handleHueClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = e.currentTarget
@@ -226,8 +213,20 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     const h = Math.max(0, Math.min(360, (x / rect.width) * 360))
     
     console.log('Hue click:', { x, rect: { width: rect.width }, h, currentSaturation: saturation, currentValue: value })
-    handleHSVChange(h, saturation, value)
-  }, [saturation, value, handleHSVChange])
+    // Use the current state values directly to avoid stale closure issues
+    setHue(h)
+    setSaturation(saturation)
+    setValue(value)
+    
+    try {
+      const newColor = hsvToRgb(h, saturation, value)
+      console.log('Hue change - HSV to RGB conversion:', { h, s: saturation, v: value, result: newColor })
+      console.log('Hue change - Calling handleColorChange with:', newColor)
+      handleColorChange(newColor)
+    } catch (error) {
+      console.warn('Failed to convert HSV to RGB in hue click:', error)
+    }
+  }, [saturation, value, handleColorChange])
 
   const handleAlphaClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = e.currentTarget
@@ -238,8 +237,29 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     const newAlpha = Math.max(0, Math.min(1, x / rect.width))
     
     console.log('Alpha click:', { x, rect: { width: rect.width }, alpha: newAlpha })
-    handleAlphaChange(newAlpha)
-  }, [handleAlphaChange])
+    // Use the current state values directly to avoid stale closure issues
+    setAlpha(newAlpha)
+    
+    try {
+      const newColor = hsvToRgb(hue, saturation, value)
+      console.log('Alpha change - HSV to RGB conversion:', { h: hue, s: saturation, v: value, a: newAlpha, result: newColor })
+      console.log('Alpha change - Calling handleColorChange with:', newColor)
+      handleColorChange(newColor)
+    } catch (error) {
+      console.warn('Failed to convert HSV to RGB in alpha click:', error)
+    }
+  }, [hue, saturation, value, handleColorChange])
+
+  // Handle initial clicks when mouse down occurs
+  const handleInitialClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>, type: 'gradient' | 'hue' | 'alpha') => {
+    if (type === 'gradient') {
+      handleGradientClick(e)
+    } else if (type === 'alpha') {
+      handleAlphaClick(e)
+    } else if (type === 'hue') {
+      handleHueClick(e)
+    }
+  }, [handleGradientClick, handleHueClick, handleAlphaClick])
 
   // Mouse event handlers for drag functionality
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>, type: 'gradient' | 'hue' | 'alpha') => {
@@ -248,14 +268,8 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     e.preventDefault()
     
     // Handle the initial click
-    if (type === 'gradient') {
-      handleGradientClick(e)
-    } else if (type === 'hue') {
-      handleHueClick(e)
-    } else if (type === 'alpha') {
-      handleAlphaClick(e)
-    }
-  }, [handleGradientClick, handleHueClick, handleAlphaClick])
+    handleInitialClick(e, type)
+  }, [handleInitialClick])
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDragging || !dragType) return
