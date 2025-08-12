@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import SpriteEditor from '../../src/components/SpriteEditor'
 
 // Mock the canvas context
@@ -42,6 +42,8 @@ describe('SpriteEditor', () => {
   const defaultProps = {
     selectedTool: 'pencil' as const,
     primaryColor: '#ff0000',
+    secondaryColor: '#00ff00',
+    brushSize: 1,
     canvasSize: 32,
     layers: [
       {
@@ -59,7 +61,8 @@ describe('SpriteEditor', () => {
       quarter: false,
       eighths: false,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     }
   }
 
@@ -137,19 +140,90 @@ describe('SpriteEditor', () => {
   })
 
   it('should handle layer visibility correctly', () => {
-    const hiddenLayerProps = {
-      ...defaultProps,
-      layers: [
-        {
-          id: 1,
-          name: 'Layer 1',
-          visible: false,
-          active: true
-        }
-      ]
-    }
-    
-    render(<SpriteEditor {...hiddenLayerProps} />)
+    const { rerender } = render(
+      <SpriteEditor
+        layers={[
+          { id: 1, name: 'Layer 1', visible: true, active: true },
+          { id: 2, name: 'Layer 2', visible: false, active: false }
+        ]}
+        selectedTool="pencil"
+        primaryColor="#ff0000"
+        secondaryColor="#00ff00"
+        brushSize={1}
+        canvasSize={16}
+        gridSettings={{
+          visible: true,
+          color: '#333',
+          opacity: 0.5,
+          quarter: false,
+          eighths: false,
+          sixteenths: false,
+          thirtyseconds: false,
+          sixtyfourths: false
+        }}
+        onCanvasRef={jest.fn()}
+      />
+    )
+
+    // Initially both layers should be rendered
     expect(screen.getByTestId('sprite-canvas')).toBeInTheDocument()
+
+    // Change layer visibility
+    rerender(
+      <SpriteEditor
+        layers={[
+          { id: 1, name: 'Layer 1', visible: false, active: true },
+          { id: 2, name: 'Layer 2', visible: true, active: false }
+        ]}
+        selectedTool="pencil"
+        primaryColor="#ff0000"
+        secondaryColor="#00ff00"
+        brushSize={1}
+        canvasSize={16}
+        gridSettings={{
+          visible: true,
+          color: '#333',
+          opacity: 0.5,
+          quarter: false,
+          eighths: false,
+          sixteenths: false,
+          thirtyseconds: false,
+          sixtyfourths: false
+        }}
+        onCanvasRef={jest.fn()}
+      />
+    )
+
+    expect(screen.getByTestId('sprite-canvas')).toBeInTheDocument()
+  })
+
+  it('should draw sixty-fourths grid when enabled', () => {
+    render(
+      <SpriteEditor
+        layers={[{ id: 1, name: 'Layer 1', visible: true, active: true }]}
+        selectedTool="pencil"
+        primaryColor="#ff0000"
+        secondaryColor="#00ff00"
+        brushSize={1}
+        canvasSize={16}
+        gridSettings={{
+          visible: false,
+          color: '#333',
+          opacity: 0.5,
+          quarter: false,
+          eighths: false,
+          sixteenths: false,
+          thirtyseconds: false,
+          sixtyfourths: true
+        }}
+        onCanvasRef={jest.fn()}
+      />
+    )
+
+    // Verify the component renders with sixty-fourths grid enabled
+    expect(screen.getByTestId('sprite-canvas')).toBeInTheDocument()
+    
+    // The grid drawing logic is internal to the component and tested through integration
+    // This test verifies the component structure and props are correct
   })
 })

@@ -371,6 +371,35 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
       // Reset global alpha
       ctx.globalAlpha = 1.0
     }
+
+    // Draw sixty-fourths grid divisions (if enabled)
+    if (gridSettings.sixtyfourths) {
+      ctx.strokeStyle = gridSettings.color
+      ctx.globalAlpha = gridSettings.opacity
+      ctx.lineWidth = 1
+      
+      // Draw vertical division lines at 1/32, 1/16, 3/32, 1/8, 5/32, 3/16, 7/32, 1/4, 9/32, 5/16, 11/32, 3/8, 13/32, 7/16, 15/32, 1/2, 17/32, 9/16, 19/32, 5/8, 21/32, 11/16, 23/32, 3/4, 25/32, 13/16, 27/32, 7/8, 29/32, 15/16, 31/32 positions
+      const thirtySecondPositions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31] // 1/32 through 31/32
+      thirtySecondPositions.forEach(thirtySecond => {
+        const pos = (canvasSize * thirtySecond / 32) * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(pos, 0)
+        ctx.lineTo(pos, canvas.height)
+        ctx.stroke()
+      })
+      
+      // Draw horizontal division lines at 1/32, 1/16, 3/32, 1/8, 5/32, 3/16, 7/32, 1/4, 9/32, 5/16, 11/32, 3/8, 13/32, 7/16, 15/32, 1/2, 17/32, 9/16, 19/32, 5/8, 21/32, 11/16, 23/32, 3/4, 25/32, 13/16, 27/32, 7/8, 29/32, 15/16, 31/32 positions
+      thirtySecondPositions.forEach(thirtySecond => {
+        const pos = (canvasSize * thirtySecond / 32) * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(0, pos)
+        ctx.lineTo(canvas.width, pos)
+        ctx.stroke()
+      })
+      
+      // Reset global alpha
+      ctx.globalAlpha = 1.0
+    }
     
     // Draw pixels
     pixels.forEach((pixel) => {
@@ -386,7 +415,7 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
         )
       }
     })
-  }, [pixels, layers, canvasSize, pixelSize, gridSettings.visible, gridSettings.color, gridSettings.opacity, gridSettings.quarter, gridSettings.eighths, gridSettings.sixteenths, gridSettings.thirtyseconds])
+  }, [pixels, layers, canvasSize, pixelSize, gridSettings.visible, gridSettings.color, gridSettings.opacity, gridSettings.quarter, gridSettings.eighths, gridSettings.sixteenths, gridSettings.thirtyseconds, gridSettings.sixtyfourths])
 
   return (
     <div className="canvas-container">

@@ -29,7 +29,8 @@ describe('Toolbar', () => {
       quarter: false,
       eighths: false,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     } as GridSettings,
     onGridSettingsChange: jest.fn(),
     onNewProject: jest.fn(),
@@ -198,7 +199,8 @@ describe('Toolbar', () => {
       quarter: false,
       eighths: false,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     })
   })
 
@@ -212,7 +214,8 @@ describe('Toolbar', () => {
         quarter: false,
         eighths: false,
         sixteenths: false,
-        thirtyseconds: false
+        thirtyseconds: false,
+        sixtyfourths: false
       }
     }
     
@@ -248,7 +251,8 @@ describe('Toolbar', () => {
       quarter: true,
       eighths: false,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     })
   })
 
@@ -262,7 +266,8 @@ describe('Toolbar', () => {
         quarter: true,
         eighths: false,
         sixteenths: false,
-        thirtyseconds: false
+        thirtyseconds: false,
+        sixtyfourths: false
       }
     }
     
@@ -294,7 +299,8 @@ describe('Toolbar', () => {
       quarter: false,
       eighths: true,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     })
   })
 
@@ -308,7 +314,8 @@ describe('Toolbar', () => {
         quarter: false,
         eighths: true,
         sixteenths: false,
-        thirtyseconds: false
+        thirtyseconds: false,
+        sixtyfourths: false
       }
     }
     
@@ -340,7 +347,8 @@ describe('Toolbar', () => {
       quarter: false,
       eighths: false,
       sixteenths: true,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     })
   })
 
@@ -348,7 +356,7 @@ describe('Toolbar', () => {
     render(<Toolbar {...defaultProps} gridSettings={{ ...defaultProps.gridSettings, sixteenths: true }} />)
     
     const sixteenthsGrid = screen.getByTitle('Sixteenths Grid - Currently ON')
-    expect(sixteenthsGrid).toHaveClass('tool-button', 'active')
+    expect(sixteenthsGrid).toHaveClass('tool-button active')
   })
 
   it('should display thirtyseconds grid control', () => {
@@ -372,7 +380,8 @@ describe('Toolbar', () => {
       quarter: false,
       eighths: false,
       sixteenths: false,
-      thirtyseconds: true
+      thirtyseconds: true,
+      sixtyfourths: false
     })
   })
 
@@ -380,7 +389,40 @@ describe('Toolbar', () => {
     render(<Toolbar {...defaultProps} gridSettings={{ ...defaultProps.gridSettings, thirtyseconds: true }} />)
     
     const thirtysecondsGrid = screen.getByTitle('Thirty-Second Grid - Currently ON')
-    expect(thirtysecondsGrid).toHaveClass('tool-button', 'active')
+    expect(thirtysecondsGrid).toHaveClass('tool-button active')
+  })
+
+  it('should display sixty-fourths grid control', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const sixtyFourthsGrid = screen.getByTitle('Sixty-Fourths Grid - Currently OFF')
+    expect(sixtyFourthsGrid).toBeInTheDocument()
+    expect(sixtyFourthsGrid).toHaveClass('tool-button')
+  })
+
+  it('should call onGridSettingsChange when sixty-fourths grid is clicked', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const sixtyFourthsGrid = screen.getByTitle('Sixty-Fourths Grid - Currently OFF')
+    fireEvent.click(sixtyFourthsGrid)
+    
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: false,
+      color: '#333',
+      opacity: 0.5,
+      quarter: false,
+      eighths: false,
+      sixteenths: false,
+      thirtyseconds: false,
+      sixtyfourths: true
+    })
+  })
+
+  it('should display sixty-fourths grid as ON when active', () => {
+    render(<Toolbar {...defaultProps} gridSettings={{ ...defaultProps.gridSettings, sixtyfourths: true }} />)
+    
+    const sixtyFourthsGrid = screen.getByTitle('Sixty-Fourths Grid - Currently ON')
+    expect(sixtyFourthsGrid).toHaveClass('tool-button active')
   })
 
   it('should display canvas size selection in file dropdown', () => {
@@ -477,7 +519,8 @@ describe('Toolbar', () => {
       quarter: true,
       eighths: false,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     })
     
     // Clear mock to test next interaction
@@ -494,7 +537,8 @@ describe('Toolbar', () => {
       quarter: false,
       eighths: true,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     })
     
     // Clear mock again
@@ -511,7 +555,8 @@ describe('Toolbar', () => {
       quarter: false,
       eighths: false,
       sixteenths: true,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     })
   })
 
@@ -521,7 +566,8 @@ describe('Toolbar', () => {
       quarter: true,
       eighths: false,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     }} />)
     
     // Main grid should be clickable even when quarter is active
@@ -536,7 +582,8 @@ describe('Toolbar', () => {
       quarter: true,
       eighths: false,
       sixteenths: false,
-      thirtyseconds: false
+      thirtyseconds: false,
+      sixtyfourths: false
     })
   })
 
@@ -596,15 +643,16 @@ describe('Toolbar', () => {
         onBrushSizeChange: jest.fn(),
         canvasSize: 32,
         onCanvasSizeChange: jest.fn(),
-        gridSettings: {
-          visible: false,
-          color: '#333',
-          opacity: 0.5,
-          quarter: false,
-          eighths: false,
-          sixteenths: false,
-          thirtyseconds: false
-        } as GridSettings,
+              gridSettings: {
+        visible: false,
+        color: '#333',
+        opacity: 0.5,
+        quarter: false,
+        eighths: false,
+        sixteenths: false,
+        thirtyseconds: false,
+        sixtyfourths: false
+      } as GridSettings,
         onGridSettingsChange: jest.fn()
         // Missing file operation callbacks
       }

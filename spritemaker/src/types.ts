@@ -31,4 +31,5 @@ export interface GridSettings {
   eighths: boolean // Enable eighths grid divisions
   sixteenths: boolean // Enable sixteenths grid divisions
   thirtyseconds: boolean // Enable thirty-seconds grid divisions
+  sixtyfourths: boolean // Enable sixty-fourths grid divisions
 }

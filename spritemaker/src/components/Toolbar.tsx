@@ -36,7 +36,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onNewProject,
   onOpenProject,
   onSaveProject,
-  onExportImage,
+
   onSettings,
   canvasRef
 }) => {
@@ -165,7 +165,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
     { id: 'line', name: 'Line', icon: '/icons/line.png', iconType: 'png' }
   ]
 
-  const canvasSizes = [16, 32, 64, 128, 256]
+
 
   return (
     <div className="toolbar">
@@ -581,7 +581,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
             quarter: !safeGridSettings.quarter,
             eighths: false,
             sixteenths: false,
-            thirtyseconds: false
+            thirtyseconds: false,
+            sixtyfourths: false
           })}
           title={`Quarter Grid - Currently ${safeGridSettings.quarter ? 'ON' : 'OFF'}`}
         >
@@ -600,7 +601,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
             quarter: false,
             eighths: !safeGridSettings.eighths,
             sixteenths: false,
-            thirtyseconds: false
+            thirtyseconds: false,
+            sixtyfourths: false
           })}
           title={`Eighths Grid - Currently ${safeGridSettings.eighths ? 'ON' : 'OFF'}`}
         >
@@ -619,7 +621,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
             quarter: false,
             eighths: false,
             sixteenths: !safeGridSettings.sixteenths,
-            thirtyseconds: false
+            thirtyseconds: false,
+            sixtyfourths: false
           })}
           title={`Sixteenths Grid - Currently ${safeGridSettings.sixteenths ? 'ON' : 'OFF'}`}
         >
@@ -638,13 +641,34 @@ const Toolbar: React.FC<ToolbarProps> = ({
             quarter: false,
             eighths: false,
             sixteenths: false,
-            thirtyseconds: !safeGridSettings.thirtyseconds
+            thirtyseconds: !safeGridSettings.thirtyseconds,
+            sixtyfourths: false
           })}
           title={`Thirty-Second Grid - Currently ${safeGridSettings.thirtyseconds ? 'ON' : 'OFF'}`}
         >
           <img
             src="/icons/thirtyseconds-icon.svg"
             alt="Thirty-Second Grid"
+            style={{ width: '20px', height: '20px' }}
+          />
+        </button>
+
+        {/* Sixty-Fourths Grid Tool */}
+        <button
+          className={`tool-button ${safeGridSettings.sixtyfourths ? 'active' : ''}`}
+          onClick={() => safeGridSettingsChange({
+            ...safeGridSettings,
+            quarter: false,
+            eighths: false,
+            sixteenths: false,
+            thirtyseconds: false,
+            sixtyfourths: !safeGridSettings.sixtyfourths
+          })}
+          title={`Sixty-Fourths Grid - Currently ${safeGridSettings.sixtyfourths ? 'ON' : 'OFF'}`}
+        >
+          <img
+            src="/icons/64-icon.svg"
+            alt="Sixty-Fourths Grid"
             style={{ width: '20px', height: '20px' }}
           />
         </button>

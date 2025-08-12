@@ -23,7 +23,8 @@ function App() {
     quarter: false,
     eighths: false,
     sixteenths: false,
-    thirtyseconds: false
+    thirtyseconds: false,
+    sixtyfourths: false
   })
 
   const handleNewLayer = () => {
@@ -87,7 +88,7 @@ function App() {
           // TODO: Implement settings functionality
           console.log('Settings clicked')
         }}
-        canvasRef={canvasRef}
+        canvasRef={canvasRef || undefined}
       />
 
       <div style={{ 

@@ -2,7 +2,8 @@
  * Jest setup file for Sprite Maker tests
  */
 
-require('@testing-library/jest-dom');
+// Import jest-dom for custom matchers
+import '@testing-library/jest-dom';
 
 // Import jest-canvas-mock for better Canvas API support
 import 'jest-canvas-mock';
@@ -98,20 +99,20 @@ const MockCanvasRenderingContext2D = function(this: any) {
   this.globalAlpha = 1.0;
 } as any;
 
-MockCanvasRenderingContext2D.prototype.fillRect = function(x: number, y: number, width: number, height: number) {};
-MockCanvasRenderingContext2D.prototype.strokeRect = function(x: number, y: number, width: number, height: number) {};
-MockCanvasRenderingContext2D.prototype.clearRect = function(x: number, y: number, width: number, height: number) {};
+MockCanvasRenderingContext2D.prototype.fillRect = function(_x: number, _y: number, _width: number, _height: number) {};
+MockCanvasRenderingContext2D.prototype.strokeRect = function(_x: number, _y: number, _width: number, _height: number) {};
+MockCanvasRenderingContext2D.prototype.clearRect = function(_x: number, _y: number, _width: number, _height: number) {};
 MockCanvasRenderingContext2D.prototype.beginPath = function() {};
-MockCanvasRenderingContext2D.prototype.moveTo = function(x: number, y: number) {};
-MockCanvasRenderingContext2D.prototype.lineTo = function(x: number, y: number) {};
+MockCanvasRenderingContext2D.prototype.moveTo = function(_x: number, _y: number) {};
+MockCanvasRenderingContext2D.prototype.lineTo = function(_x: number, _y: number) {};
 MockCanvasRenderingContext2D.prototype.stroke = function() {};
 
-MockCanvasRenderingContext2D.prototype.createLinearGradient = function(x0: number, y0: number, x1: number, y1: number) {
+MockCanvasRenderingContext2D.prototype.createLinearGradient = function(_x0: number, _y0: number, _x1: number, _y1: number) {
   return new MockCanvasGradient();
 };
 
 const MockCanvasGradient = function(this: any) {} as any;
-MockCanvasGradient.prototype.addColorStop = function(offset: number, color: string) {};
+MockCanvasGradient.prototype.addColorStop = function(_offset: number, _color: string) {};
 
 // Mock HTMLCanvasElement
 Object.defineProperty(global, 'HTMLCanvasElement', {
@@ -162,6 +163,7 @@ Element.prototype.getBoundingClientRect = jest.fn(() => ({
   bottom: 100,
   x: 0,
   y: 0,
+  toJSON: () => ({ width: 100, height: 100, top: 0, left: 0, right: 100, bottom: 100, x: 0, y: 0 })
 }));
 
 // Mock navigator.onLine
@@ -183,6 +185,8 @@ Object.defineProperty(navigator, 'onLine', {
     quarter: false,
     eighths: false,
     sixteenths: false,
+    thirtyseconds: false,
+    sixtyfourths: false,
     ...overrides,
   }),
   
