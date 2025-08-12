@@ -404,45 +404,48 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 Settings
               </button>
             </div>
+
+            {/* Canvas Size Selection */}
+            <div style={{ padding: '8px 0', borderTop: '1px solid #555' }}>
+              <div style={{ padding: '8px 12px', color: '#ccc', fontSize: '12px', borderBottom: '1px solid #555' }}>
+                Canvas Size
+              </div>
+              {[16, 32, 64, 128, 256].map(size => (
+                <button
+                  key={size}
+                  onClick={() => {
+                    safeCanvasSizeChange(size)
+                    setIsFileMenuOpen(false)
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    background: 'transparent',
+                    border: 'none',
+                    color: canvasSize === size ? '#4CAF50' : '#fff',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontWeight: canvasSize === size ? 'bold' : 'normal'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V5H19V19Z" />
+                  </svg>
+                  {size}×{size}
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
 
-      {/* Canvas Size Control - positioned next to File menu */}
-      <div 
-        style={{
-          position: 'absolute',
-          left: '280px',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '8px 12px',
-          border: '1px solid #666',
-          background: '#4a4a4a',
-          borderRadius: '4px',
-          height: '36px',
-          justifyContent: 'center'
-        }}
-      >
-        <div style={{ fontSize: '12px', color: '#ccc', whiteSpace: 'nowrap' }}>Canvas:</div>
-        <select
-          value={canvasSize}
-          onChange={(e) => safeCanvasSizeChange(parseInt(e.target.value))}
-          style={{
-            padding: '4px',
-            border: '1px solid #666',
-            background: '#4a4a4a',
-            color: 'white',
-            borderRadius: '4px',
-            fontSize: '12px'
-          }}
-        >
-          {canvasSizes.map(size => (
-            <option key={size} value={size}>{size}x{size}</option>
-          ))}
-        </select>
-      </div>
+      
 
       {/* Brush Size Control - positioned to the left of tools */}
       <div 
@@ -560,7 +563,13 @@ const Toolbar: React.FC<ToolbarProps> = ({
           <img
             src={safeGridSettings.visible ? '/icons/gimp-all/default-svg/gimp-grid.svg' : '/icons/gimp-all/default-svg/gimp-grid-symbolic.svg'}
             alt="Grid"
-            style={{ width: '20px', height: '20px' }}
+            style={{ 
+              width: '20px', 
+              height: '20px',
+              filter: safeGridSettings.visible ? 'brightness(1.2) saturate(1.2)' : 'none',
+              border: safeGridSettings.visible ? '1px solid #666' : 'none',
+              borderRadius: safeGridSettings.visible ? '2px' : '0'
+            }}
           />
         </button>
 
@@ -569,10 +578,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
           className={`tool-button ${safeGridSettings.quarter ? 'active' : ''}`}
           onClick={() => safeGridSettingsChange({
             ...safeGridSettings,
-            quarter: !safeGridSettings.quarter
+            quarter: !safeGridSettings.quarter,
+            eighths: false,
+            sixteenths: false,
+            thirtyseconds: false
           })}
           title={`Quarter Grid - Currently ${safeGridSettings.quarter ? 'ON' : 'OFF'}`}
-          style={{ marginLeft: '4px' }}
         >
           <img
             src="/icons/quarter-new-icon.svg"
@@ -586,10 +597,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
           className={`tool-button ${safeGridSettings.eighths ? 'active' : ''}`}
           onClick={() => safeGridSettingsChange({
             ...safeGridSettings,
-            eighths: !safeGridSettings.eighths
+            quarter: false,
+            eighths: !safeGridSettings.eighths,
+            sixteenths: false,
+            thirtyseconds: false
           })}
           title={`Eighths Grid - Currently ${safeGridSettings.eighths ? 'ON' : 'OFF'}`}
-          style={{ marginLeft: '4px' }}
         >
           <img
             src="/icons/eighth-new-icon.svg"
@@ -603,10 +616,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
           className={`tool-button ${safeGridSettings.sixteenths ? 'active' : ''}`}
           onClick={() => safeGridSettingsChange({
             ...safeGridSettings,
-            sixteenths: !safeGridSettings.sixteenths
+            quarter: false,
+            eighths: false,
+            sixteenths: !safeGridSettings.sixteenths,
+            thirtyseconds: false
           })}
           title={`Sixteenths Grid - Currently ${safeGridSettings.sixteenths ? 'ON' : 'OFF'}`}
-          style={{ marginLeft: '4px' }}
         >
           <img
             src="/icons/sixteenths-icon.svg"
@@ -620,10 +635,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
           className={`tool-button ${safeGridSettings.thirtyseconds ? 'active' : ''}`}
           onClick={() => safeGridSettingsChange({
             ...safeGridSettings,
+            quarter: false,
+            eighths: false,
+            sixteenths: false,
             thirtyseconds: !safeGridSettings.thirtyseconds
           })}
           title={`Thirty-Second Grid - Currently ${safeGridSettings.thirtyseconds ? 'ON' : 'OFF'}`}
-          style={{ marginLeft: '4px' }}
         >
           <img
             src="/icons/thirtyseconds-icon.svg"

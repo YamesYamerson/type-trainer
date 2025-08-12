@@ -28,7 +28,8 @@ describe('Toolbar', () => {
       opacity: 0.5,
       quarter: false,
       eighths: false,
-      sixteenths: false
+      sixteenths: false,
+      thirtyseconds: false
     } as GridSettings,
     onGridSettingsChange: jest.fn(),
     onNewProject: jest.fn(),
@@ -174,21 +175,7 @@ describe('Toolbar', () => {
     expect(screen.getByText('II')).toBeInTheDocument()
   })
 
-  it('should display canvas size control', () => {
-    render(<Toolbar {...defaultProps} />)
-    
-    const canvasSelect = screen.getByDisplayValue('32x32')
-    expect(canvasSelect).toBeInTheDocument()
-  })
 
-  it('should call onCanvasSizeChange when canvas size is changed', () => {
-    render(<Toolbar {...defaultProps} />)
-    
-    const canvasSelect = screen.getByDisplayValue('32x32')
-    fireEvent.change(canvasSelect, { target: { value: '64' } })
-    
-    expect(defaultProps.onCanvasSizeChange).toHaveBeenCalledWith(64)
-  })
 
   it('should display grid toggle control', () => {
     render(<Toolbar {...defaultProps} />)
@@ -210,7 +197,8 @@ describe('Toolbar', () => {
       opacity: 0.5,
       quarter: false,
       eighths: false,
-      sixteenths: false
+      sixteenths: false,
+      thirtyseconds: false
     })
   })
 
@@ -222,7 +210,9 @@ describe('Toolbar', () => {
         color: '#333',
         opacity: 0.5,
         quarter: false,
-        eighths: false
+        eighths: false,
+        sixteenths: false,
+        thirtyseconds: false
       }
     }
     
@@ -256,7 +246,9 @@ describe('Toolbar', () => {
       color: '#333',
       opacity: 0.5,
       quarter: true,
-      eighths: false
+      eighths: false,
+      sixteenths: false,
+      thirtyseconds: false
     })
   })
 
@@ -269,7 +261,8 @@ describe('Toolbar', () => {
         opacity: 0.5,
         quarter: true,
         eighths: false,
-        sixteenths: false
+        sixteenths: false,
+        thirtyseconds: false
       }
     }
     
@@ -299,7 +292,9 @@ describe('Toolbar', () => {
       color: '#333',
       opacity: 0.5,
       quarter: false,
-      eighths: true
+      eighths: true,
+      sixteenths: false,
+      thirtyseconds: false
     })
   })
 
@@ -311,7 +306,9 @@ describe('Toolbar', () => {
         color: '#333',
         opacity: 0.5,
         quarter: false,
-        eighths: true
+        eighths: true,
+        sixteenths: false,
+        thirtyseconds: false
       }
     }
     
@@ -342,7 +339,8 @@ describe('Toolbar', () => {
       opacity: 0.5,
       quarter: false,
       eighths: false,
-      sixteenths: true
+      sixteenths: true,
+      thirtyseconds: false
     })
   })
 
@@ -351,6 +349,212 @@ describe('Toolbar', () => {
     
     const sixteenthsGrid = screen.getByTitle('Sixteenths Grid - Currently ON')
     expect(sixteenthsGrid).toHaveClass('tool-button', 'active')
+  })
+
+  it('should display thirtyseconds grid control', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const thirtysecondsGrid = screen.getByTitle('Thirty-Second Grid - Currently OFF')
+    expect(thirtysecondsGrid).toBeInTheDocument()
+    expect(thirtysecondsGrid).toHaveClass('tool-button')
+  })
+
+  it('should call onGridSettingsChange when thirtyseconds grid is clicked', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const thirtysecondsGrid = screen.getByTitle('Thirty-Second Grid - Currently OFF')
+    fireEvent.click(thirtysecondsGrid)
+    
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: false,
+      color: '#333',
+      opacity: 0.5,
+      quarter: false,
+      eighths: false,
+      sixteenths: false,
+      thirtyseconds: true
+    })
+  })
+
+  it('should display thirtyseconds grid as ON when active', () => {
+    render(<Toolbar {...defaultProps} gridSettings={{ ...defaultProps.gridSettings, thirtyseconds: true }} />)
+    
+    const thirtysecondsGrid = screen.getByTitle('Thirty-Second Grid - Currently ON')
+    expect(thirtysecondsGrid).toHaveClass('tool-button', 'active')
+  })
+
+  it('should display canvas size selection in file dropdown', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const fileMenu = screen.getByText('File')
+    fireEvent.click(fileMenu)
+    
+    // Check for canvas size section
+    expect(screen.getByText('Canvas Size')).toBeInTheDocument()
+    
+    // Check for all canvas size options
+    expect(screen.getByText('16×16')).toBeInTheDocument()
+    expect(screen.getByText('32×32')).toBeInTheDocument()
+    expect(screen.getByText('64×64')).toBeInTheDocument()
+    expect(screen.getByText('128×128')).toBeInTheDocument()
+    expect(screen.getByText('256×256')).toBeInTheDocument()
+  })
+
+  it('should call onCanvasSizeChange when canvas size is selected from dropdown', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const fileMenu = screen.getByText('File')
+    fireEvent.click(fileMenu)
+    
+    const canvasSizeOption = screen.getByText('64×64')
+    fireEvent.click(canvasSizeOption)
+    
+    expect(defaultProps.onCanvasSizeChange).toHaveBeenCalledWith(64)
+  })
+
+  it('should close file dropdown after canvas size selection', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const fileMenu = screen.getByText('File')
+    fireEvent.click(fileMenu)
+    
+    // Verify dropdown is open
+    expect(screen.getByText('Canvas Size')).toBeInTheDocument()
+    
+    const canvasSizeOption = screen.getByText('64×64')
+    fireEvent.click(canvasSizeOption)
+    
+    // Verify dropdown is closed
+    expect(screen.queryByText('Canvas Size')).not.toBeInTheDocument()
+  })
+
+  it('should highlight current canvas size in dropdown', () => {
+    render(<Toolbar {...defaultProps} canvasSize={128} />)
+    
+    const fileMenu = screen.getByText('File')
+    fireEvent.click(fileMenu)
+    
+    const currentSizeOption = screen.getByText('128×128')
+    expect(currentSizeOption).toHaveStyle({ color: '#4CAF50', fontWeight: 'bold' })
+  })
+
+  it('should use correct grid icon sources', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    // Check quarter grid icon
+    const quarterGrid = screen.getByTitle('Quarter Grid - Currently OFF')
+    const quarterIcon = quarterGrid.querySelector('img')
+    expect(quarterIcon).toHaveAttribute('src', '/icons/quarter-new-icon.svg')
+    
+    // Check eighths grid icon
+    const eighthsGrid = screen.getByTitle('Eighths Grid - Currently OFF')
+    const eighthsIcon = eighthsGrid.querySelector('img')
+    expect(eighthsIcon).toHaveAttribute('src', '/icons/eighth-new-icon.svg')
+    
+    // Check sixteenths grid icon
+    const sixteenthsGrid = screen.getByTitle('Sixteenths Grid - Currently OFF')
+    const sixteenthsIcon = sixteenthsGrid.querySelector('img')
+    expect(sixteenthsIcon).toHaveAttribute('src', '/icons/sixteenths-icon.svg')
+    
+    // Check thirtyseconds grid icon
+    const thirtysecondsGrid = screen.getByTitle('Thirty-Second Grid - Currently OFF')
+    const thirtysecondsIcon = thirtysecondsGrid.querySelector('img')
+    expect(thirtysecondsIcon).toHaveAttribute('src', '/icons/thirtyseconds-icon.svg')
+  })
+
+  it('should implement mutual exclusivity for grid division icons', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    // Start with quarter grid active
+    const quarterGrid = screen.getByTitle('Quarter Grid - Currently OFF')
+    fireEvent.click(quarterGrid)
+    
+    // Verify quarter is now active
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: false,
+      color: '#333',
+      opacity: 0.5,
+      quarter: true,
+      eighths: false,
+      sixteenths: false,
+      thirtyseconds: false
+    })
+    
+    // Clear mock to test next interaction
+    jest.clearAllMocks()
+    
+    // Click eighths grid - should turn off quarter and turn on eighths
+    const eighthsGrid = screen.getByTitle('Eighths Grid - Currently OFF')
+    fireEvent.click(eighthsGrid)
+    
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: false,
+      color: '#333',
+      opacity: 0.5,
+      quarter: false,
+      eighths: true,
+      sixteenths: false,
+      thirtyseconds: false
+    })
+    
+    // Clear mock again
+    jest.clearAllMocks()
+    
+    // Click sixteenths grid - should turn off eighths and turn on sixteenths
+    const sixteenthsGrid = screen.getByTitle('Sixteenths Grid - Currently OFF')
+    fireEvent.click(sixteenthsGrid)
+    
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: false,
+      color: '#333',
+      opacity: 0.5,
+      quarter: false,
+      eighths: false,
+      sixteenths: true,
+      thirtyseconds: false
+    })
+  })
+
+  it('should allow main grid to be selected regardless of division icons', () => {
+    render(<Toolbar {...defaultProps} gridSettings={{ 
+      ...defaultProps.gridSettings, 
+      quarter: true,
+      eighths: false,
+      sixteenths: false,
+      thirtyseconds: false
+    }} />)
+    
+    // Main grid should be clickable even when quarter is active
+    const mainGrid = screen.getByTitle('Show Grid - Currently OFF')
+    fireEvent.click(mainGrid)
+    
+    // Should turn on main grid without affecting quarter
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: true,
+      color: '#333',
+      opacity: 0.5,
+      quarter: true,
+      eighths: false,
+      sixteenths: false,
+      thirtyseconds: false
+    })
+  })
+
+  it('should apply enhanced styling to main grid when active', () => {
+    render(<Toolbar {...defaultProps} gridSettings={{ 
+      ...defaultProps.gridSettings, 
+      visible: true 
+    }} />)
+    
+    const mainGrid = screen.getByTitle('Show Grid - Currently ON')
+    const gridIcon = mainGrid.querySelector('img')
+    
+    // Check that the icon has enhanced styling when active
+    expect(gridIcon).toHaveStyle({
+      filter: 'brightness(1.2) saturate(1.2)',
+      border: '1px solid #666',
+      borderRadius: '2px'
+    })
   })
 
   it('should have proper brush size options', () => {
@@ -365,17 +569,7 @@ describe('Toolbar', () => {
     expect(options?.[3]).toHaveValue('4')
   })
 
-  it('should have proper canvas size options', () => {
-    render(<Toolbar {...defaultProps} />)
-    
-    const canvasSelect = screen.getByDisplayValue('32x32')
-    expect(canvasSelect).toBeInTheDocument()
-    
-    const options = canvasSelect.querySelectorAll('option')
-    expect(options).toHaveLength(5)
-    expect(options[0]).toHaveValue('16')
-    expect(options[4]).toHaveValue('256')
-  })
+
 
   it('should maintain proper spacing and layout', () => {
     render(<Toolbar {...defaultProps} />)
@@ -405,7 +599,11 @@ describe('Toolbar', () => {
         gridSettings: {
           visible: false,
           color: '#333',
-          opacity: 0.5
+          opacity: 0.5,
+          quarter: false,
+          eighths: false,
+          sixteenths: false,
+          thirtyseconds: false
         } as GridSettings,
         onGridSettingsChange: jest.fn()
         // Missing file operation callbacks
@@ -529,23 +727,6 @@ describe('Toolbar', () => {
       expect(eighthsGrid).not.toHaveClass('active')
     })
 
-    it('should handle extreme canvas sizes', () => {
-      const extremeCanvasProps = {
-        ...defaultProps,
-        canvasSize: 16, // Minimum valid size
-        onCanvasSizeChange: jest.fn()
-      }
-      
-      render(<Toolbar {...extremeCanvasProps} />)
-      
-      // Should display minimum canvas size
-      expect(screen.getByDisplayValue('16x16')).toBeInTheDocument()
-      
-      // Should allow changing to maximum value
-      const canvasSelect = screen.getByDisplayValue('16x16')
-      fireEvent.change(canvasSelect, { target: { value: '256' } })
-      
-      expect(extremeCanvasProps.onCanvasSizeChange).toHaveBeenCalledWith(256)
-    })
+
   })
 })
