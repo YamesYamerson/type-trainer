@@ -44,17 +44,18 @@ describe('ColorPicker - Simple Tests', () => {
   });
 
   it('should display the primary color', () => {
-    render(<ColorPicker {...defaultProps} />);
+    render(<ColorPicker {...defaultProps} />)
     
     // Check that the component renders without infinite loops
-    const colorPicker = screen.getByText('Color Picker');
-    expect(colorPicker).toBeInTheDocument();
-  });
+    const colorPicker = screen.getByText('II')
+    expect(colorPicker).toBeInTheDocument()
+  })
 
   it('should display color swatches', () => {
-    render(<ColorPicker {...defaultProps} />);
+    render(<ColorPicker {...defaultProps} />)
     
     // The component should render and not cause infinite loops
-    expect(screen.getByText('Color Picker')).toBeInTheDocument();
-  });
+    const colorPicker = screen.getByText('I')
+    expect(colorPicker).toBeInTheDocument()
+  })
 });

@@ -38,6 +38,54 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onExportImage,
   onSettings
 }) => {
+  // Provide default values for optional props to prevent crashes
+  const safeGridSettings = gridSettings || {
+    visible: false,
+    color: '#333',
+    opacity: 0.5
+  }
+
+  // Safe callback wrappers to prevent crashes from callback errors
+  const safeToolSelect = (tool: Tool) => {
+    try {
+      onToolSelect(tool)
+    } catch (error) {
+      console.warn('Error in tool selection callback:', error)
+    }
+  }
+
+  const safeBrushSizeChange = (size: number) => {
+    try {
+      onBrushSizeChange(size)
+    } catch (error) {
+      console.warn('Error in brush size change callback:', error)
+    }
+  }
+
+  const safeCanvasSizeChange = (size: number) => {
+    try {
+      onCanvasSizeChange(size)
+    } catch (error) {
+      console.warn('Error in canvas size change callback:', error)
+    }
+  }
+
+  const safeGridSettingsChange = (settings: GridSettings) => {
+    try {
+      onGridSettingsChange(settings)
+    } catch (error) {
+      console.warn('Error in grid settings change callback:', error)
+    }
+  }
+
+  const safeNewProject = () => {
+    try {
+      if (onNewProject) onNewProject()
+    } catch (error) {
+      console.warn('Error in new project callback:', error)
+    }
+  }
+
   const tools: { id: Tool; name: string; icon: string; iconType: 'svg' | 'png' }[] = [
     { id: 'pencil', name: 'Pencil', icon: '/icons/pencil.svg', iconType: 'svg' },
     { id: 'eraser', name: 'Eraser', icon: '/icons/eraser.svg', iconType: 'svg' },
@@ -71,10 +119,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           position: 'absolute',
           left: '20px'
         }}
-        onClick={() => {
-          // Simple dropdown toggle - you can enhance this later
-          if (onNewProject) onNewProject()
-        }}
+        onClick={safeNewProject}
         title="File Menu - Click for New Project"
       >
         {/* File Icon */}
@@ -162,7 +207,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <select
           id="brush-size-select"
           value={brushSize}
-          onChange={(e) => onBrushSizeChange(parseInt(e.target.value))}
+          onChange={(e) => safeBrushSizeChange(parseInt(e.target.value))}
           style={{
             position: 'absolute',
             top: '0',
@@ -185,7 +230,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           <button
             key={tool.id}
             className={`tool-button ${selectedTool === tool.id ? 'active' : ''}`}
-            onClick={() => onToolSelect(tool.id)}
+            onClick={() => safeToolSelect(tool.id)}
             title={tool.name}
           >
             {tool.iconType === 'svg' ? (
@@ -276,7 +321,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         <label>Canvas Size</label>
         <select
           value={canvasSize}
-          onChange={(e) => onCanvasSizeChange(parseInt(e.target.value))}
+          onChange={(e) => safeCanvasSizeChange(parseInt(e.target.value))}
           style={{
             padding: '4px',
             border: '1px solid #555',
@@ -295,14 +340,14 @@ const Toolbar: React.FC<ToolbarProps> = ({
       <div className="control-group">
         <label>Show Grid</label>
         <button
-          className={`tool-button ${gridSettings.visible ? 'active' : ''}`}
-          onClick={() => onGridSettingsChange({
-            ...gridSettings,
-            visible: !gridSettings.visible
+          className={`tool-button ${safeGridSettings.visible ? 'active' : ''}`}
+          onClick={() => safeGridSettingsChange({
+            ...safeGridSettings,
+            visible: !safeGridSettings.visible
           })}
           style={{ width: '80px', height: '30px' }}
         >
-          {gridSettings.visible ? 'ON' : 'OFF'}
+          {safeGridSettings.visible ? 'ON' : 'OFF'}
         </button>
       </div>
     </div>
