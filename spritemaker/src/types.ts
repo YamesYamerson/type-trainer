@@ -27,4 +27,7 @@ export interface GridSettings {
   visible: boolean
   color: string
   opacity: number
+  quarter: boolean // Enable quarter grid divisions
+  eighths: boolean // Enable eighths grid divisions
+  sixteenths: boolean // Enable sixteenths grid divisions
 }

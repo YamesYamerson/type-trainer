@@ -25,14 +25,18 @@ describe('Toolbar', () => {
     gridSettings: {
       visible: false,
       color: '#333',
-      opacity: 0.5
+      opacity: 0.5,
+      quarter: false,
+      eighths: false,
+      sixteenths: false
     } as GridSettings,
     onGridSettingsChange: jest.fn(),
     onNewProject: jest.fn(),
     onOpenProject: jest.fn(),
     onSaveProject: jest.fn(),
     onExportImage: jest.fn(),
-    onSettings: jest.fn()
+    onSettings: jest.fn(),
+    canvasRef: undefined
   }
 
   beforeEach(() => {
@@ -189,19 +193,24 @@ describe('Toolbar', () => {
   it('should display grid toggle control', () => {
     render(<Toolbar {...defaultProps} />)
     
-    expect(screen.getByText('Show Grid')).toBeInTheDocument()
-    expect(screen.getByText('OFF')).toBeInTheDocument()
+    const gridToggle = screen.getByTitle('Show Grid - Currently OFF')
+    expect(gridToggle).toBeInTheDocument()
+    expect(gridToggle).toHaveClass('tool-button')
   })
 
   it('should call onGridSettingsChange when grid toggle is clicked', () => {
     render(<Toolbar {...defaultProps} />)
     
-    const gridToggle = screen.getByText('OFF')
+    const gridToggle = screen.getByTitle('Show Grid - Currently OFF')
     fireEvent.click(gridToggle)
     
     expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
-      ...defaultProps.gridSettings,
-      visible: true
+      visible: true,
+      color: '#333',
+      opacity: 0.5,
+      quarter: false,
+      eighths: false,
+      sixteenths: false
     })
   })
 
@@ -209,38 +218,163 @@ describe('Toolbar', () => {
     const propsWithVisibleGrid = {
       ...defaultProps,
       gridSettings: {
-        ...defaultProps.gridSettings,
-        visible: true
+        visible: true,
+        color: '#333',
+        opacity: 0.5,
+        quarter: false,
+        eighths: false
       }
     }
     
     render(<Toolbar {...propsWithVisibleGrid} />)
     
-    expect(screen.getByText('ON')).toBeInTheDocument()
+    const gridToggle = screen.getByTitle('Show Grid - Currently ON')
+    expect(gridToggle).toBeInTheDocument()
+    
+    // Check that it has the active class and correct icon
+    expect(gridToggle).toHaveClass('tool-button active')
+    const gridIcon = gridToggle.querySelector('img')
+    expect(gridIcon).toHaveAttribute('src', '/icons/gimp-all/default-svg/gimp-grid.svg')
+  })
+
+  it('should display quarter grid control', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const quarterGrid = screen.getByTitle('Quarter Grid - Currently OFF')
+    expect(quarterGrid).toBeInTheDocument()
+    expect(quarterGrid).toHaveClass('tool-button')
+  })
+
+  it('should call onGridSettingsChange when quarter grid is clicked', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const quarterGrid = screen.getByTitle('Quarter Grid - Currently OFF')
+    fireEvent.click(quarterGrid)
+    
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: false,
+      color: '#333',
+      opacity: 0.5,
+      quarter: true,
+      eighths: false
+    })
+  })
+
+  it('should display quarter grid as ON when active', () => {
+    const propsWithQuarterGrid = {
+      ...defaultProps,
+      gridSettings: {
+        visible: false,
+        color: '#333',
+        opacity: 0.5,
+        quarter: true,
+        eighths: false,
+        sixteenths: false
+      }
+    }
+    
+    render(<Toolbar {...propsWithQuarterGrid} />)
+    
+    const quarterGrid = screen.getByTitle('Quarter Grid - Currently ON')
+    expect(quarterGrid).toBeInTheDocument()
+    expect(quarterGrid).toHaveClass('tool-button active')
+  })
+
+  it('should display eighths grid control', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const eighthsGrid = screen.getByTitle('Eighths Grid - Currently OFF')
+    expect(eighthsGrid).toBeInTheDocument()
+    expect(eighthsGrid).toHaveClass('tool-button')
+  })
+
+  it('should call onGridSettingsChange when eighths grid is clicked', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const eighthsGrid = screen.getByTitle('Eighths Grid - Currently OFF')
+    fireEvent.click(eighthsGrid)
+    
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: false,
+      color: '#333',
+      opacity: 0.5,
+      quarter: false,
+      eighths: true
+    })
+  })
+
+  it('should display eighths grid as ON when active', () => {
+    const propsWithEighthsGrid = {
+      ...defaultProps,
+      gridSettings: {
+        visible: false,
+        color: '#333',
+        opacity: 0.5,
+        quarter: false,
+        eighths: true
+      }
+    }
+    
+    render(<Toolbar {...propsWithEighthsGrid} />)
+    
+    const eighthsGrid = screen.getByTitle('Eighths Grid - Currently ON')
+    expect(eighthsGrid).toBeInTheDocument()
+    expect(eighthsGrid).toHaveClass('tool-button active')
+  })
+
+  it('should display sixteenths grid control', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const sixteenthsGrid = screen.getByTitle('Sixteenths Grid - Currently OFF')
+    expect(sixteenthsGrid).toBeInTheDocument()
+    expect(sixteenthsGrid).toHaveClass('tool-button')
+  })
+
+  it('should call onGridSettingsChange when sixteenths grid is clicked', () => {
+    render(<Toolbar {...defaultProps} />)
+    
+    const sixteenthsGrid = screen.getByTitle('Sixteenths Grid - Currently OFF')
+    fireEvent.click(sixteenthsGrid)
+    
+    expect(defaultProps.onGridSettingsChange).toHaveBeenCalledWith({
+      visible: false,
+      color: '#333',
+      opacity: 0.5,
+      quarter: false,
+      eighths: false,
+      sixteenths: true
+    })
+  })
+
+  it('should display sixteenths grid as ON when active', () => {
+    render(<Toolbar {...defaultProps} gridSettings={{ ...defaultProps.gridSettings, sixteenths: true }} />)
+    
+    const sixteenthsGrid = screen.getByTitle('Sixteenths Grid - Currently ON')
+    expect(sixteenthsGrid).toHaveClass('tool-button', 'active')
   })
 
   it('should have proper brush size options', () => {
     render(<Toolbar {...defaultProps} />)
     
-    const brushSelect = screen.getByDisplayValue('2')
-    const options = Array.from(brushSelect.querySelectorAll('option'))
+    const brushSelect = document.getElementById('brush-size-select')
+    expect(brushSelect).toBeInTheDocument()
     
-    const expectedSizes = [1, 2, 3, 4]
-    expectedSizes.forEach(size => {
-      expect(options.some(option => option.value === size.toString())).toBe(true)
-    })
+    const options = brushSelect?.querySelectorAll('option')
+    expect(options).toHaveLength(4)
+    expect(options?.[0]).toHaveValue('1')
+    expect(options?.[3]).toHaveValue('4')
   })
 
   it('should have proper canvas size options', () => {
     render(<Toolbar {...defaultProps} />)
     
     const canvasSelect = screen.getByDisplayValue('32x32')
-    const options = Array.from(canvasSelect.querySelectorAll('option'))
+    expect(canvasSelect).toBeInTheDocument()
     
-    const expectedSizes = [16, 32, 64, 128, 256]
-    expectedSizes.forEach(size => {
-      expect(options.some(option => option.value === size.toString())).toBe(true)
-    })
+    const options = canvasSelect.querySelectorAll('option')
+    expect(options).toHaveLength(5)
+    expect(options[0]).toHaveValue('16')
+    expect(options[4]).toHaveValue('256')
   })
 
   it('should maintain proper spacing and layout', () => {
@@ -250,7 +384,7 @@ describe('Toolbar', () => {
     expect(toolbar).toBeInTheDocument()
     
     // Check that the spacer exists to maintain centering
-    const spacer = toolbar?.querySelector('div[style*="width: 260px"]')
+    const spacer = toolbar?.querySelector('div[style*="width: 200px"]')
     expect(spacer).toBeInTheDocument()
   })
 
@@ -374,15 +508,25 @@ describe('Toolbar', () => {
       expect(container).toBeInTheDocument()
       
       // Should display grid toggle with default state (OFF)
-      // Find the grid toggle by looking for the specific "Show Grid" label
-      const gridLabel = Array.from(container.querySelectorAll('label')).find(label => 
-        label.textContent === 'Show Grid'
-      )
-      expect(gridLabel).toBeInTheDocument()
+      // Find the grid toggle by looking for the button with grid icon
+      const gridToggle = container.querySelector('button[title*="Show Grid"]')
+      expect(gridToggle).toBeInTheDocument()
       
-      // The button should be in the same control group
-      const gridToggle = gridLabel?.nextElementSibling as HTMLButtonElement
-      expect(gridToggle).toHaveTextContent('OFF')
+      // Should have the default inactive state
+      expect(gridToggle).toHaveClass('tool-button')
+      expect(gridToggle).not.toHaveClass('active')
+
+      // Should display quarter grid with default state (OFF)
+      const quarterGrid = container.querySelector('button[title*="Quarter Grid"]')
+      expect(quarterGrid).toBeInTheDocument()
+      expect(quarterGrid).toHaveClass('tool-button')
+      expect(quarterGrid).not.toHaveClass('active')
+
+      // Should display eighths grid with default state (OFF)
+      const eighthsGrid = container.querySelector('button[title*="Eighths Grid"]')
+      expect(eighthsGrid).toBeInTheDocument()
+      expect(eighthsGrid).toHaveClass('tool-button')
+      expect(eighthsGrid).not.toHaveClass('active')
     })
 
     it('should handle extreme canvas sizes', () => {

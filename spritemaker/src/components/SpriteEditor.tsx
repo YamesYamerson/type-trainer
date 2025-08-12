@@ -244,6 +244,88 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
       // Reset global alpha
       ctx.globalAlpha = 1.0
     }
+
+    // Draw quarter grid divisions (if enabled)
+    if (gridSettings.quarter) {
+      ctx.strokeStyle = gridSettings.color
+      ctx.globalAlpha = gridSettings.opacity
+      ctx.lineWidth = 1
+      
+      // Draw center vertical line
+      const centerX = (canvasSize / 2) * pixelSize
+      ctx.beginPath()
+      ctx.moveTo(centerX, 0)
+      ctx.lineTo(centerX, canvas.height)
+      ctx.stroke()
+      
+      // Draw center horizontal line
+      const centerY = (canvasSize / 2) * pixelSize
+      ctx.beginPath()
+      ctx.moveTo(0, centerY)
+      ctx.lineTo(canvas.width, centerY)
+      ctx.stroke()
+      
+      // Reset global alpha
+      ctx.globalAlpha = 1.0
+    }
+
+    // Draw eighths grid divisions (if enabled)
+    if (gridSettings.eighths) {
+      ctx.strokeStyle = gridSettings.color
+      ctx.globalAlpha = gridSettings.opacity
+      ctx.lineWidth = 1
+      
+      // Draw vertical division lines at 1/4, 1/2, and 3/4 positions
+      const quarterPositions = [1, 2, 3] // 1/4, 2/4, 3/4
+      quarterPositions.forEach(quarter => {
+        const pos = (canvasSize * quarter / 4) * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(pos, 0)
+        ctx.lineTo(pos, canvas.height)
+        ctx.stroke()
+      })
+      
+      // Draw horizontal division lines at 1/4, 1/2, and 3/4 positions
+      quarterPositions.forEach(quarter => {
+        const pos = (canvasSize * quarter / 4) * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(0, pos)
+        ctx.lineTo(canvas.width, pos)
+        ctx.stroke()
+      })
+      
+      // Reset global alpha
+      ctx.globalAlpha = 1.0
+    }
+
+    // Draw sixteenths grid divisions (if enabled)
+    if (gridSettings.sixteenths) {
+      ctx.strokeStyle = gridSettings.color
+      ctx.globalAlpha = gridSettings.opacity
+      ctx.lineWidth = 1
+      
+      // Draw vertical division lines at 1/8, 1/4, 3/8, 1/2, 5/8, 3/4, 7/8 positions
+      const eighthPositions = [1, 2, 3, 4, 5, 6, 7] // 1/8, 2/8, 3/8, 4/8, 5/8, 6/8, 7/8
+      eighthPositions.forEach(eighth => {
+        const pos = (canvasSize * eighth / 8) * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(pos, 0)
+        ctx.lineTo(pos, canvas.height)
+        ctx.stroke()
+      })
+      
+      // Draw horizontal division lines at 1/8, 1/4, 3/8, 1/2, 5/8, 3/4, 7/8 positions
+      eighthPositions.forEach(eighth => {
+        const pos = (canvasSize * eighth / 8) * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(0, pos)
+        ctx.lineTo(canvas.width, pos)
+        ctx.stroke()
+      })
+      
+      // Reset global alpha
+      ctx.globalAlpha = 1.0
+    }
     
     // Draw pixels
     pixels.forEach((pixel) => {
@@ -258,7 +340,7 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
         )
       }
     })
-  }, [pixels, layers, canvasSize, pixelSize, gridSettings])
+  }, [pixels, layers, canvasSize, pixelSize, gridSettings.visible, gridSettings.color, gridSettings.opacity, gridSettings.quarter, gridSettings.eighths, gridSettings.sixteenths])
 
   return (
     <div className="canvas-container">

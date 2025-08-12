@@ -19,7 +19,10 @@ function App() {
   const [gridSettings, setGridSettings] = useState<GridSettings>({
     visible: false,
     color: '#333',
-    opacity: 0.5
+    opacity: 0.5,
+    quarter: false,
+    eighths: false,
+    sixteenths: false
   })
 
   const handleNewLayer = () => {

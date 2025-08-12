@@ -180,6 +180,9 @@ Object.defineProperty(navigator, 'onLine', {
     visible: false,
     color: '#333',
     opacity: 0.5,
+    quarter: false,
+    eighths: false,
+    sixteenths: false,
     ...overrides,
   }),
   

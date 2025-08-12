@@ -56,11 +56,14 @@ const Toolbar: React.FC<ToolbarProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Provide default values for optional props to prevent crashes
+  // Safe grid settings with defaults
   const safeGridSettings = gridSettings || {
     visible: false,
     color: '#333',
-    opacity: 0.5
+    opacity: 0.5,
+    quarter: false,
+    eighths: false,
+    sixteenths: false
   }
 
   // Safe callback wrappers to prevent crashes from callback errors
@@ -404,8 +407,41 @@ const Toolbar: React.FC<ToolbarProps> = ({
         )}
       </div>
 
-      {/* Spacer to maintain centering of other content */}
-      <div style={{ width: '260px', flexShrink: 0 }}></div>
+      {/* Canvas Size Control - positioned next to File menu */}
+      <div 
+        style={{
+          position: 'absolute',
+          left: '280px',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '8px 12px',
+          border: '1px solid #666',
+          background: '#4a4a4a',
+          borderRadius: '4px',
+          height: '36px',
+          justifyContent: 'center'
+        }}
+      >
+        <div style={{ fontSize: '12px', color: '#ccc', whiteSpace: 'nowrap' }}>Canvas:</div>
+        <select
+          value={canvasSize}
+          onChange={(e) => safeCanvasSizeChange(parseInt(e.target.value))}
+          style={{
+            padding: '4px',
+            border: '1px solid #666',
+            background: '#4a4a4a',
+            color: 'white',
+            borderRadius: '4px',
+            fontSize: '12px'
+          }}
+        >
+          {canvasSizes.map(size => (
+            <option key={size} value={size}>{size}x{size}</option>
+          ))}
+        </select>
+      </div>
 
       {/* Brush Size Control - positioned to the left of tools */}
       <div 
@@ -509,10 +545,78 @@ const Toolbar: React.FC<ToolbarProps> = ({
             )}
           </button>
         ))}
+        
+        {/* Grid Toggle Tool */}
+        <button
+          className={`tool-button ${safeGridSettings.visible ? 'active' : ''}`}
+          onClick={() => safeGridSettingsChange({
+            ...safeGridSettings,
+            visible: !safeGridSettings.visible
+          })}
+          title={`Show Grid - Currently ${safeGridSettings.visible ? 'ON' : 'OFF'}`}
+          style={{ marginLeft: '8px' }}
+        >
+          <img
+            src={safeGridSettings.visible ? '/icons/gimp-all/default-svg/gimp-grid.svg' : '/icons/gimp-all/default-svg/gimp-grid-symbolic.svg'}
+            alt="Grid"
+            style={{ width: '20px', height: '20px' }}
+          />
+        </button>
+
+        {/* Quarter Grid Tool */}
+        <button
+          className={`tool-button ${safeGridSettings.quarter ? 'active' : ''}`}
+          onClick={() => safeGridSettingsChange({
+            ...safeGridSettings,
+            quarter: !safeGridSettings.quarter
+          })}
+          title={`Quarter Grid - Currently ${safeGridSettings.quarter ? 'ON' : 'OFF'}`}
+          style={{ marginLeft: '4px' }}
+        >
+          <img
+            src="/icons/plus-icon.svg"
+            alt="Quarter Grid"
+            style={{ width: '20px', height: '20px' }}
+          />
+        </button>
+
+        {/* Eighths Grid Tool */}
+        <button
+          className={`tool-button ${safeGridSettings.eighths ? 'active' : ''}`}
+          onClick={() => safeGridSettingsChange({
+            ...safeGridSettings,
+            eighths: !safeGridSettings.eighths
+          })}
+          title={`Eighths Grid - Currently ${safeGridSettings.eighths ? 'ON' : 'OFF'}`}
+          style={{ marginLeft: '4px' }}
+        >
+          <img
+            src="/icons/eighths-icon.svg"
+            alt="Eighths Grid"
+            style={{ width: '20px', height: '20px' }}
+          />
+        </button>
+
+        {/* Sixteenths Grid Tool */}
+        <button
+          className={`tool-button ${safeGridSettings.sixteenths ? 'active' : ''}`}
+          onClick={() => safeGridSettingsChange({
+            ...safeGridSettings,
+            sixteenths: !safeGridSettings.sixteenths
+          })}
+          title={`Sixteenths Grid - Currently ${safeGridSettings.sixteenths ? 'ON' : 'OFF'}`}
+          style={{ marginLeft: '4px' }}
+        >
+          <img
+            src="/icons/sixteenths-icon.svg"
+            alt="Sixteenths Grid"
+            style={{ width: '20px', height: '20px' }}
+          />
+        </button>
       </div>
 
       {/* Color Display - Single icon box split diagonally */}
-      <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginLeft: '8px' }}>
         <div
           style={{
             width: '36px',
@@ -585,40 +689,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
         </div>
       </div>
 
-      {/* Canvas Size */}
-      <div className="control-group">
-        <label>Canvas Size</label>
-        <select
-          value={canvasSize}
-          onChange={(e) => safeCanvasSizeChange(parseInt(e.target.value))}
-          style={{
-            padding: '4px',
-            border: '1px solid #666',
-            background: '#4a4a4a',
-            color: 'white',
-            borderRadius: '4px'
-          }}
-        >
-          {canvasSizes.map(size => (
-            <option key={size} value={size}>{size}x{size}</option>
-          ))}
-        </select>
-      </div>
-
-      {/* Grid Toggle */}
-      <div className="control-group">
-        <label>Show Grid</label>
-        <button
-          className={`tool-button ${safeGridSettings.visible ? 'active' : ''}`}
-          onClick={() => safeGridSettingsChange({
-            ...safeGridSettings,
-            visible: !safeGridSettings.visible
-          })}
-          style={{ width: '80px', height: '30px' }}
-        >
-          {safeGridSettings.visible ? 'ON' : 'OFF'}
-        </button>
-      </div>
+      {/* Spacer to maintain centering of other content */}
+      <div style={{ width: '200px', flexShrink: 0 }}></div>
     </div>
   )
 }
