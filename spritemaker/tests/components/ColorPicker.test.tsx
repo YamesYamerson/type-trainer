@@ -48,11 +48,14 @@ describe('ColorPicker', () => {
   it('should display the primary color correctly', () => {
     render(<ColorPicker {...defaultProps} />);
     
-    // The element with text 'II' IS the color display div with the background color
-    const colorDisplay = screen.getByText('II');
-    // Check the inline style attribute directly since Jest/jsdom doesn't support computed styles
-    expect(colorDisplay).toHaveAttribute('style');
-    expect(colorDisplay!.getAttribute('style')).toContain('background-color: rgb(255, 0, 0)'); // Jest converts #ff0000 to rgb(255, 0, 0)
+    // The color display now has a nested structure with checkerboard background
+    // We need to find the inner div that contains the actual color
+    const colorText = screen.getByText('II');
+    const colorDisplay = colorText.parentElement;
+    // The inner div with the color is the second child (index 1) of the container
+    const innerColorDiv = colorDisplay?.children[1] as HTMLElement;
+    expect(innerColorDiv).toHaveAttribute('style');
+    expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(0, 100%, 100%, 1)'); // Default red with full alpha
   });
 
   it('should render color swatches', () => {
@@ -288,22 +291,26 @@ describe('ColorPicker', () => {
       />
     );
     
-    const colorDisplay = screen.getByText('II');
+    const colorText = screen.getByText('II');
+    const colorDisplay = colorText.parentElement;
+    const innerColorDiv = colorDisplay?.children[1] as HTMLElement;
     // Check the inline style attribute directly
-    expect(colorDisplay).toHaveAttribute('style');
-    expect(colorDisplay!.getAttribute('style')).toContain('background-color: rgb(0, 255, 0)'); // Jest converts #00ff00 to rgb(0, 255, 0)
+    expect(innerColorDiv).toHaveAttribute('style');
+    expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(120, 100%, 100%, 1)'); // Green with full alpha
   });
 
   it('should maintain state consistency', () => {
     render(<ColorPicker {...defaultProps} />);
     
     // Check that all color-related elements are consistent
-    const colorDisplay = screen.getByText('II');
+    const colorText = screen.getByText('II');
+    const colorDisplay = colorText.parentElement;
+    const innerColorDiv = colorDisplay?.children[1] as HTMLElement;
     const hexInput = screen.getByDisplayValue('#ff0000');
     
     // Check the inline style attribute directly
-    expect(colorDisplay).toHaveAttribute('style');
-    expect(colorDisplay!.getAttribute('style')).toContain('background-color: rgb(255, 0, 0)'); // Jest converts #ff0000 to rgb(255, 0, 0)
+    expect(innerColorDiv).toHaveAttribute('style');
+    expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(0, 100%, 100%, 1)'); // Red with full alpha
     expect(hexInput).toHaveValue('#ff0000');
   });
 

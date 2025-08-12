@@ -355,16 +355,43 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         <div style={{
           width: '40px',
           height: '40px',
-          backgroundColor: primaryColor,
+          position: 'relative',
           border: '2px solid #fff',
           borderRadius: '4px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#000',
-          fontWeight: 'bold'
+          overflow: 'hidden'
         }}>
-          II
+          {/* Checkerboard background to show transparency */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `
+              linear-gradient(45deg, #ccc 25%, transparent 25%),
+              linear-gradient(-45deg, #ccc 25%, transparent 25%),
+              linear-gradient(45deg, transparent 75%, #ccc 75%),
+              linear-gradient(-45deg, transparent 75%, #ccc 75%)
+            `,
+            backgroundSize: '8px 8px',
+            backgroundPosition: '0 0, 0 4px, 4px -4px, -4px 0px'
+          }} />
+          {/* Color with alpha */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: `hsla(${hue}, ${saturation}%, ${value}%, ${alpha})`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#000',
+            fontWeight: 'bold'
+          }}>
+            II
+          </div>
         </div>
         <div style={{
           width: '40px',
@@ -498,6 +525,42 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
             boxShadow: '0 0 4px rgba(0,0,0,0.8)'
           }}
         />
+        
+        {/* Alpha preview - shows current color with transparency */}
+        <div style={{
+          marginTop: '8px',
+          height: '20px',
+          position: 'relative',
+          border: '1px solid #555',
+          borderRadius: '4px',
+          overflow: 'hidden'
+        }}>
+          {/* Checkerboard background */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `
+              linear-gradient(45deg, #ccc 25%, transparent 25%),
+              linear-gradient(-45deg, #ccc 25%, transparent 25%),
+              linear-gradient(45deg, transparent 75%, #ccc 75%),
+              linear-gradient(-45deg, transparent 75%, #ccc 75%)
+            `,
+            backgroundSize: '8px 8px',
+            backgroundPosition: '0 0, 0 4px, 4px -4px, -4px 0px'
+          }} />
+          {/* Color with current alpha */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: `hsla(${hue}, ${saturation}%, ${value}%, ${alpha})`
+          }} />
+        </div>
       </div>
 
       {/* Color inputs */}
@@ -519,8 +582,8 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
             }}
           />
         </div>
-        <div>
-          <label>Color:</label>
+        <div style={{ marginBottom: '8px' }}>
+          <label>Hex:</label>
           <input
             type="text"
             value={primaryColor}
@@ -535,6 +598,55 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
               fontSize: '11px'
             }}
           />
+        </div>
+        <div style={{ marginBottom: '8px' }}>
+          <label>HSLA:</label>
+          <input
+            type="text"
+            value={`hsla(${Math.round(hue)}, ${Math.round(saturation)}%, ${Math.round(value)}%, ${alpha.toFixed(2)})`}
+            readOnly
+            style={{
+              width: '100%',
+              padding: '4px',
+              backgroundColor: '#444',
+              border: '1px solid #555',
+              borderRadius: '4px',
+              color: '#fff',
+              fontSize: '11px'
+            }}
+          />
+        </div>
+        <div>
+          <label>Alpha:</label>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={alpha}
+            onChange={(e) => {
+              const newAlpha = parseFloat(e.target.value);
+              setAlpha(newAlpha);
+              // Update the color with new alpha
+              try {
+                const newColor = hsvToRgb(hue, saturation, value);
+                handleColorChange(newColor);
+              } catch (error) {
+                console.warn('Failed to update color with new alpha:', error);
+              }
+            }}
+            style={{
+              width: '100%',
+              padding: '4px',
+              backgroundColor: '#444',
+              border: '1px solid #555',
+              borderRadius: '4px',
+              color: '#fff'
+            }}
+          />
+          <span style={{ fontSize: '10px', color: '#aaa', marginLeft: '8px' }}>
+            {Math.round(alpha * 100)}%
+          </span>
         </div>
       </div>
 
