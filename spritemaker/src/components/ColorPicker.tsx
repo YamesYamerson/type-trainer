@@ -332,13 +332,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       left: '20px',
       top: '20px',
       width: '200px',
-      backgroundColor: '#2d2d2d',
-      border: '1px solid #555',
-      borderRadius: '8px',
-      padding: '15px',
-      color: '#fff',
-      fontFamily: 'monospace',
-      fontSize: '12px'
+      padding: '15px'
     }}>
       {/* Main color display */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
@@ -417,7 +411,11 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
             border: 'none',
             borderRadius: '4px',
             color: '#fff',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
           Swap Colors
