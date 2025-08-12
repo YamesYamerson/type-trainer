@@ -48,8 +48,11 @@ describe('ColorPicker', () => {
   it('should display the primary color correctly', () => {
     render(<ColorPicker {...defaultProps} />);
     
-    const colorDisplay = screen.getByText('II').parentElement;
-    expect(colorDisplay).toHaveStyle({ backgroundColor: '#ff0000' });
+    // The element with text 'II' IS the color display div with the background color
+    const colorDisplay = screen.getByText('II');
+    // Check the inline style attribute directly since Jest/jsdom doesn't support computed styles
+    expect(colorDisplay).toHaveAttribute('style');
+    expect(colorDisplay!.getAttribute('style')).toContain('background-color: rgb(255, 0, 0)'); // Jest converts #ff0000 to rgb(255, 0, 0)
   });
 
   it('should render color swatches', () => {
@@ -61,7 +64,6 @@ describe('ColorPicker', () => {
   });
 
   it('should handle color swatch clicks', async () => {
-    const user = userEvent.setup();
     const onPrimaryColorChange = jest.fn();
     
     render(
@@ -71,13 +73,32 @@ describe('ColorPicker', () => {
       />
     );
 
-    // Find and click a color swatch
-    const swatches = document.querySelectorAll('[style*="background-color"]');
-    const firstSwatch = swatches[0] as HTMLElement;
+    // Find actual color swatches by looking for elements with specific dimensions and background colors
+    // Color swatches have width: 20px, height: 20px and are in the swatch grid
+    const swatches = document.querySelectorAll('div[style*="width: 20px"][style*="height: 20px"][style*="background-color"]');
+    console.log('Found color swatches:', swatches.length);
     
-    await user.click(firstSwatch);
+    // Find a swatch that's not the current primary color (#ff0000)
+    let targetSwatch: HTMLElement | null = null;
+    for (let i = 0; i < swatches.length; i++) {
+      const swatch = swatches[i] as HTMLElement;
+      const style = swatch.getAttribute('style');
+      console.log(`Swatch ${i} style:`, style);
+      if (style && !style.includes('rgb(255, 0, 0)')) {
+        targetSwatch = swatch;
+        console.log(`Found target swatch at index ${i}`);
+        break;
+      }
+    }
     
-    expect(onPrimaryColorChange).toHaveBeenCalled();
+    expect(targetSwatch).not.toBeNull();
+    if (targetSwatch) {
+      console.log('Clicking target swatch');
+      // Use fireEvent for more reliable clicking
+      fireEvent.click(targetSwatch);
+      console.log('onPrimaryColorChange calls:', onPrimaryColorChange.mock.calls);
+      expect(onPrimaryColorChange).toHaveBeenCalled();
+    }
   });
 
   it('should render gradient picker canvas', () => {
@@ -114,7 +135,6 @@ describe('ColorPicker', () => {
   });
 
   it('should handle hex color input changes', async () => {
-    const user = userEvent.setup();
     const onPrimaryColorChange = jest.fn();
     
     render(
@@ -126,8 +146,8 @@ describe('ColorPicker', () => {
 
     const hexInput = screen.getByDisplayValue('#ff0000');
     
-    await user.clear(hexInput);
-    await user.type(hexInput, '#00ff00');
+    // Use fireEvent for more reliable input changes
+    fireEvent.change(hexInput, { target: { value: '#00ff00' } });
     
     expect(onPrimaryColorChange).toHaveBeenCalledWith('#00ff00');
   });
@@ -268,18 +288,22 @@ describe('ColorPicker', () => {
       />
     );
     
-    const colorDisplay = screen.getByText('II').parentElement;
-    expect(colorDisplay).toHaveStyle({ backgroundColor: '#00ff00' });
+    const colorDisplay = screen.getByText('II');
+    // Check the inline style attribute directly
+    expect(colorDisplay).toHaveAttribute('style');
+    expect(colorDisplay!.getAttribute('style')).toContain('background-color: rgb(0, 255, 0)'); // Jest converts #00ff00 to rgb(0, 255, 0)
   });
 
   it('should maintain state consistency', () => {
     render(<ColorPicker {...defaultProps} />);
     
     // Check that all color-related elements are consistent
-    const colorDisplay = screen.getByText('II').parentElement;
+    const colorDisplay = screen.getByText('II');
     const hexInput = screen.getByDisplayValue('#ff0000');
     
-    expect(colorDisplay).toHaveStyle({ backgroundColor: '#ff0000' });
+    // Check the inline style attribute directly
+    expect(colorDisplay).toHaveAttribute('style');
+    expect(colorDisplay!.getAttribute('style')).toContain('background-color: rgb(255, 0, 0)'); // Jest converts #ff0000 to rgb(255, 0, 0)
     expect(hexInput).toHaveValue('#ff0000');
   });
 

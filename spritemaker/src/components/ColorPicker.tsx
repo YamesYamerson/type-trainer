@@ -70,9 +70,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   }, [onPrimaryColorChange])
 
 
-
-
-
   // Draw gradient canvas - only when hue changes
   useEffect(() => {
     const canvas = gradientRef.current
