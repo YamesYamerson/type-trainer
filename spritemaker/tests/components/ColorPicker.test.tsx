@@ -54,8 +54,9 @@ describe('ColorPicker', () => {
     const colorDisplay = colorText.parentElement;
     // The inner div with the color is the second child (index 1) of the container
     const innerColorDiv = colorDisplay?.children[1] as HTMLElement;
+    
     expect(innerColorDiv).toHaveAttribute('style');
-    expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(0, 100%, 100%, 1)'); // Default red with full alpha
+    expect(innerColorDiv!.getAttribute('style')).toContain('background-color: rgb(255, 0, 0)'); // Default red with full alpha (converted from hsla by Jest/jsdom)
   });
 
   it('should render color swatches', () => {
@@ -280,7 +281,7 @@ describe('ColorPicker', () => {
     expect(alphaCanvas).toBeInTheDocument();
   });
 
-  it('should update when primary color changes externally', () => {
+  it('should update when primary color changes externally', async () => {
     const { rerender } = render(<ColorPicker {...defaultProps} />);
     
     // Change the primary color
@@ -291,12 +292,13 @@ describe('ColorPicker', () => {
       />
     );
     
-    const colorText = screen.getByText('II');
-    const colorDisplay = colorText.parentElement;
-    const innerColorDiv = colorDisplay?.children[1] as HTMLElement;
-    // Check the inline style attribute directly
-    expect(innerColorDiv).toHaveAttribute('style');
-    expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(120, 100%, 100%, 1)'); // Green with full alpha
+    // Wait for the state update to complete
+    await waitFor(() => {
+      const colorText = screen.getByText('II');
+      const colorDisplay = colorText.parentElement;
+      const innerColorDiv = colorDisplay?.children[1] as HTMLElement;
+      expect(innerColorDiv!.getAttribute('style')).toContain('background-color: rgb(0, 255, 0)'); // Green with full alpha (converted from hsla by Jest/jsdom)
+    });
   });
 
   it('should maintain state consistency', () => {
@@ -310,7 +312,7 @@ describe('ColorPicker', () => {
     
     // Check the inline style attribute directly
     expect(innerColorDiv).toHaveAttribute('style');
-    expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(0, 100%, 100%, 1)'); // Red with full alpha
+    expect(innerColorDiv!.getAttribute('style')).toContain('background-color: rgb(255, 0, 0)'); // Red with full alpha (converted from hsla by Jest/jsdom)
     expect(hexInput).toHaveValue('#ff0000');
   });
 

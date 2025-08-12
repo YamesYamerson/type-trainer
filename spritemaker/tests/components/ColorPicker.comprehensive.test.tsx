@@ -73,16 +73,20 @@ describe('ColorPicker - Comprehensive Tests', () => {
       // The inner div with the color is the second child (index 1) of the container
       const innerColorDiv = colorDisplay?.children[1] as HTMLElement;
       expect(innerColorDiv).toHaveAttribute('style');
-      expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(0, 100%, 100%, 1)'); // Default red with full alpha
+      expect(innerColorDiv!.getAttribute('style')).toContain('background-color: rgb(255, 0, 0)'); // Default red with full alpha (converted from hsla by Jest/jsdom)
     });
 
     it('should display the secondary color correctly', () => {
       render(<ColorPicker {...defaultProps} />);
-      const colorText = screen.getByText('I');
-      const colorDisplay = colorText.parentElement;
+      
+      // Find the secondary color display (the "I" element)
+      const secondaryColorText = screen.getByText('I');
+      // The background color is on the div containing the "I" text, not its parent
+      const secondaryColorDisplay = secondaryColorText;
+      
       // Check the inline style attribute directly
-      expect(colorDisplay).toHaveAttribute('style');
-      expect(colorDisplay!.getAttribute('style')).toContain('background-color: #00ff00');
+      expect(secondaryColorDisplay).toHaveAttribute('style');
+      expect(secondaryColorDisplay!.getAttribute('style')).toContain('background-color: rgb(0, 255, 0)'); // Green (converted from hex by Jest/jsdom)
     });
 
     it('should render all required UI elements', () => {
@@ -243,9 +247,9 @@ describe('ColorPicker - Comprehensive Tests', () => {
       expect(gradientCanvas).toHaveAttribute('width', '160');
       expect(gradientCanvas).toHaveAttribute('height', '120');
       expect(hueCanvas).toHaveAttribute('width', '160');
-      expect(hueCanvas).toHaveAttribute('height', '20');
+      expect(hueCanvas).toHaveAttribute('height', '30'); // Updated from 20 to 30
       expect(alphaCanvas).toHaveAttribute('width', '160');
-      expect(alphaCanvas).toHaveAttribute('height', '20');
+      expect(alphaCanvas).toHaveAttribute('height', '30'); // Updated from 20 to 30
     });
   });
 
@@ -328,7 +332,7 @@ describe('ColorPicker - Comprehensive Tests', () => {
       const innerColorDiv = colorDisplay?.children[1] as HTMLElement;
       // Check the inline style attribute directly
       expect(innerColorDiv).toHaveAttribute('style');
-      expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(120, 100%, 100%, 1)'); // Green with full alpha
+      expect(innerColorDiv!.getAttribute('style')).toContain('background-color: rgb(0, 255, 0)'); // Green with full alpha (converted from hsla by Jest/jsdom)
     });
 
     it('should maintain state consistency', () => {
@@ -342,7 +346,7 @@ describe('ColorPicker - Comprehensive Tests', () => {
       
       // Check the inline style attribute directly
       expect(innerColorDiv).toHaveAttribute('style');
-      expect(innerColorDiv!.getAttribute('style')).toContain('background-color: hsla(0, 100%, 100%, 1)'); // Red with full alpha
+      expect(innerColorDiv!.getAttribute('style')).toContain('background-color: rgb(255, 0, 0)'); // Red with full alpha (converted from hsla by Jest/jsdom)
       expect(hexInput).toHaveValue('#ff0000');
     });
 
@@ -409,8 +413,10 @@ describe('ColorPicker - Comprehensive Tests', () => {
     it('should have proper labels', () => {
       render(<ColorPicker {...defaultProps} />);
       
-      expect(screen.getByText('Color:')).toBeInTheDocument();
       expect(screen.getByText('Idx-1:')).toBeInTheDocument();
+      expect(screen.getByText('Hex:')).toBeInTheDocument();
+      expect(screen.getByText('HSLA:')).toBeInTheDocument();
+      expect(screen.getByText('Alpha:')).toBeInTheDocument();
     });
 
     it('should have proper button text', () => {
