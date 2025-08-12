@@ -3,7 +3,6 @@ import SpriteEditor from './components/SpriteEditor'
 import Toolbar from './components/Toolbar'
 import LayerPanel from './components/LayerPanel'
 import ColorPicker from './components/ColorPicker'
-import ExportPanel from './components/ExportPanel'
 import ErrorBoundary from './components/ErrorBoundary'
 import { Tool, Color, Layer, GridSettings } from './types'
 
@@ -84,6 +83,7 @@ function App() {
           // TODO: Implement settings functionality
           console.log('Settings clicked')
         }}
+        canvasRef={canvasRef}
       />
 
       <div style={{ 
@@ -130,19 +130,6 @@ function App() {
               onLayerSelect={handleLayerSelect}
             />
           </div>
-
-          {/* Export Panel */}
-          {canvasRef && (
-            <div style={{ 
-              width: '100%',
-              flexShrink: 0
-            }}>
-              <ExportPanel
-                canvasRef={canvasRef}
-                canvasSize={canvasSize}
-              />
-            </div>
-          )}
         </div>
 
         {/* Main Canvas Area - Takes remaining space */}

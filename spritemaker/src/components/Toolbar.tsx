@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Tool, Color, GridSettings } from '../types'
 
 interface ToolbarProps {
@@ -19,6 +19,7 @@ interface ToolbarProps {
   onSaveProject?: () => void
   onExportImage?: () => void
   onSettings?: () => void
+  canvasRef?: React.RefObject<HTMLCanvasElement>
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
@@ -36,8 +37,25 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onOpenProject,
   onSaveProject,
   onExportImage,
-  onSettings
+  onSettings,
+  canvasRef
 }) => {
+  // State for file dropdown
+  const [isFileMenuOpen, setIsFileMenuOpen] = useState(false)
+  const fileMenuRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (fileMenuRef.current && !fileMenuRef.current.contains(event.target as Node)) {
+        setIsFileMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   // Provide default values for optional props to prevent crashes
   const safeGridSettings = gridSettings || {
     visible: false,
@@ -86,6 +104,53 @@ const Toolbar: React.FC<ToolbarProps> = ({
     }
   }
 
+  const safeOpenProject = () => {
+    try {
+      if (onOpenProject) onOpenProject()
+    } catch (error) {
+      console.warn('Error in open project callback:', error)
+    }
+  }
+
+  const safeSaveProject = () => {
+    try {
+      if (onSaveProject) onSaveProject()
+    } catch (error) {
+      console.warn('Error in save project callback:', error)
+    }
+  }
+
+  const safeSettings = () => {
+    try {
+      if (onSettings) onSettings()
+    } catch (error) {
+      console.warn('Error in settings callback:', error)
+    }
+  }
+
+  // Export functions
+  const exportAsPNG = () => {
+    if (!canvasRef?.current) return
+    
+    const canvas = canvasRef.current
+    const link = document.createElement('a')
+    link.download = `sprite-${canvasSize}x${canvasSize}.png`
+    link.href = canvas.toDataURL()
+    link.click()
+    setIsFileMenuOpen(false)
+  }
+
+  const exportAsJSON = () => {
+    // This would export the pixel data as JSON for later editing
+    // For now, just show an alert
+    alert('JSON export coming soon!')
+    setIsFileMenuOpen(false)
+  }
+
+  const toggleFileMenu = () => {
+    setIsFileMenuOpen(!isFileMenuOpen)
+  }
+
   const tools: { id: Tool; name: string; icon: string; iconType: 'svg' | 'png' }[] = [
     { id: 'pencil', name: 'Pencil', icon: '/icons/pencil.svg', iconType: 'svg' },
     { id: 'eraser', name: 'Eraser', icon: '/icons/eraser.svg', iconType: 'svg' },
@@ -102,37 +167,241 @@ const Toolbar: React.FC<ToolbarProps> = ({
     <div className="toolbar">
       {/* File Menu - Far Left */}
       <div
+        ref={fileMenuRef}
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '8px 12px',
-          backgroundColor: '#2a2a2a',
-          border: '1px solid #555',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          color: '#fff',
-          fontSize: '14px',
-          fontWeight: '500',
-          minWidth: '240px',
-          justifyContent: 'center',
           position: 'absolute',
-          left: '20px'
+          left: '20px',
+          zIndex: 1000
         }}
-        onClick={safeNewProject}
-        title="File Menu - Click for New Project"
       >
-        {/* File Icon */}
-        <svg 
-          width="16" 
-          height="16" 
-          viewBox="0 0 24 24" 
-          fill="currentColor"
-          style={{ flexShrink: 0 }}
+        {/* File Button */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 12px',
+            backgroundColor: '#2a2a2a',
+            border: '1px solid #555',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            color: '#fff',
+            fontSize: '14px',
+            fontWeight: '500',
+            minWidth: '240px',
+            justifyContent: 'center',
+            borderBottomLeftRadius: isFileMenuOpen ? '0' : '4px',
+            borderBottomRightRadius: isFileMenuOpen ? '0' : '4px'
+          }}
+          onClick={toggleFileMenu}
+          title="File Menu - Click to open"
         >
-          <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
-        </svg>
-        File
+          {/* File Icon */}
+          <svg 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="currentColor"
+            style={{ flexShrink: 0 }}
+          >
+            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+          </svg>
+          File
+          {/* Dropdown Arrow */}
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            style={{
+              transform: isFileMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s ease'
+            }}
+          >
+            <path d="M7,10L12,15L17,10H7Z" />
+          </svg>
+        </div>
+
+        {/* File Dropdown Menu */}
+        {isFileMenuOpen && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              backgroundColor: '#2a2a2a',
+              border: '1px solid #555',
+              borderTop: 'none',
+              borderRadius: '0 0 4px 4px',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+              zIndex: 1001
+            }}
+          >
+            {/* File Operations */}
+            <div
+              style={{
+                padding: '8px 0',
+                borderBottom: '1px solid #555'
+              }}
+            >
+              <button
+                onClick={safeNewProject}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#fff',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                </svg>
+                New Project
+              </button>
+              
+              <button
+                onClick={safeOpenProject}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#fff',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                </svg>
+                Open Project
+              </button>
+              
+              <button
+                onClick={safeSaveProject}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#fff',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" />
+                </svg>
+                Save Project
+              </button>
+            </div>
+
+            {/* Export Operations */}
+            <div
+              style={{
+                padding: '8px 0',
+                borderBottom: '1px solid #555'
+              }}
+            >
+              <button
+                onClick={exportAsPNG}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#fff',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                </svg>
+                Export PNG
+              </button>
+              
+              <button
+                onClick={exportAsJSON}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#fff',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                </svg>
+                Export JSON
+              </button>
+            </div>
+
+            {/* Settings */}
+            <div style={{ padding: '8px 0' }}>
+              <button
+                onClick={safeSettings}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#fff',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+                </svg>
+                Settings
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Spacer to maintain centering of other content */}
@@ -146,8 +415,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
           alignItems: 'center',
           gap: '6px',
           padding: '8px 12px',
-          border: '1px solid #555',
-          background: '#333',
+          border: '1px solid #666',
+          background: '#4a4a4a',
           borderRadius: '4px',
           height: '36px',
           justifyContent: 'center',
@@ -249,7 +518,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             width: '36px',
             height: '36px',
             position: 'relative',
-            border: '2px solid #555',
+            border: '2px solid #666',
             borderRadius: '4px',
             cursor: 'pointer',
             overflow: 'hidden'
@@ -324,8 +593,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
           onChange={(e) => safeCanvasSizeChange(parseInt(e.target.value))}
           style={{
             padding: '4px',
-            border: '1px solid #555',
-            background: '#333',
+            border: '1px solid #666',
+            background: '#4a4a4a',
             color: 'white',
             borderRadius: '4px'
           }}

@@ -48,32 +48,59 @@ describe('Toolbar', () => {
 
   it('should display the File menu with correct styling', () => {
     render(<Toolbar {...defaultProps} />)
-    
+
     const fileMenu = screen.getByText('File')
     expect(fileMenu).toBeInTheDocument()
-    
-    // Check that it's positioned absolutely (far left)
-    const fileMenuContainer = fileMenu.closest('div')
-    expect(fileMenuContainer).toHaveStyle('position: absolute')
+
+    // Check that the container is positioned absolutely (far left)
+    // The file menu text is inside a button, which is inside a div container
+    const fileMenuContainer = fileMenu.closest('div[style*="position: absolute"]')
+    expect(fileMenuContainer).toBeInTheDocument()
     expect(fileMenuContainer).toHaveStyle('left: 20px')
-    expect(fileMenuContainer).toHaveStyle('min-width: 240px')
+    
+    // Check the button styling
+    const fileButton = fileMenu.closest('div[style*="min-width: 240px"]')
+    expect(fileButton).toBeInTheDocument()
   })
 
   it('should display the File menu with a file icon', () => {
     render(<Toolbar {...defaultProps} />)
-    
+
     const fileMenu = screen.getByText('File')
     const fileIcon = fileMenu.parentElement?.querySelector('svg')
-    
+
     expect(fileIcon).toBeInTheDocument()
     expect(fileIcon?.tagName).toBe('svg')
   })
 
-  it('should call onNewProject when File menu is clicked', () => {
+  it('should toggle dropdown when File menu is clicked', () => {
     render(<Toolbar {...defaultProps} />)
-    
+
     const fileMenu = screen.getByText('File')
+    
+    // Initially dropdown should be closed
+    expect(screen.queryByText('New Project')).not.toBeInTheDocument()
+    
+    // Click to open dropdown
     fireEvent.click(fileMenu)
+    expect(screen.getByText('New Project')).toBeInTheDocument()
+    
+    // Click again to close dropdown
+    fireEvent.click(fileMenu)
+    expect(screen.queryByText('New Project')).not.toBeInTheDocument()
+  })
+
+  it('should call onNewProject when New Project is clicked in dropdown', () => {
+    render(<Toolbar {...defaultProps} />)
+
+    const fileMenu = screen.getByText('File')
+    
+    // Open dropdown
+    fireEvent.click(fileMenu)
+    
+    // Click New Project
+    const newProjectButton = screen.getByText('New Project')
+    fireEvent.click(newProjectButton)
     
     expect(defaultProps.onNewProject).toHaveBeenCalledTimes(1)
   })
