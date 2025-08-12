@@ -42,7 +42,9 @@ describe('ColorPicker', () => {
 
   it('should render without crashing', () => {
     render(<ColorPicker {...defaultProps} />);
-    expect(screen.getByText('Color Picker')).toBeInTheDocument();
+    // Check that the color picker container is rendered
+    expect(screen.getByText('II')).toBeInTheDocument(); // Primary color display
+    expect(screen.getByText('I')).toBeInTheDocument();  // Secondary color display
   });
 
   it('should display the primary color correctly', () => {

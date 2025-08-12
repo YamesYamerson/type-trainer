@@ -302,20 +302,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     return () => document.removeEventListener('mouseup', handleGlobalMouseUp)
   }, [])
 
-  // Handle color swatch clicks
-  const handleSwatchClick = useCallback((color: Color) => {
-    handleColorChange(color)
-    try {
-      const hsv = rgbToHsv(color)
-      setHue(hsv.h)
-      setSaturation(hsv.s)
-      setValue(hsv.v)
-      // Keep current alpha value when selecting from swatches
-    } catch (error) {
-      console.warn('Failed to convert color to HSV:', error)
-    }
-  }, [handleColorChange])
-
   // Handle hex input changes
   const handleHexChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -354,8 +340,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       fontFamily: 'monospace',
       fontSize: '12px'
     }}>
-      <h3 style={{ margin: '0 0 15px 0', textAlign: 'center' }}>Color Picker</h3>
-      
       {/* Main color display */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
         <div style={{
@@ -608,23 +592,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       {/* Color inputs */}
       <div style={{ marginBottom: '15px' }}>
         <div style={{ marginBottom: '8px' }}>
-          <label>Idx-1:</label>
-          <input
-            type="text"
-            value={`Idx-${Math.floor(Math.random() * 1000)}`}
-            readOnly
-            style={{
-              width: '100%',
-              padding: '4px',
-              backgroundColor: '#444',
-              border: '1px solid #555',
-              borderRadius: '4px',
-              color: '#fff',
-              fontSize: '11px'
-            }}
-          />
-        </div>
-        <div style={{ marginBottom: '8px' }}>
           <label>Hex:</label>
           <input
             type="text"
@@ -658,76 +625,30 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
             }}
           />
         </div>
-        <div>
-          <label>Alpha:</label>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={alpha}
-            onChange={(e) => {
-              const newAlpha = parseFloat(e.target.value);
-              setAlpha(newAlpha);
-              // Update the color with new alpha
-              try {
-                const newColor = hsvToRgb(hue, saturation, value);
-                handleColorChange(newColor);
-              } catch (error) {
-                console.warn('Failed to update color with new alpha:', error);
-              }
-            }}
-            style={{
-              width: '100%',
-              padding: '4px',
-              backgroundColor: '#444',
-              border: '1px solid #555',
-              borderRadius: '4px',
-              color: '#fff'
-            }}
-          />
-          <span style={{ fontSize: '10px', color: '#aaa', marginLeft: '8px' }}>
-            {Math.round(alpha * 100)}%
-          </span>
-        </div>
       </div>
 
       {/* Color swatches */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        gap: '4px',
-        marginBottom: '15px'
+        gridTemplateColumns: 'repeat(6, 1fr)',
+        gap: '0px',
+        marginTop: '15px'
       }}>
         {defaultColors.map((color, index) => (
           <div
             key={index}
-            onClick={() => handleSwatchClick(color)}
+            onClick={() => handleColorChange(color)}
             style={{
               width: '20px',
               height: '20px',
               backgroundColor: color,
-              border: color === primaryColor ? '2px solid #fff' : '1px solid #555',
+              border: '1px solid #555',
               borderRadius: '2px',
               cursor: 'pointer',
               position: 'relative',
-              boxShadow: color === primaryColor ? '0 0 6px rgba(255,255,255,0.8)' : 'none'
+              boxShadow: color === primaryColor ? '0 0 4px rgba(255,255,255,0.8)' : 'none'
             }}
-          >
-            {/* Selection indicator */}
-            {color === primaryColor && (
-              <div style={{
-                position: 'absolute',
-                top: '-2px',
-                right: '-2px',
-                width: '8px',
-                height: '8px',
-                backgroundColor: '#fff',
-                borderRadius: '50%',
-                border: '1px solid #000'
-              }} />
-            )}
-          </div>
+          />
         ))}
       </div>
 
