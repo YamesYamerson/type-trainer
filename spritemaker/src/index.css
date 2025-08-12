@@ -17,18 +17,16 @@
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  width: 100%;
 }
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  padding-left: 240px;
-  padding-right: 240px;
-  text-align: center;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
   width: 100%;
 }
 
@@ -47,9 +45,10 @@ body {
 .toolbar {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   justify-content: center;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .tool-button {

@@ -44,9 +44,13 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <h1>Sprite Maker</h1>
-      
+    <div className="App" style={{ 
+      display: 'flex', 
+      flexDirection: 'column',
+      height: '100vh',
+      width: '100%',
+      overflow: 'hidden'
+    }}>
       <Toolbar
         selectedTool={selectedTool}
         onToolSelect={setSelectedTool}
@@ -60,43 +64,110 @@ function App() {
         onCanvasSizeChange={setCanvasSize}
         gridSettings={gridSettings}
         onGridSettingsChange={setGridSettings}
+        onNewProject={() => {
+          // TODO: Implement new project functionality
+          console.log('New Project clicked')
+        }}
+        onOpenProject={() => {
+          // TODO: Implement open project functionality
+          console.log('Open Project clicked')
+        }}
+        onSaveProject={() => {
+          // TODO: Implement save project functionality
+          console.log('Save Project clicked')
+        }}
+        onExportImage={() => {
+          // TODO: Implement export image functionality
+          console.log('Export Image clicked')
+        }}
+        onSettings={() => {
+          // TODO: Implement settings functionality
+          console.log('Settings clicked')
+        }}
       />
 
-      <ErrorBoundary>
-        <ColorPicker
-          primaryColor={primaryColor}
-          onPrimaryColorChange={setPrimaryColor}
-          secondaryColor={secondaryColor}
-          onSecondaryColorChange={setSecondaryColor}
-        />
-      </ErrorBoundary>
+      <div style={{ 
+        display: 'flex', 
+        flex: 1,
+        overflow: 'hidden'
+      }}>
+        {/* Fixed Left Sidebar Column */}
+        <div style={{ 
+          width: '280px',
+          backgroundColor: '#1e1e1e',
+          borderRight: '1px solid #333',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '15px',
+          gap: '15px',
+          flexShrink: 0,
+          overflowY: 'auto'
+        }}>
+          {/* Color Picker - Below File Menu */}
+          <div style={{ 
+            width: '100%',
+            flexShrink: 0
+          }}>
+            <ErrorBoundary>
+              <ColorPicker
+                primaryColor={primaryColor}
+                onPrimaryColorChange={setPrimaryColor}
+                secondaryColor={secondaryColor}
+                onSecondaryColorChange={setSecondaryColor}
+              />
+            </ErrorBoundary>
+          </div>
 
-      <ErrorBoundary>
-        <SpriteEditor
-          selectedTool={selectedTool}
-          primaryColor={primaryColor}
-          secondaryColor={secondaryColor}
-          brushSize={brushSize}
-          canvasSize={canvasSize}
-          layers={layers}
-          onCanvasRef={setCanvasRef}
-          gridSettings={gridSettings}
-        />
-      </ErrorBoundary>
+          {/* Layer Panel */}
+          <div style={{ 
+            width: '100%',
+            flexShrink: 0
+          }}>
+            <LayerPanel
+              layers={layers}
+              onNewLayer={handleNewLayer}
+              onLayerToggle={handleLayerToggle}
+              onLayerSelect={handleLayerSelect}
+            />
+          </div>
 
-      <LayerPanel
-        layers={layers}
-        onNewLayer={handleNewLayer}
-        onLayerToggle={handleLayerToggle}
-        onLayerSelect={handleLayerSelect}
-      />
+          {/* Export Panel */}
+          {canvasRef && (
+            <div style={{ 
+              width: '100%',
+              flexShrink: 0
+            }}>
+              <ExportPanel
+                canvasRef={canvasRef}
+                canvasSize={canvasSize}
+              />
+            </div>
+          )}
+        </div>
 
-      {canvasRef && (
-        <ExportPanel
-          canvasRef={canvasRef}
-          canvasSize={canvasSize}
-        />
-      )}
+        {/* Main Canvas Area - Takes remaining space */}
+        <div style={{ 
+          flex: 1,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '20px',
+          overflow: 'auto'
+        }}>
+          <ErrorBoundary>
+            <SpriteEditor
+              selectedTool={selectedTool}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+              brushSize={brushSize}
+              canvasSize={canvasSize}
+              layers={layers}
+              onCanvasRef={setCanvasRef}
+              gridSettings={gridSettings}
+            />
+          </ErrorBoundary>
+        </div>
+      </div>
     </div>
   )
 }

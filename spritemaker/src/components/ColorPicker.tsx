@@ -328,10 +328,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
 
   return (
     <div className="color-picker" style={{
-      position: 'fixed',
-      left: '20px',
-      top: '20px',
-      width: '200px',
+      width: '100%',
       padding: '15px'
     }}>
       {/* Main color display */}
