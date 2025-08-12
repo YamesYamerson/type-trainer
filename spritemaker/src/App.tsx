@@ -22,7 +22,8 @@ function App() {
     opacity: 0.5,
     quarter: false,
     eighths: false,
-    sixteenths: false
+    sixteenths: false,
+    thirtyseconds: false
   })
 
   const handleNewLayer = () => {

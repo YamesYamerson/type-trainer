@@ -326,6 +326,35 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
       // Reset global alpha
       ctx.globalAlpha = 1.0
     }
+
+    // Draw thirty-seconds grid divisions (if enabled)
+    if (gridSettings.thirtyseconds) {
+      ctx.strokeStyle = gridSettings.color
+      ctx.globalAlpha = gridSettings.opacity
+      ctx.lineWidth = 1
+      
+      // Draw vertical division lines at 1/16, 1/8, 3/16, 1/4, 5/16, 3/8, 7/16, 1/2, 9/16, 5/8, 11/16, 3/4, 13/16, 7/8, 15/16 positions
+      const sixteenthPositions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] // 1/16 through 15/16
+      sixteenthPositions.forEach(sixteenth => {
+        const pos = (canvasSize * sixteenth / 16) * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(pos, 0)
+        ctx.lineTo(pos, canvas.height)
+        ctx.stroke()
+      })
+      
+      // Draw horizontal division lines at 1/16, 1/8, 3/16, 1/4, 5/16, 3/8, 7/16, 1/2, 9/16, 5/8, 11/16, 3/4, 13/16, 7/8, 15/16 positions
+      sixteenthPositions.forEach(sixteenth => {
+        const pos = (canvasSize * sixteenth / 16) * pixelSize
+        ctx.beginPath()
+        ctx.moveTo(0, pos)
+        ctx.lineTo(canvas.width, pos)
+        ctx.stroke()
+      })
+      
+      // Reset global alpha
+      ctx.globalAlpha = 1.0
+    }
     
     // Draw pixels
     pixels.forEach((pixel) => {
@@ -340,7 +369,7 @@ const SpriteEditor: React.FC<SpriteEditorProps> = ({
         )
       }
     })
-  }, [pixels, layers, canvasSize, pixelSize, gridSettings.visible, gridSettings.color, gridSettings.opacity, gridSettings.quarter, gridSettings.eighths, gridSettings.sixteenths])
+  }, [pixels, layers, canvasSize, pixelSize, gridSettings.visible, gridSettings.color, gridSettings.opacity, gridSettings.quarter, gridSettings.eighths, gridSettings.sixteenths, gridSettings.thirtyseconds])
 
   return (
     <div className="canvas-container">

@@ -63,7 +63,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
     opacity: 0.5,
     quarter: false,
     eighths: false,
-    sixteenths: false
+    sixteenths: false,
+    thirtyseconds: false
   }
 
   // Safe callback wrappers to prevent crashes from callback errors
@@ -574,7 +575,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           style={{ marginLeft: '4px' }}
         >
           <img
-            src="/icons/plus-icon.svg"
+            src="/icons/quarter-new-icon.svg"
             alt="Quarter Grid"
             style={{ width: '20px', height: '20px' }}
           />
@@ -591,7 +592,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           style={{ marginLeft: '4px' }}
         >
           <img
-            src="/icons/eighths-icon.svg"
+            src="/icons/eighth-new-icon.svg"
             alt="Eighths Grid"
             style={{ width: '20px', height: '20px' }}
           />
@@ -610,6 +611,23 @@ const Toolbar: React.FC<ToolbarProps> = ({
           <img
             src="/icons/sixteenths-icon.svg"
             alt="Sixteenths Grid"
+            style={{ width: '20px', height: '20px' }}
+          />
+        </button>
+
+        {/* Thirty-Second Grid Tool */}
+        <button
+          className={`tool-button ${safeGridSettings.thirtyseconds ? 'active' : ''}`}
+          onClick={() => safeGridSettingsChange({
+            ...safeGridSettings,
+            thirtyseconds: !safeGridSettings.thirtyseconds
+          })}
+          title={`Thirty-Second Grid - Currently ${safeGridSettings.thirtyseconds ? 'ON' : 'OFF'}`}
+          style={{ marginLeft: '4px' }}
+        >
+          <img
+            src="/icons/thirtyseconds-icon.svg"
+            alt="Thirty-Second Grid"
             style={{ width: '20px', height: '20px' }}
           />
         </button>
