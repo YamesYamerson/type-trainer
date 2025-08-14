@@ -160,36 +160,8 @@ export const TestPage: React.FC = () => {
                   🛠️ Developer Information
                 </h4>
                 <p className="text-xs text-yellow-700 mb-3">
-                  Pet sprites are using fallback rendering. To add custom sprites:
+                  Pet sprites are using fallback rendering. Custom sprites can be added by placing PNG files in the sprites directory.
                 </p>
-                <div className="flex flex-wrap gap-2 justify-center text-xs">
-                  <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                    Place PNG files in /public/sprites/
-                  </span>
-                  <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                    Use naming: egg-sheet.png, baby-sheet.png, etc.
-                  </span>
-                  <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                    20 frames per sprite (4×5 grid)
-                  </span>
-                </div>
-                <div className="mt-3">
-                  <a 
-                    href="/egg-sprite-generator.html" 
-                    target="_blank"
-                    className="inline-block bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded transition-colors"
-                  >
-                    🥚 Generate Egg Sprite
-                  </a>
-                  <span className="mx-2 text-yellow-600">•</span>
-                  <a 
-                    href="/sprite-generator.html" 
-                    target="_blank"
-                    className="inline-block bg-purple-500 hover:bg-purple-600 text-white text-xs px-3 py-1 rounded transition-colors"
-                  >
-                    🎨 Full Sprite Editor
-                  </a>
-                </div>
               </div>
             </div>
           ) : (

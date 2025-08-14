@@ -203,22 +203,19 @@ describe('TestPage Component', () => {
       render(<TestPage />);
       
       expect(screen.getByText('🛠️ Developer Information')).toBeInTheDocument();
-      expect(screen.getByText('Pet sprites are using fallback rendering. To add custom sprites:')).toBeInTheDocument();
+      expect(screen.getByText('Pet sprites are using fallback rendering. Custom sprites can be added by placing PNG files in the sprites directory.')).toBeInTheDocument();
     });
 
-    it('should display sprite generation tools for developers', () => {
+    it('should display sprite requirements for developers', () => {
       render(<TestPage />);
       
-      expect(screen.getByText('🥚 Generate Egg Sprite')).toBeInTheDocument();
-      expect(screen.getByText('🎨 Full Sprite Editor')).toBeInTheDocument();
+      expect(screen.getByText('Pet sprites are using fallback rendering. Custom sprites can be added by placing PNG files in the sprites directory.')).toBeInTheDocument();
     });
 
     it('should show sprite requirements for developers', () => {
       render(<TestPage />);
       
-      expect(screen.getByText('Place PNG files in /public/sprites/')).toBeInTheDocument();
-      expect(screen.getByText('Use naming: egg-sheet.png, baby-sheet.png, etc.')).toBeInTheDocument();
-      expect(screen.getByText('20 frames per sprite (4×5 grid)')).toBeInTheDocument();
+      expect(screen.getByText('Pet sprites are using fallback rendering. Custom sprites can be added by placing PNG files in the sprites directory.')).toBeInTheDocument();
     });
 
     it('should not show developer info in production mode', () => {

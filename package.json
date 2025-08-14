@@ -15,9 +15,7 @@
     "test:utils": "jest --testPathPatterns=utils",
     "test:components": "jest --testPathPatterns=components",
     "test:integration": "jest --testPathPatterns=integration",
-    "test:server": "jest --testPathPatterns=server",
-    "sprites": "node scripts/generate-sprites.js",
-    "sprites:egg": "open http://localhost:5174/egg-sprite-generator.html"
+    "test:server": "jest --testPathPatterns=server"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
